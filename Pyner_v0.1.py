@@ -15,10 +15,10 @@ import pandas as pd
 # ============================================
 
 # Tu email es OBLIGATORIO para NCBI
-Entrez.email = "lucianofranco.a@gmail.com"  # CAMBIAR ESTO!
+Entrez.email = ""  # CAMBIAR ESTO!
 
 # Tu API key (opcional pero recomendado)
-Entrez.api_key = "4579ad4ab4c2144aa84a340b2e4374111308"  # CAMBIAR ESTO!
+Entrez.api_key = ""  # CAMBIAR ESTO!
 
 # Cliente de Ollama
 client = ollama.Client()
