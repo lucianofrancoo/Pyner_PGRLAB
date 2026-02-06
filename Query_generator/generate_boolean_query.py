@@ -290,10 +290,128 @@ def _organism_with_variants(organism_name: str) -> str:
     """Build organism clause with all search variants (genus, full name, common names).
     
     Example: Arabidopsis thaliana -> '("Arabidopsis" OR "Arabidopsis thaliana")[Organism]'
+    
+    If organism not in ORGANISM_VARIANTS, asks Ollama to generate variants.
     """
-    variants = ORGANISM_VARIANTS.get(organism_name, [organism_name])
+    variants = get_organism_variants(organism_name)
     quoted_variants = [f'"{v}"' for v in variants]
     return '(' + ' OR '.join(quoted_variants) + ')[Organism]'
+
+
+# Cache for ALL variants (both dict and Ollama-generated)
+_VARIANTS_CACHE = {}
+
+
+def get_organism_variants(organism_name: str) -> List[str]:
+    """Get search variants for an organism.
+    
+    First checks ORGANISM_VARIANTS dict.
+    If not found, calls Ollama to generate variants based on pattern.
+    Caches all results to avoid repeated lookups.
+    """
+    # Check cache first (covers both dict-based and Ollama-generated)
+    if organism_name in _VARIANTS_CACHE:
+        return _VARIANTS_CACHE[organism_name]
+    
+    # Check if already in hardcoded dict
+    if organism_name in ORGANISM_VARIANTS:
+        result = ORGANISM_VARIANTS[organism_name]
+        _VARIANTS_CACHE[organism_name] = result
+        return result
+    
+    # Call Ollama to generate variants
+    try:
+        variants = _ask_ollama_for_variants(organism_name)
+        if variants:
+            _VARIANTS_CACHE[organism_name] = variants
+            return variants
+    except Exception as e:
+        print(f"Warning: Ollama variant generation failed for {organism_name}: {e}", file=sys.stderr)
+    
+    # Fallback: return just the organism name
+    result = [organism_name]
+    _VARIANTS_CACHE[organism_name] = result
+    return result
+
+
+def _ask_ollama_for_variants(organism_name: str) -> List[str]:
+    """Use Ollama to generate organism search variants (genus, common names, etc.).
+    
+    Returns: list of variant names, e.g. ["Arabidopsis", "Arabidopsis thaliana"]
+    """
+    # Build examples from the known dict
+    examples = []
+    for org, vars_list in list(ORGANISM_VARIANTS.items())[:5]:  # First 5 as examples
+        examples.append(f"  {org} -> {vars_list}")
+    examples_str = '\n'.join(examples)
+    
+    prompt = f"""You are an expert in biology and scientific nomenclature.
+
+Given an organism scientific name, generate search variants that would be useful for finding research studies.
+Variants should include:
+1. The genus name (first word)
+2. The full scientific name
+3. Common names if they exist (e.g., "mouse" for "Mus musculus", "rainbow trout" for "Oncorhyncus mykiss")
+
+EXAMPLES OF EXPECTED OUTPUT FORMAT:
+{examples_str}
+
+Now, for the organism: "{organism_name}"
+
+Generate variants in the SAME format as above. Return ONLY the organism name and its variants list, nothing else.
+Format: organism_name -> [variant1, variant2, variant3, ...]"""
+
+    try:
+        cmd = [
+            'curl', '-s', '-X', 'POST',
+            'http://localhost:11434/api/generate',
+            '-d', json.dumps({
+                'model': 'llama2',
+                'prompt': prompt,
+                'stream': False,
+            })
+        ]
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        if proc.returncode == 0:
+            resp = json.loads(proc.stdout)
+            output = resp.get('response', '').strip()
+            
+            # Parse output: "organism_name -> [variant1, variant2, ...]"
+            variants = _parse_ollama_variants(output)
+            if variants:
+                return variants
+    except Exception as e:
+        raise RuntimeError(f"Ollama call failed: {e}")
+    
+    return None
+
+
+def _parse_ollama_variants(output: str) -> List[str]:
+    """Parse Ollama output to extract variants list.
+    
+    Expected format: "Organism Name -> [variant1, variant2, variant3]"
+    Returns: [variant1, variant2, variant3]
+    """
+    try:
+        # Find the arrow and extract the list part
+        if '->' not in output:
+            return None
+        
+        list_part = output.split('->', 1)[1].strip()
+        
+        # Try to parse as Python list
+        # Replace single quotes with double quotes for JSON compatibility
+        list_part = list_part.replace("'", '"')
+        
+        # Extract content between brackets
+        if list_part.startswith('[') and list_part.endswith(']'):
+            variants = json.loads(list_part)
+            if isinstance(variants, list) and all(isinstance(v, str) for v in variants):
+                return variants
+    except Exception as e:
+        pass
+    
+    return None
 
 
 def local_retrieve(query: str, top_k: int = 5):
