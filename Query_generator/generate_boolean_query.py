@@ -302,10 +302,11 @@ def extract_species_from_text(text: str, kb_orgs: Dict[str, str] = None) -> List
     return found
 
 
-def build_boolean(results: List[dict], seed_organisms: List[str] = None, kb_orgs: Dict[str, str] = None) -> str:
+def build_boolean(results: List[dict], seed_organisms: List[str] = None, kb_orgs: Dict[str, str] = None, user_keywords: List[str] = None) -> str:
     """Build NCBI-ready boolean query from semantic search results.
     
     For each organism, includes all variants (genus, full name, common names).
+    Also includes user keywords as additional All Fields search terms.
     """
     if kb_orgs is None:
         kb_orgs = load_kb_organisms()
@@ -390,7 +391,7 @@ def build_boolean(results: List[dict], seed_organisms: List[str] = None, kb_orgs
     if organisms:
         clause_list.append('(' + ' OR '.join(organisms) + ')')
 
-    # Deduplicate and merge facets
+    # Deduplicate and merge facets from results
     uniq_facets = []
     seen = set()
     for facet in facets:
@@ -405,6 +406,14 @@ def build_boolean(results: List[dict], seed_organisms: List[str] = None, kb_orgs
             if t not in uniq:
                 uniq.append(t)
         clause_list.append('(' + ' OR '.join(uniq) + ')')
+    
+    # Add user keywords as additional All Fields search terms
+    if user_keywords:
+        # Quote each keyword for precise matching
+        quoted_keywords = [f'"{kw}"' for kw in user_keywords]
+        keywords_clause = '(' + ' OR '.join(quoted_keywords) + ')'
+        if keywords_clause not in clause_list:  # Avoid duplicates
+            clause_list.append(keywords_clause)
 
     if not clause_list:
         return ''
@@ -539,6 +548,114 @@ def _parse_ollama_variants(output: str) -> List[str]:
     return None
 
 
+def extract_keywords_with_ollama(user_query: str) -> List[str]:
+    """Use Ollama to extract research keywords from natural language query.
+    
+    Handles queries like "I want to find info about arabidopsis in roots under drought"
+    Returns: ["arabidopsis", "roots", "drought", "drought stress"] in English
+    
+    Falls back to simple keyword pattern matching if Ollama is unavailable.
+    """
+    prompt = f"""Extract key research terms from this query. Return ONLY keywords related to:
+- Organisms (species, strain names)
+- Biological processes (drought, stress, infection, growth, development)
+- Plant parts (root, leaf, flower, stem)
+- Tissues or cell types
+- Biological conditions or treatments
+
+Query: "{user_query}"
+
+Return as a simple list with NO descriptions, one per line. Use English terms. Include singular and plural forms where relevant.
+Examples of output format:
+arabidopsis
+root
+roots
+drought
+drought stress"""
+
+    try:
+        cmd = [
+            'curl', '-s', '-X', 'POST',
+            'http://localhost:11434/api/generate',
+            '-d', json.dumps({
+                'model': 'llama2',
+                'prompt': prompt,
+                'stream': False,
+            })
+        ]
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        if proc.returncode == 0:
+            try:
+                resp = json.loads(proc.stdout)
+                # Check if response has an error field
+                if resp.get('error'):
+                    # Ollama returned an error (e.g., model not found)
+                    pass  # Fall through to fallback
+                else:
+                    output = resp.get('response', '').strip()
+                    
+                    # Parse output: list of keywords, one per line
+                    keywords = []
+                    for line in output.split('\n'):
+                        kw = line.strip().lower()
+                        # Clean up and validate
+                        kw = re.sub(r'[^\w\s-]', '', kw).strip()
+                        if len(kw) > 2 and kw not in keywords:
+                            keywords.append(kw)
+                    
+                    if keywords:
+                        return keywords
+            except:
+                pass
+    except:
+        pass
+    
+    # Fallback: keyword extraction using local keyword list
+    return _fallback_keyword_extraction(user_query)
+
+
+def _fallback_keyword_extraction(user_query: str) -> List[str]:
+    """Fallback keyword extraction when Ollama is unavailable.
+    Uses pattern matching on common biological terms in English and Spanish."""
+    
+    # Common biological process keywords
+    PROCESS_KEYWORDS = {
+        'drought', 'stress', 'infection', 'disease', 'growth', 'development',
+        'flowering', 'reproduction', 'senescence', 'immunity', 'pathogen',
+        'treatment', 'response', 'tolerance', 'susceptibility', 'resistance'
+    }
+    
+    # Common plant parts (English and Spanish, singular and plural)
+    PLANT_PARTS = {
+        'root', 'roots', 'leaf', 'leaves', 'flower', 'flowers', 'stem', 'stems',
+        'seed', 'seeds', 'fruit', 'fruits', 'tissue', 'tissues', 'cell', 'cells',
+        'raíz', 'raíces', 'raices', 'raiz', 'hoja', 'hojas', 'sequía', 'sequia'
+    }
+    
+    # All combined lookups
+    all_keywords = PROCESS_KEYWORDS | PLANT_PARTS
+    
+    query_lower = user_query.lower()
+    found_keywords = []
+    
+    # Find matches in query
+    for kw in sorted(all_keywords):  # Sort for consistent output
+        if kw in query_lower:
+            # Normalize to English
+            normalized = kw
+            if kw in ('raíz', 'raíces', 'raices', 'raiz'):
+                normalized = 'root'
+            elif kw in ('sequía', 'sequia'):
+                normalized = 'drought'
+            elif kw in ('hoja', 'hojas'):
+                normalized = 'leaf'
+            
+            if normalized not in found_keywords:
+                found_keywords.append(normalized)
+    
+    return found_keywords if found_keywords else None
+
+
 def local_retrieve(query: str, top_k: int = 5):
     """Fallback: use local phase2 vector DB inside Query_generator/phases."""
     from pathlib import Path
@@ -565,9 +682,13 @@ def generate_boolean(query: str, top_k: int = 5, expand: bool = False) -> dict:
     """Programmatic entrypoint: returns dict with suggestions and boolean query.
     
     Results are filtered for relevance to the user's query keywords.
+    Extracts keywords from natural language query using Ollama.
     """
     kb_orgs = load_kb_organisms()
     seed_species = extract_species_from_text(query, kb_orgs)
+    
+    # Extract keywords from natural language query
+    user_keywords = extract_keywords_with_ollama(query)
 
     try:
         resp = call_search_api(query, top_k=top_k, expand=expand)
@@ -582,8 +703,8 @@ def generate_boolean(query: str, top_k: int = 5, expand: bool = False) -> dict:
     # Filter results for relevance to the actual user query
     filtered_results = filter_results_by_relevance(results, query)
     
-    # Build boolean with filtered, relevant results
-    boolean = build_boolean(filtered_results, seed_organisms=seed_species, kb_orgs=kb_orgs)
+    # Build boolean with filtered, relevant results AND extracted keywords
+    boolean = build_boolean(filtered_results, seed_organisms=seed_species, kb_orgs=kb_orgs, user_keywords=user_keywords)
 
     # Prepare suggestions list (show what was actually used, not all raw results)
     suggestions = []
@@ -635,8 +756,16 @@ def main():
     if len(filtered_results) < len(results):
         print(f"\n⚠️  Filtered out {len(results) - len(filtered_results)} irrelevant results")
 
-    print(f'\n📊 Using {len(filtered_results)} relevant results to build boolean query')
-    boolean = build_boolean(filtered_results, seed_organisms=seed_species, kb_orgs=kb_orgs)
+    # Extract keywords from natural language query
+    print('\n🔍 Extracting keywords from query...')
+    user_keywords = extract_keywords_with_ollama(query)
+    if user_keywords:
+        print(f'🔑 Extracted keywords: {", ".join(user_keywords)}')
+    else:
+        print('🔑 No keywords extracted')
+
+    print(f'\n📊 Using {len(filtered_results)} relevant results + keywords to build boolean query')
+    boolean = build_boolean(filtered_results, seed_organisms=seed_species, kb_orgs=kb_orgs, user_keywords=user_keywords)
     print('\nGenerated boolean query (NCBI-ready):\n')
     print(boolean)
     print('\n-- End')
