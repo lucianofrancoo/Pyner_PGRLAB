@@ -251,6 +251,9 @@ def filter_results_by_relevance(results: List[dict], user_query: str) -> List[di
         filtered.append(r)
     
     return filtered
+
+
+def extract_species_from_text(text: str, kb_orgs: Dict[str, str] = None) -> List[str]:
     """Extract organism names from query text — STRICT version.
     
     Strategy:
