@@ -1,0 +1,49 @@
+[2026-02-06 12:22:25,028] INFO     | Pyner.Phase1.stage1_parse_xml | 
+======================================================================
+[2026-02-06 12:22:25,029] INFO     | Pyner.Phase1.stage1_parse_xml | 📍 STAGE 1: XML PARSING
+[2026-02-06 12:22:25,029] INFO     | Pyner.Phase1.stage1_parse_xml | ======================================================================
+[2026-02-06 12:22:25,029] INFO     | Pyner.Phase1.stage1_parse_xml | 🔄 Verificando checkpoint anterior...
+[2026-02-06 12:22:25,029] INFO     | Pyner.Phase1.stage1_parse_xml | 
+======================================================================
+[2026-02-06 12:22:25,029] INFO     | Pyner.Phase1.stage1_parse_xml | 📍 DISCOVERY: Encontrando archivos XML
+[2026-02-06 12:22:25,029] INFO     | Pyner.Phase1.stage1_parse_xml | ======================================================================
+[2026-02-06 12:22:25,029] INFO     | Pyner.Phase1.stage1_parse_xml | 📁 Buscando XMLs en: /home/lahumada/disco1/NCBI_Metadata/SRA
+[2026-02-06 12:22:39,260] INFO     | Pyner.Phase1.stage1_parse_xml | 📊 Total de BioProjects encontrados: 1,340,468
+[2026-02-06 12:22:40,520] INFO     | Pyner.Phase1.stage1_parse_xml | 🎯 Procesando primeros: 1,000 BioProjects
+[2026-02-06 12:22:40,520] INFO     | Pyner.Phase1.stage1_parse_xml | 
+======================================================================
+[2026-02-06 12:22:40,520] INFO     | Pyner.Phase1.stage1_parse_xml | 📍 PARSING: Extrayendo metadatos
+[2026-02-06 12:22:40,520] INFO     | Pyner.Phase1.stage1_parse_xml | ======================================================================
+[2026-02-06 12:22:40,621] DEBUG    | Pyner.Phase1.stage1_parse_xml | [0/1,000] RAM: 1.1GB | CPU: 0.0%
+[2026-02-06 12:22:40,745] DEBUG    | Pyner.Phase1.stage1_parse_xml | [100/1,000] RAM: 1.1GB | CPU: 0.0%
+[2026-02-06 12:22:40,895] DEBUG    | Pyner.Phase1.stage1_parse_xml | [200/1,000] RAM: 1.1GB | CPU: 0.0%
+[2026-02-06 12:22:41,015] DEBUG    | Pyner.Phase1.stage1_parse_xml | [300/1,000] RAM: 1.1GB | CPU: 0.0%
+[2026-02-06 12:22:41,173] DEBUG    | Pyner.Phase1.stage1_parse_xml | [400/1,000] RAM: 1.1GB | CPU: 0.0%
+[2026-02-06 12:22:41,317] DEBUG    | Pyner.Phase1.stage1_parse_xml | [500/1,000] RAM: 1.1GB | CPU: 0.0%
+[2026-02-06 12:22:41,483] DEBUG    | Pyner.Phase1.stage1_parse_xml | [600/1,000] RAM: 1.1GB | CPU: 0.0%
+[2026-02-06 12:22:41,685] DEBUG    | Pyner.Phase1.stage1_parse_xml | [700/1,000] RAM: 1.1GB | CPU: 0.0%
+[2026-02-06 12:22:41,987] DEBUG    | Pyner.Phase1.stage1_parse_xml | [800/1,000] RAM: 1.1GB | CPU: 0.0%
+[2026-02-06 12:22:42,345] DEBUG    | Pyner.Phase1.stage1_parse_xml | [900/1,000] RAM: 1.1GB | CPU: 0.0%
+[2026-02-06 12:22:42,473] INFO     | Pyner.Phase1.stage1_parse_xml | ⏳ XML Parsing | [████████████████████████████████████████] 100.0% (1,000/1,000) | Rate: 512.1 files/sec | ETA: 0.0 min | Errors: 0
+[2026-02-06 12:22:42,473] INFO     | Pyner.Phase1.stage1_parse_xml | 
+======================================================================
+[2026-02-06 12:22:42,473] INFO     | Pyner.Phase1.stage1_parse_xml | 📍 SAVING: Escribiendo índices
+[2026-02-06 12:22:42,473] INFO     | Pyner.Phase1.stage1_parse_xml | ======================================================================
+[2026-02-06 12:22:42,473] INFO     | Pyner.Phase1.stage1_parse_xml | 💾 Guardando índices en JSON...
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml | ✅ Índices guardados: /mnt/64274670-793f-4763-b132-b5c7b1178bb0/lahumada/Pyner_PGRLAB/phase1/output/stage1_indices.json
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml | 
+======================================================================
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml | ✅ STAGE 1: XML PARSING COMPLETADO
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml | ======================================================================
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml |   Total Experiments....................... 14,800
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml |   Total Samples........................... 12,692
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml |   Unique Organisms........................ 988
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml |   Unique Strategies....................... 20
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml |   Parse Errors............................ 0
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml |   Missing Fields.......................... 0
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml |   Files Processed......................... 1,000
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml |   Tiempo total............................ 17.45 sec (0.29 min)
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml | ======================================================================
+
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml | ✅ Stage 1 completado exitosamente
+[2026-02-06 12:22:42,476] INFO     | Pyner.Phase1.stage1_parse_xml | 📊 Archivo de índices: /mnt/64274670-793f-4763-b132-b5c7b1178bb0/lahumada/Pyner_PGRLAB/phase1/output/stage1_indices.json

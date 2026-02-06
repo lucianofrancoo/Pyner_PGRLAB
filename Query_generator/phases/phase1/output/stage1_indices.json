@@ -1,0 +1,6829 @@
+{
+  "organisms": {
+    "Bacillus subtilis subsp. natto BEST195": {
+      "count": 1,
+      "studies": [
+        "DRA000001"
+      ]
+    },
+    "Bacillus subtilis subsp. subtilis str. 168": {
+      "count": 1,
+      "studies": [
+        "DRA000002"
+      ]
+    },
+    "Homo sapiens": {
+      "count": 1083,
+      "studies": [
+        "DRA001161",
+        "DRA000363",
+        "DRA003736",
+        "DRA000008",
+        "DRA002574",
+        "DRA000007",
+        "DRA000152",
+        "DRA000285",
+        "DRA005580",
+        "DRA000024",
+        "DRA002261",
+        "DRA005486",
+        "DRA000287",
+        "DRA000328",
+        "DRA001069",
+        "DRA000357",
+        "DRA000407",
+        "DRA000310",
+        "DRA003786",
+        "DRA005595",
+        "DRA001166",
+        "DRA002233",
+        "DRA000405",
+        "DRA000147",
+        "DRA004349",
+        "DRA001035",
+        "DRA005377",
+        "DRA000559",
+        "DRA000041",
+        "DRA005848",
+        "DRA002730",
+        "DRA001027",
+        "DRA000329",
+        "DRA000092",
+        "DRA003233",
+        "DRA005526",
+        "DRA002604",
+        "DRA001009",
+        "DRA000107",
+        "DRA000095",
+        "DRA005375",
+        "DRA000028",
+        "DRA005487",
+        "DRA000359",
+        "DRA004087",
+        "DRA000345",
+        "DRA000179",
+        "DRA000205",
+        "DRA000135",
+        "DRA005133",
+        "DRA000349",
+        "DRA000188",
+        "DRA003581",
+        "DRA000075",
+        "DRA003232",
+        "DRA003769",
+        "DRA005645",
+        "DRA000340",
+        "DRA000038",
+        "DRA005488",
+        "DRA002724",
+        "DRA004825",
+        "DRA000004",
+        "DRA002571",
+        "DRA000330",
+        "DRA000204",
+        "DRA004874",
+        "DRA001043",
+        "DRA000019",
+        "DRA004490",
+        "DRA000180",
+        "DRA005143",
+        "DRA000402",
+        "DRA001215",
+        "DRA000283",
+        "DRA002269",
+        "DRA002833",
+        "DRA000533"
+      ]
+    },
+    "microbial mat metagenome": {
+      "count": 2,
+      "studies": [
+        "DRA000160",
+        "DRA000009"
+      ]
+    },
+    "Bacillus anthracis": {
+      "count": 1,
+      "studies": [
+        "DRA000067"
+      ]
+    },
+    "Streptococcus salivarius HT9R": {
+      "count": 1,
+      "studies": [
+        "DRA000072"
+      ]
+    },
+    "Mus musculus": {
+      "count": 655,
+      "studies": [
+        "DRA005345",
+        "DRA004414",
+        "DRA001090",
+        "DRA005628",
+        "DRA004420",
+        "DRA005738",
+        "DRA000114",
+        "DRA001129",
+        "DRA004401",
+        "DRA002438",
+        "DRA001066",
+        "DRA001198",
+        "DRA000370",
+        "DRA003065",
+        "DRA000110",
+        "DRA003248",
+        "DRA004395",
+        "DRA004427",
+        "DRA004383",
+        "DRA003215",
+        "DRA003477",
+        "DRA004430",
+        "DRA004535",
+        "DRA001260",
+        "DRA004005",
+        "DRA005694",
+        "DRA002919",
+        "DRA004094",
+        "DRA000487",
+        "DRA004387",
+        "DRA000957",
+        "DRA002943",
+        "DRA000145",
+        "DRA001124",
+        "DRA003185",
+        "DRA002477",
+        "DRA000116",
+        "DRA005633",
+        "DRA000164",
+        "DRA002711",
+        "DRA000140",
+        "DRA002151",
+        "DRA004733",
+        "DRA005166",
+        "DRA005529",
+        "DRA004411",
+        "DRA004597",
+        "DRA004412",
+        "DRA003693",
+        "DRA005975",
+        "DRA004393",
+        "DRA005296",
+        "DRA003256",
+        "DRA001213",
+        "DRA001145",
+        "DRA005504",
+        "DRA004580",
+        "DRA002145",
+        "DRA000998",
+        "DRA004382",
+        "DRA001190",
+        "DRA004410",
+        "DRA000119",
+        "DRA004007",
+        "DRA003920",
+        "DRA001186",
+        "DRA003578",
+        "DRA001262",
+        "DRA002720",
+        "DRA005817",
+        "DRA000378",
+        "DRA005643",
+        "DRA004415",
+        "DRA005512",
+        "DRA004484",
+        "DRA003596",
+        "DRA003075",
+        "DRA000486",
+        "DRA002918",
+        "DRA005417",
+        "DRA000475",
+        "DRA005319",
+        "DRA004397",
+        "DRA001123",
+        "DRA002147",
+        "DRA000465",
+        "DRA000996",
+        "DRA000113",
+        "DRA005221",
+        "DRA002923",
+        "DRA000491",
+        "DRA005956",
+        "DRA003464",
+        "DRA004622",
+        "DRA000853"
+      ]
+    },
+    "soil metagenome": {
+      "count": 207,
+      "studies": [
+        "DRA003982",
+        "DRA002850",
+        "DRA005043",
+        "DRA004913",
+        "DRA004529",
+        "DRA005994",
+        "DRA002417",
+        "DRA000728",
+        "DRA001854",
+        "DRA003953",
+        "DRA000454",
+        "DRA000315",
+        "DRA000587",
+        "DRA000546",
+        "DRA005608",
+        "DRA000157",
+        "DRA002235"
+      ]
+    },
+    "Hevea brasiliensis subsp. brasiliensis": {
+      "count": 1,
+      "studies": [
+        "DRA000170"
+      ]
+    },
+    "Salmonella enterica subsp. enterica serovar Typhimurium str. T000240": {
+      "count": 1,
+      "studies": [
+        "DRA000195"
+      ]
+    },
+    "Jatropha curcas": {
+      "count": 2,
+      "studies": [
+        "DRA000306",
+        "DRA000502"
+      ]
+    },
+    "Oryza sativa Japonica Group": {
+      "count": 29,
+      "studies": [
+        "DRA000809",
+        "DRA002210",
+        "DRA000651",
+        "DRA003929",
+        "DRA002422",
+        "DRA000470",
+        "DRA000343",
+        "DRA003208",
+        "DRA005259",
+        "DRA005304",
+        "DRA000385"
+      ]
+    },
+    "Arabidopsis thaliana": {
+      "count": 303,
+      "studies": [
+        "DRA005887",
+        "DRA005845",
+        "DRA005816",
+        "DRA000344",
+        "DRA003020",
+        "DRA001688",
+        "DRA003474",
+        "DRA002307",
+        "DRA003208",
+        "DRA005064",
+        "DRA005463",
+        "DRA005252",
+        "DRA005135",
+        "DRA003016",
+        "DRA005451",
+        "DRA002971",
+        "DRA003230",
+        "DRA005464",
+        "DRA004670"
+      ]
+    },
+    "Closterium peracerosum-strigosum-littorale complex": {
+      "count": 6,
+      "studies": [
+        "DRA003074",
+        "DRA000373"
+      ]
+    },
+    "Closterium sp. NIES-67": {
+      "count": 1,
+      "studies": [
+        "DRA000373"
+      ]
+    },
+    "Callitris intratropica": {
+      "count": 1,
+      "studies": [
+        "DRA000388"
+      ]
+    },
+    "Trypanosoma cruzi": {
+      "count": 1,
+      "studies": [
+        "DRA000396"
+      ]
+    },
+    "Canis lupus familiaris": {
+      "count": 9,
+      "studies": [
+        "DRA005021",
+        "DRA000408",
+        "DRA005022",
+        "DRA005026",
+        "DRA005024",
+        "DRA005027",
+        "DRA005025",
+        "DRA005018"
+      ]
+    },
+    "Anolis carolinensis": {
+      "count": 2,
+      "studies": [
+        "DRA000409",
+        "DRA000411"
+      ]
+    },
+    "Equus przewalskii": {
+      "count": 4,
+      "studies": [
+        "DRA000429"
+      ]
+    },
+    "Equus asinus africanus": {
+      "count": 1,
+      "studies": [
+        "DRA000429"
+      ]
+    },
+    "Macaca fascicularis": {
+      "count": 17,
+      "studies": [
+        "DRA003280",
+        "DRA000430"
+      ]
+    },
+    "Oryza rufipogon": {
+      "count": 3,
+      "studies": [
+        "DRA000444",
+        "DRA000438"
+      ]
+    },
+    "Oryza sativa Indica Group": {
+      "count": 3,
+      "studies": [
+        "DRA000444",
+        "DRA005784",
+        "DRA000968"
+      ]
+    },
+    "Oryza sativa Japonica Group x Oryza sativa Indica Group": {
+      "count": 1,
+      "studies": [
+        "DRA000444"
+      ]
+    },
+    "Oryza sativa Indica Group x Oryza sativa Japonica Group": {
+      "count": 1,
+      "studies": [
+        "DRA000444"
+      ]
+    },
+    "Oryza sativa Japonica Group x Oryza rufipogon": {
+      "count": 2,
+      "studies": [
+        "DRA000452"
+      ]
+    },
+    "Oryza rufipogon x Oryza sativa Japonica Group": {
+      "count": 2,
+      "studies": [
+        "DRA000452"
+      ]
+    },
+    "Eucalyptus camaldulensis": {
+      "count": 1,
+      "studies": [
+        "DRA000466"
+      ]
+    },
+    "Pinctada fucata": {
+      "count": 2,
+      "studies": [
+        "DRA000476"
+      ]
+    },
+    "Xenopus tropicalis": {
+      "count": 3,
+      "studies": [
+        "DRA000509",
+        "DRA000507",
+        "DRA000645"
+      ]
+    },
+    "biofilm metagenome": {
+      "count": 39,
+      "studies": [
+        "DRA000988",
+        "DRA004367",
+        "DRA004478",
+        "DRA000640",
+        "DRA000520"
+      ]
+    },
+    "Ciona intestinalis": {
+      "count": 4,
+      "studies": [
+        "DRA003470",
+        "DRA000528"
+      ]
+    },
+    "Bos taurus": {
+      "count": 6,
+      "studies": [
+        "DRA000530",
+        "DRA000549"
+      ]
+    },
+    "Lotus japonicus": {
+      "count": 28,
+      "studies": [
+        "DRA000535",
+        "DRA002749",
+        "DRA002462",
+        "DRA004948",
+        "DRA000598"
+      ]
+    },
+    "uncultured fungus": {
+      "count": 47,
+      "studies": [
+        "DRA000541",
+        "DRA002656",
+        "DRA002687",
+        "DRA002703",
+        "DRA002681",
+        "DRA002705",
+        "DRA002651",
+        "DRA002696",
+        "DRA002697",
+        "DRA003753",
+        "DRA002665",
+        "DRA002434",
+        "DRA002652",
+        "DRA002689"
+      ]
+    },
+    "Lymnaea stagnalis": {
+      "count": 1,
+      "studies": [
+        "DRA000562"
+      ]
+    },
+    "uncultured marine microorganism": {
+      "count": 157,
+      "studies": [
+        "DRA004899",
+        "DRA004901",
+        "DRA000565"
+      ]
+    },
+    "Haemaphysalis longicornis": {
+      "count": 1,
+      "studies": [
+        "DRA000590"
+      ]
+    },
+    "Ixodes ovatus": {
+      "count": 2,
+      "studies": [
+        "DRA000590"
+      ]
+    },
+    "Amblyomma testudinarium": {
+      "count": 1,
+      "studies": [
+        "DRA000590"
+      ]
+    },
+    "Amblyomma variegatum": {
+      "count": 2,
+      "studies": [
+        "DRA000590"
+      ]
+    },
+    "Haemaphysalis formosensis": {
+      "count": 1,
+      "studies": [
+        "DRA000590"
+      ]
+    },
+    "Ixodes persulcatus": {
+      "count": 2,
+      "studies": [
+        "DRA000590"
+      ]
+    },
+    "Ixodes ricinus": {
+      "count": 1,
+      "studies": [
+        "DRA000590"
+      ]
+    },
+    "Acetobacter pasteurianus NBRC 101655": {
+      "count": 1,
+      "studies": [
+        "DRA000611"
+      ]
+    },
+    "Latimeria chalumnae": {
+      "count": 2,
+      "studies": [
+        "DRA000624",
+        "DRA000653"
+      ]
+    },
+    "Physcomitrium patens": {
+      "count": 3,
+      "studies": [
+        "DRA000633",
+        "DRA004653",
+        "DRA004957"
+      ]
+    },
+    "Plutella xylostella": {
+      "count": 1,
+      "studies": [
+        "DRA000654"
+      ]
+    },
+    "uncultured bacterium": {
+      "count": 21,
+      "studies": [
+        "DRA001054",
+        "DRA000658",
+        "DRA001209",
+        "DRA004103",
+        "DRA002644",
+        "DRA002819",
+        "DRA001057",
+        "DRA002421"
+      ]
+    },
+    "human gut metagenome": {
+      "count": 292,
+      "studies": [
+        "DRA000702",
+        "DRA001865",
+        "DRA002871",
+        "DRA002901",
+        "DRA002867",
+        "DRA000879",
+        "DRA000880",
+        "DRA001868",
+        "DRA002892",
+        "DRA005774",
+        "DRA002884",
+        "DRA002883",
+        "DRA000872",
+        "DRA002878",
+        "DRA000684",
+        "DRA005121",
+        "DRA005811",
+        "DRA000687",
+        "DRA002897",
+        "DRA002904",
+        "DRA000876",
+        "DRA000682",
+        "DRA000661"
+      ]
+    },
+    "Thomasclavelia saccharogumia": {
+      "count": 1,
+      "studies": [
+        "DRA000704"
+      ]
+    },
+    "Hungatella hathewayi VE202-04": {
+      "count": 1,
+      "studies": [
+        "DRA000710"
+      ]
+    },
+    "Lachnospiraceae": {
+      "count": 1,
+      "studies": [
+        "DRA000714"
+      ]
+    },
+    "Clostridiales bacterium VE202-26": {
+      "count": 1,
+      "studies": [
+        "DRA000715"
+      ]
+    },
+    "Clostridium sp.": {
+      "count": 1,
+      "studies": [
+        "DRA000718"
+      ]
+    },
+    "Lachnospiraceae bacterium VE202-12": {
+      "count": 1,
+      "studies": [
+        "DRA000725"
+      ]
+    },
+    "rhizosphere metagenome": {
+      "count": 791,
+      "studies": [
+        "DRA000728",
+        "DRA002296",
+        "DRA004193",
+        "DRA002304",
+        "DRA005126",
+        "DRA002421"
+      ]
+    },
+    "Acetobacter sp.": {
+      "count": 1,
+      "studies": [
+        "DRA000734"
+      ]
+    },
+    "Escherichia coli DSM 30083 = JCM 1649 = ATCC 11775": {
+      "count": 2,
+      "studies": [
+        "DRA002191",
+        "DRA000736"
+      ]
+    },
+    "Hoylesella shahii": {
+      "count": 1,
+      "studies": [
+        "DRA000747"
+      ]
+    },
+    "Segatella oris": {
+      "count": 1,
+      "studies": [
+        "DRA000748"
+      ]
+    },
+    "Bacteroides pyogenes JCM 10003": {
+      "count": 1,
+      "studies": [
+        "DRA000753"
+      ]
+    },
+    "Pyrus pyrifolia var. culta": {
+      "count": 1,
+      "studies": [
+        "DRA000757"
+      ]
+    },
+    "Hoylesella pleuritidis": {
+      "count": 1,
+      "studies": [
+        "DRA000762"
+      ]
+    },
+    "Bacteroides salyersiae": {
+      "count": 1,
+      "studies": [
+        "DRA000765"
+      ]
+    },
+    "Prevotella falsenii": {
+      "count": 1,
+      "studies": [
+        "DRA000768"
+      ]
+    },
+    "Acetobacter persici JCM 25330": {
+      "count": 1,
+      "studies": [
+        "DRA000770"
+      ]
+    },
+    "Hoylesella marshii": {
+      "count": 1,
+      "studies": [
+        "DRA000775"
+      ]
+    },
+    "Lentilactobacillus farraginis DSM 18382 = JCM 14108": {
+      "count": 1,
+      "studies": [
+        "DRA000787"
+      ]
+    },
+    "Bacteroides rodentium JCM 16496": {
+      "count": 1,
+      "studies": [
+        "DRA000788"
+      ]
+    },
+    "Porphyromonas macacae DSM 20710 = JCM 13914": {
+      "count": 1,
+      "studies": [
+        "DRA000795"
+      ]
+    },
+    "Porphyromonas cangingivalis JCM 15983": {
+      "count": 1,
+      "studies": [
+        "DRA000796"
+      ]
+    },
+    "Escherichia coli JCM 18426": {
+      "count": 1,
+      "studies": [
+        "DRA000799"
+      ]
+    },
+    "Legionella pneumophila subsp. pneumophila JCM 7571": {
+      "count": 1,
+      "studies": [
+        "DRA000808"
+      ]
+    },
+    "Marinilabilia salmonicolor JCM 21150": {
+      "count": 1,
+      "studies": [
+        "DRA000813"
+      ]
+    },
+    "Lactobacillus gasseri ATCC 33323 = JCM 1131": {
+      "count": 1,
+      "studies": [
+        "DRA000819"
+      ]
+    },
+    "Lactobacillus kitasatonis DSM 16761 = JCM 1039": {
+      "count": 1,
+      "studies": [
+        "DRA000823"
+      ]
+    },
+    "Lactiplantibacillus plantarum subsp. plantarum ATCC 14917 = JCM 1149 = CGMCC 1.2437": {
+      "count": 1,
+      "studies": [
+        "DRA000824"
+      ]
+    },
+    "Nilaparvata lugens": {
+      "count": 2,
+      "studies": [
+        "DRA000828"
+      ]
+    },
+    "Pseudomonas aeruginosa JCM 6119": {
+      "count": 1,
+      "studies": [
+        "DRA000831"
+      ]
+    },
+    "Agrilactobacillus composti DSM 18527 = JCM 14202": {
+      "count": 1,
+      "studies": [
+        "DRA000840"
+      ]
+    },
+    "Caldalkalibacillus mannanilyticus JCM 10596": {
+      "count": 1,
+      "studies": [
+        "DRA000844"
+      ]
+    },
+    "Macaca mulatta": {
+      "count": 12,
+      "studies": [
+        "DRA000861",
+        "DRA003280"
+      ]
+    },
+    "Sus scrofa": {
+      "count": 2,
+      "studies": [
+        "DRA000861"
+      ]
+    },
+    "Aspergillus oryzae 100-8": {
+      "count": 1,
+      "studies": [
+        "DRA000891"
+      ]
+    },
+    "Leptospira interrogans serovar Canicola": {
+      "count": 1,
+      "studies": [
+        "DRA000913"
+      ]
+    },
+    "Leptospira interrogans serovar Hebdomadis": {
+      "count": 3,
+      "studies": [
+        "DRA000913"
+      ]
+    },
+    "Leptospira interrogans serovar Australis": {
+      "count": 3,
+      "studies": [
+        "DRA000913"
+      ]
+    },
+    "Leptospira interrogans serovar Autumnalis": {
+      "count": 1,
+      "studies": [
+        "DRA000913"
+      ]
+    },
+    "Leptospira interrogans serovar Copenhageni/Icterohaemorrhagiae": {
+      "count": 1,
+      "studies": [
+        "DRA000913"
+      ]
+    },
+    "Leptospira interrogans serovar Manilae": {
+      "count": 1,
+      "studies": [
+        "DRA000913"
+      ]
+    },
+    "Medicago sativa": {
+      "count": 2,
+      "studies": [
+        "DRA000922"
+      ]
+    },
+    "Acinetobacter baumannii": {
+      "count": 117,
+      "studies": [
+        "DRA000944",
+        "DRA003559"
+      ]
+    },
+    "Acinetobacter nosocomialis": {
+      "count": 3,
+      "studies": [
+        "DRA000944"
+      ]
+    },
+    "Allium fistulosum": {
+      "count": 9,
+      "studies": [
+        "DRA000945"
+      ]
+    },
+    "Lacticaseibacillus paracasei": {
+      "count": 1,
+      "studies": [
+        "DRA000956"
+      ]
+    },
+    "Glycyrrhiza uralensis": {
+      "count": 4,
+      "studies": [
+        "DRA000958"
+      ]
+    },
+    "root metagenome": {
+      "count": 4,
+      "studies": [
+        "DRA000966"
+      ]
+    },
+    "Caballeronia insecticola": {
+      "count": 5,
+      "studies": [
+        "DRA000987",
+        "DRA000982"
+      ]
+    },
+    "human oral metagenome": {
+      "count": 483,
+      "studies": [
+        "DRA004077",
+        "DRA000986",
+        "DRA002962",
+        "DRA002251",
+        "DRA005351",
+        "DRA002215",
+        "DRA000984",
+        "DRA003992"
+      ]
+    },
+    "Citrus x aurantiifolia": {
+      "count": 8,
+      "studies": [
+        "DRA000989"
+      ]
+    },
+    "Cupriavidus necator H16": {
+      "count": 1,
+      "studies": [
+        "DRA000990"
+      ]
+    },
+    "Raphanus sativus": {
+      "count": 119,
+      "studies": [
+        "DRA005069",
+        "DRA001003",
+        "DRA001288",
+        "DRA001157"
+      ]
+    },
+    "Triticum monococcum": {
+      "count": 2,
+      "studies": [
+        "DRA001004"
+      ]
+    },
+    "Holospora undulata HU1": {
+      "count": 1,
+      "studies": [
+        "DRA001008"
+      ]
+    },
+    "Mus musculus musculus": {
+      "count": 4,
+      "studies": [
+        "DRA001041"
+      ]
+    },
+    "Nasutitermes takasagoensis": {
+      "count": 3,
+      "studies": [
+        "DRA003011",
+        "DRA003012",
+        "DRA001046"
+      ]
+    },
+    "uncultured archaeon": {
+      "count": 13,
+      "studies": [
+        "DRA001047",
+        "DRA001051",
+        "DRA005478",
+        "DRA001170"
+      ]
+    },
+    "Notamacropus eugenii": {
+      "count": 1,
+      "studies": [
+        "DRA001074"
+      ]
+    },
+    "Hepacivirus hominis": {
+      "count": 9,
+      "studies": [
+        "DRA001077"
+      ]
+    },
+    "mouse gut metagenome": {
+      "count": 268,
+      "studies": [
+        "DRA005031",
+        "DRA001238",
+        "DRA001079",
+        "DRA004433",
+        "DRA005819",
+        "DRA004786"
+      ]
+    },
+    "gut metagenome": {
+      "count": 169,
+      "studies": [
+        "DRA003486",
+        "DRA005413",
+        "DRA003482",
+        "DRA001088"
+      ]
+    },
+    "phyllosphere metagenome": {
+      "count": 1,
+      "studies": [
+        "DRA001097"
+      ]
+    },
+    "Limimaricola cinnabarinus": {
+      "count": 1,
+      "studies": [
+        "DRA001118"
+      ]
+    },
+    "Ramazzottius varieornatus": {
+      "count": 7,
+      "studies": [
+        "DRA001120",
+        "DRA001119"
+      ]
+    },
+    "Fagus crenata": {
+      "count": 1,
+      "studies": [
+        "DRA001122"
+      ]
+    },
+    "Sphingobium fuliginis": {
+      "count": 1,
+      "studies": [
+        "DRA001135"
+      ]
+    },
+    "Solanum melongena": {
+      "count": 3,
+      "studies": [
+        "DRA001153",
+        "DRA001156"
+      ]
+    },
+    "Raphanus sativus var. sativus": {
+      "count": 1,
+      "studies": [
+        "DRA001157"
+      ]
+    },
+    "Momordica charantia": {
+      "count": 1,
+      "studies": [
+        "DRA001175"
+      ]
+    },
+    "Brassica rapa x Raphanus sativus": {
+      "count": 2,
+      "studies": [
+        "DRA001191"
+      ]
+    },
+    "anaerobic digester metagenome": {
+      "count": 1,
+      "studies": [
+        "DRA001222"
+      ]
+    },
+    "Drosophila melanogaster": {
+      "count": 50,
+      "studies": [
+        "DRA006010",
+        "DRA004032",
+        "DRA004265",
+        "DRA005781",
+        "DRA001230"
+      ]
+    },
+    "Drosophila virilis": {
+      "count": 2,
+      "studies": [
+        "DRA001230"
+      ]
+    },
+    "fish metagenome": {
+      "count": 3,
+      "studies": [
+        "DRA001264"
+      ]
+    },
+    "Sorghum bicolor": {
+      "count": 49,
+      "studies": [
+        "DRA003928",
+        "DRA001269"
+      ]
+    },
+    "Ureaplasma parvum serovar 3": {
+      "count": 1,
+      "studies": [
+        "DRA001279"
+      ]
+    },
+    "Staphylococcus aureus": {
+      "count": 1,
+      "studies": [
+        "DRA001292"
+      ]
+    },
+    "Bergeyella zoohelcum": {
+      "count": 1,
+      "studies": [
+        "DRA001293"
+      ]
+    },
+    "Klebsiella pneumoniae": {
+      "count": 1,
+      "studies": [
+        "DRA001297"
+      ]
+    },
+    "Kluyvera cryocrescens": {
+      "count": 1,
+      "studies": [
+        "DRA001299"
+      ]
+    },
+    "Morganella morganii": {
+      "count": 1,
+      "studies": [
+        "DRA001302"
+      ]
+    },
+    "Acinetobacter gerneri": {
+      "count": 1,
+      "studies": [
+        "DRA001303"
+      ]
+    },
+    "Acinetobacter genospecies": {
+      "count": 1,
+      "studies": [
+        "DRA001304"
+      ]
+    },
+    "Acinetobacter junii": {
+      "count": 1,
+      "studies": [
+        "DRA001306"
+      ]
+    },
+    "Acinetobacter guillouiae": {
+      "count": 1,
+      "studies": [
+        "DRA001309"
+      ]
+    },
+    "Aeromonas sobria": {
+      "count": 1,
+      "studies": [
+        "DRA001315"
+      ]
+    },
+    "Aeromonas enteropelogenes": {
+      "count": 1,
+      "studies": [
+        "DRA001316"
+      ]
+    },
+    "Burkholderia gladioli pv. cocovenerans": {
+      "count": 2,
+      "studies": [
+        "DRA001617",
+        "DRA001327"
+      ]
+    },
+    "Cedecea lapagei": {
+      "count": 1,
+      "studies": [
+        "DRA001328"
+      ]
+    },
+    "Pseudomonas luteola": {
+      "count": 1,
+      "studies": [
+        "DRA001332"
+      ]
+    },
+    "Cronobacter universalis": {
+      "count": 1,
+      "studies": [
+        "DRA001337"
+      ]
+    },
+    "Taphrina deformans": {
+      "count": 1,
+      "studies": [
+        "DRA001344"
+      ]
+    },
+    "Enterobacter ludwigii": {
+      "count": 1,
+      "studies": [
+        "DRA001357"
+      ]
+    },
+    "Plesiomonas shigelloides": {
+      "count": 3,
+      "studies": [
+        "DRA001504",
+        "DRA001620",
+        "DRA001367"
+      ]
+    },
+    "Salmonella bongori": {
+      "count": 1,
+      "studies": [
+        "DRA001376"
+      ]
+    },
+    "Suttonella indologenes": {
+      "count": 1,
+      "studies": [
+        "DRA001383"
+      ]
+    },
+    "Haemophilus influenzae": {
+      "count": 3,
+      "studies": [
+        "DRA001386",
+        "DRA001668",
+        "DRA001389"
+      ]
+    },
+    "Moraxella ovis": {
+      "count": 1,
+      "studies": [
+        "DRA001394"
+      ]
+    },
+    "Aggregatibacter aphrophilus": {
+      "count": 1,
+      "studies": [
+        "DRA001396"
+      ]
+    },
+    "Neisseria flava": {
+      "count": 1,
+      "studies": [
+        "DRA001400"
+      ]
+    },
+    "Escherichia coli": {
+      "count": 38,
+      "studies": [
+        "DRA001408",
+        "DRA001404",
+        "DRA004888",
+        "DRA004593",
+        "DRA005815",
+        "DRA005649"
+      ]
+    },
+    "Arcanobacterium haemolyticum": {
+      "count": 1,
+      "studies": [
+        "DRA001417"
+      ]
+    },
+    "Tsukamurella pulmonis": {
+      "count": 1,
+      "studies": [
+        "DRA001421"
+      ]
+    },
+    "Enterococcus faecium": {
+      "count": 25,
+      "studies": [
+        "DRA001425",
+        "DRA003513"
+      ]
+    },
+    "Enterococcus hirae ATCC 9790": {
+      "count": 1,
+      "studies": [
+        "DRA001428"
+      ]
+    },
+    "Enterococcus malodoratus": {
+      "count": 1,
+      "studies": [
+        "DRA001429"
+      ]
+    },
+    "Mammaliicoccus lentus": {
+      "count": 1,
+      "studies": [
+        "DRA001447"
+      ]
+    },
+    "Staphylococcus coagulans": {
+      "count": 1,
+      "studies": [
+        "DRA001449"
+      ]
+    },
+    "Streptococcus canis": {
+      "count": 1,
+      "studies": [
+        "DRA001457"
+      ]
+    },
+    "Streptococcus equi subsp. zooepidemicus": {
+      "count": 2,
+      "studies": [
+        "DRA001468",
+        "DRA001466"
+      ]
+    },
+    "Bordetella holmesii": {
+      "count": 1,
+      "studies": [
+        "DRA001488"
+      ]
+    },
+    "Flavobacterium psychrophilum": {
+      "count": 1,
+      "studies": [
+        "DRA001499"
+      ]
+    },
+    "Vibrio anguillarum": {
+      "count": 1,
+      "studies": [
+        "DRA001501"
+      ]
+    },
+    "Cronobacter malonaticus": {
+      "count": 1,
+      "studies": [
+        "DRA001515"
+      ]
+    },
+    "Shigella boydii": {
+      "count": 5,
+      "studies": [
+        "DRA001518",
+        "DRA001529",
+        "DRA001522",
+        "DRA001524",
+        "DRA001592"
+      ]
+    },
+    "Shigella dysenteriae": {
+      "count": 2,
+      "studies": [
+        "DRA001597",
+        "DRA001532"
+      ]
+    },
+    "Clostridium chauvoei": {
+      "count": 1,
+      "studies": [
+        "DRA001546"
+      ]
+    },
+    "Mycolicibacterium peregrinum": {
+      "count": 1,
+      "studies": [
+        "DRA001557"
+      ]
+    },
+    "Mycobacterium gordonae": {
+      "count": 1,
+      "studies": [
+        "DRA001558"
+      ]
+    },
+    "Mycolicibacterium flavescens": {
+      "count": 1,
+      "studies": [
+        "DRA001564"
+      ]
+    },
+    "Fusobacterium nucleatum": {
+      "count": 1,
+      "studies": [
+        "DRA001566"
+      ]
+    },
+    "Citrobacter gillenii": {
+      "count": 1,
+      "studies": [
+        "DRA001568"
+      ]
+    },
+    "Citrobacter murliniae": {
+      "count": 1,
+      "studies": [
+        "DRA001569"
+      ]
+    },
+    "Pandoraea oxalativorans": {
+      "count": 1,
+      "studies": [
+        "DRA001575"
+      ]
+    },
+    "Cronobacter dublinensis": {
+      "count": 1,
+      "studies": [
+        "DRA001587"
+      ]
+    },
+    "Shigella flexneri 1a": {
+      "count": 1,
+      "studies": [
+        "DRA001600"
+      ]
+    },
+    "Shigella flexneri 2a": {
+      "count": 1,
+      "studies": [
+        "DRA001602"
+      ]
+    },
+    "Shigella flexneri": {
+      "count": 1,
+      "studies": [
+        "DRA001606"
+      ]
+    },
+    "Corynebacterium striatum": {
+      "count": 1,
+      "studies": [
+        "DRA001623"
+      ]
+    },
+    "Mycobacterium branderi": {
+      "count": 1,
+      "studies": [
+        "DRA001624"
+      ]
+    },
+    "Mycolicibacterium senegalense": {
+      "count": 1,
+      "studies": [
+        "DRA001632"
+      ]
+    },
+    "Corynebacterium otitidis": {
+      "count": 1,
+      "studies": [
+        "DRA001636"
+      ]
+    },
+    "Mycobacterium malmoense": {
+      "count": 1,
+      "studies": [
+        "DRA001646"
+      ]
+    },
+    "Mycobacteroides abscessus": {
+      "count": 1,
+      "studies": [
+        "DRA001649"
+      ]
+    },
+    "Clostridium sporogenes": {
+      "count": 2,
+      "studies": [
+        "DRA001656",
+        "DRA001653"
+      ]
+    },
+    "Bordetella bronchiseptica": {
+      "count": 1,
+      "studies": [
+        "DRA001658"
+      ]
+    },
+    "Burkholderia cepacia": {
+      "count": 1,
+      "studies": [
+        "DRA001660"
+      ]
+    },
+    "Serratia quinivorans": {
+      "count": 1,
+      "studies": [
+        "DRA001665"
+      ]
+    },
+    "Elizabethkingia miricola": {
+      "count": 1,
+      "studies": [
+        "DRA001666"
+      ]
+    },
+    "Rousettus aegyptiacus": {
+      "count": 2,
+      "studies": [
+        "DRA001680"
+      ]
+    },
+    "Orthetrum albistylum": {
+      "count": 3,
+      "studies": [
+        "DRA001694",
+        "DRA001713",
+        "DRA001701"
+      ]
+    },
+    "Anguilla japonica": {
+      "count": 2,
+      "studies": [
+        "DRA001739"
+      ]
+    },
+    "Somatochlora uchidai": {
+      "count": 2,
+      "studies": [
+        "DRA002773",
+        "DRA001780"
+      ]
+    },
+    "Thauera": {
+      "count": 1,
+      "studies": [
+        "DRA001881"
+      ]
+    },
+    "Halalkalibacter akibai": {
+      "count": 1,
+      "studies": [
+        "DRA001890"
+      ]
+    },
+    "Marinifilum fragile": {
+      "count": 1,
+      "studies": [
+        "DRA001897"
+      ]
+    },
+    "Companilactobacillus kimchii DSM 13961 = JCM 10707": {
+      "count": 1,
+      "studies": [
+        "DRA001904"
+      ]
+    },
+    "Lacticaseibacillus camelliae DSM 22697 = JCM 13995": {
+      "count": 1,
+      "studies": [
+        "DRA001909"
+      ]
+    },
+    "Lactobacillus delbrueckii subsp. bulgaricus ATCC 11842 = JCM 1002": {
+      "count": 1,
+      "studies": [
+        "DRA001913"
+      ]
+    },
+    "Limosilactobacillus equigenerosi DSM 18793 = JCM 14505": {
+      "count": 1,
+      "studies": [
+        "DRA001918"
+      ]
+    },
+    "Lentilactobacillus kisonensis DSM 19906 = JCM 15041": {
+      "count": 1,
+      "studies": [
+        "DRA001920"
+      ]
+    },
+    "Holzapfeliella floricola DSM 23037 = JCM 16512": {
+      "count": 1,
+      "studies": [
+        "DRA001922"
+      ]
+    },
+    "Metallosphaera hakonensis JCM 8857 = DSM 7519": {
+      "count": 1,
+      "studies": [
+        "DRA001926"
+      ]
+    },
+    "Latilactobacillus curvatus JCM 1096 = DSM 20019": {
+      "count": 1,
+      "studies": [
+        "DRA001942"
+      ]
+    },
+    "Lentilactobacillus kefiri DSM 20587 = JCM 5818": {
+      "count": 1,
+      "studies": [
+        "DRA001947"
+      ]
+    },
+    "Sulfuracidifex metallicus DSM 6482 = JCM 9184": {
+      "count": 1,
+      "studies": [
+        "DRA001950"
+      ]
+    },
+    "Mesobacillus boroniphilus JCM 21738": {
+      "count": 1,
+      "studies": [
+        "DRA001967"
+      ]
+    },
+    "Lysinibacillus boronitolerans JCM 21713 = 10a = NBRC 103108": {
+      "count": 1,
+      "studies": [
+        "DRA001969"
+      ]
+    },
+    "Achromobacter sp. JCM 18799": {
+      "count": 1,
+      "studies": [
+        "DRA001987"
+      ]
+    },
+    "Clostridium sp. NkU-1": {
+      "count": 1,
+      "studies": [
+        "DRA001994"
+      ]
+    },
+    "Coprobacillus cateniformis JCM 10604": {
+      "count": 1,
+      "studies": [
+        "DRA001996"
+      ]
+    },
+    "Paenibacillus sp. YK5": {
+      "count": 1,
+      "studies": [
+        "DRA002007"
+      ]
+    },
+    "Rhodococcus baikonurensis JCM 18801": {
+      "count": 1,
+      "studies": [
+        "DRA002011"
+      ]
+    },
+    "Rhodococcus sp. JCM 9793": {
+      "count": 1,
+      "studies": [
+        "DRA002014"
+      ]
+    },
+    "Helicobacter pylori NCTC 11637 = CCUG 17874 = ATCC 43504 = JCM 12093": {
+      "count": 3,
+      "studies": [
+        "DRA002019",
+        "DRA003679"
+      ]
+    },
+    "Bacillus spizizenii ATCC 6633 = JCM 2499": {
+      "count": 1,
+      "studies": [
+        "DRA002020"
+      ]
+    },
+    "Methanobacterium formicicum JCM 10132": {
+      "count": 1,
+      "studies": [
+        "DRA002025"
+      ]
+    },
+    "Nocardioides sp. JCM 18999": {
+      "count": 1,
+      "studies": [
+        "DRA002035"
+      ]
+    },
+    "Cutibacterium acnes JCM 18909": {
+      "count": 1,
+      "studies": [
+        "DRA002038"
+      ]
+    },
+    "Cutibacterium acnes JCM 18920": {
+      "count": 1,
+      "studies": [
+        "DRA002041"
+      ]
+    },
+    "Verrucomicrobium spinosum DSM 4136 = JCM 18804": {
+      "count": 1,
+      "studies": [
+        "DRA002043"
+      ]
+    },
+    "Pseudonocardia tetrahydrofuranoxydans JCM 14745": {
+      "count": 1,
+      "studies": [
+        "DRA002057"
+      ]
+    },
+    "Granulicoccus phenolivorans DSM 17626 = NBRC 107789 = JCM 15570": {
+      "count": 1,
+      "studies": [
+        "DRA002060"
+      ]
+    },
+    "Streptomyces lavendulae subsp. lavendulae JCM 4055": {
+      "count": 1,
+      "studies": [
+        "DRA002063"
+      ]
+    },
+    "Mycolicibacterium chlorophenolicum JCM 7439 = NBRC 15527": {
+      "count": 1,
+      "studies": [
+        "DRA002064"
+      ]
+    },
+    "Nocardioides aromaticivorans JCM 11674": {
+      "count": 1,
+      "studies": [
+        "DRA002073"
+      ]
+    },
+    "Thermobifida fusca NBRC 14071 = JCM 3263": {
+      "count": 1,
+      "studies": [
+        "DRA002081"
+      ]
+    },
+    "Cellulomonas xylanilytica JCM 14281": {
+      "count": 1,
+      "studies": [
+        "DRA002085"
+      ]
+    },
+    "Mycolicibacterium pyrenivorans JCM 15927": {
+      "count": 1,
+      "studies": [
+        "DRA002089"
+      ]
+    },
+    "Mycolicibacterium aromaticivorans JS19b1 = JCM 16368": {
+      "count": 1,
+      "studies": [
+        "DRA002090"
+      ]
+    },
+    "Kineosporia aurantiaca JCM 3230": {
+      "count": 1,
+      "studies": [
+        "DRA002100"
+      ]
+    },
+    "Streptomyces misionensis JCM 4497": {
+      "count": 1,
+      "studies": [
+        "DRA002103"
+      ]
+    },
+    "Streptomyces antibioticus JCM 4620": {
+      "count": 1,
+      "studies": [
+        "DRA002104"
+      ]
+    },
+    "Streptomyces chrestomyceticus JCM 4735": {
+      "count": 1,
+      "studies": [
+        "DRA002107"
+      ]
+    },
+    "Catenuloplanes japonicus JCM 9106": {
+      "count": 1,
+      "studies": [
+        "DRA002109"
+      ]
+    },
+    "Catenuloplanes niger JCM 9533": {
+      "count": 1,
+      "studies": [
+        "DRA002111"
+      ]
+    },
+    "Phocaeicola coprophilus DSM 18228 = JCM 13818": {
+      "count": 1,
+      "studies": [
+        "DRA002122"
+      ]
+    },
+    "Bacillus sp. JCM 19045": {
+      "count": 1,
+      "studies": [
+        "DRA002130"
+      ]
+    },
+    "Pseudomonas sp.": {
+      "count": 1,
+      "studies": [
+        "DRA002139"
+      ]
+    },
+    "Elaeis guineensis": {
+      "count": 19,
+      "studies": [
+        "DRA002154"
+      ]
+    },
+    "Triops cancriformis": {
+      "count": 1,
+      "studies": [
+        "DRA002162"
+      ]
+    },
+    "Vibrio sp. JCM 19234": {
+      "count": 1,
+      "studies": [
+        "DRA002167"
+      ]
+    },
+    "Photobacterium aphoticum": {
+      "count": 1,
+      "studies": [
+        "DRA002170"
+      ]
+    },
+    "Vibrio ponticus": {
+      "count": 1,
+      "studies": [
+        "DRA002171"
+      ]
+    },
+    "Vibrio maritimus": {
+      "count": 1,
+      "studies": [
+        "DRA002173"
+      ]
+    },
+    "Jejuia pallidilutea": {
+      "count": 1,
+      "studies": [
+        "DRA002180"
+      ]
+    },
+    "Tetragenococcus halophilus": {
+      "count": 1,
+      "studies": [
+        "DRA002197"
+      ]
+    },
+    "Thalassobacillus sp. C254": {
+      "count": 1,
+      "studies": [
+        "DRA002199"
+      ]
+    },
+    "Bacillus sp. JCM 19059": {
+      "count": 1,
+      "studies": [
+        "DRA002201"
+      ]
+    },
+    "freshwater metagenome": {
+      "count": 45,
+      "studies": [
+        "DRA005093",
+        "DRA002220"
+      ]
+    },
+    "Mycena chlorophos": {
+      "count": 2,
+      "studies": [
+        "DRA002230"
+      ]
+    },
+    "Bombyx mori": {
+      "count": 42,
+      "studies": [
+        "DRA004652",
+        "DRA003146",
+        "DRA003158",
+        "DRA002247",
+        "DRA005511",
+        "DRA005958",
+        "DRA003166",
+        "DRA005085",
+        "DRA003144",
+        "DRA003571"
+      ]
+    },
+    "Clostridium botulinum": {
+      "count": 10,
+      "studies": [
+        "DRA002253"
+      ]
+    },
+    "Chlorocebus sabaeus": {
+      "count": 1,
+      "studies": [
+        "DRA002256"
+      ]
+    },
+    "terrestrial metagenome": {
+      "count": 121,
+      "studies": [
+        "DRA002257"
+      ]
+    },
+    "pig metagenome": {
+      "count": 3,
+      "studies": [
+        "DRA002295"
+      ]
+    },
+    "Escherichia coli str. K-12 substr. W3110": {
+      "count": 7,
+      "studies": [
+        "DRA002309"
+      ]
+    },
+    "food fermentation metagenome": {
+      "count": 85,
+      "studies": [
+        "DRA005614",
+        "DRA005916",
+        "DRA004822",
+        "DRA005855",
+        "DRA002315",
+        "DRA003983",
+        "DRA002319"
+      ]
+    },
+    "Asiagomphus melaenops": {
+      "count": 1,
+      "studies": [
+        "DRA002346"
+      ]
+    },
+    "Papilio polytes": {
+      "count": 4,
+      "studies": [
+        "DRA002370",
+        "DRA002360",
+        "DRA002371",
+        "DRA002372"
+      ]
+    },
+    "Papilio xuthus": {
+      "count": 1,
+      "studies": [
+        "DRA002383"
+      ]
+    },
+    "Mnais costalis": {
+      "count": 2,
+      "studies": [
+        "DRA002393",
+        "DRA002390"
+      ]
+    },
+    "Secundilactobacillus oryzae": {
+      "count": 1,
+      "studies": [
+        "DRA002405"
+      ]
+    },
+    "Pseudoalteromonas sp. YT10": {
+      "count": 1,
+      "studies": [
+        "DRA002427"
+      ]
+    },
+    "Salmonella enterica subsp. enterica serovar 4,[5],12:i:-": {
+      "count": 6,
+      "studies": [
+        "DRA002431"
+      ]
+    },
+    "Thujopsis dolabrata var. hondae": {
+      "count": 1,
+      "studies": [
+        "DRA002435"
+      ]
+    },
+    "Enkianthus perulatus": {
+      "count": 1,
+      "studies": [
+        "DRA002446"
+      ]
+    },
+    "Indolestes peregrinus": {
+      "count": 2,
+      "studies": [
+        "DRA002455",
+        "DRA002460"
+      ]
+    },
+    "Mesorhizobium japonicum MAFF 303099": {
+      "count": 9,
+      "studies": [
+        "DRA002462"
+      ]
+    },
+    "Solanum lycopersicum": {
+      "count": 9,
+      "studies": [
+        "DRA002470"
+      ]
+    },
+    "Anotogaster sieboldii": {
+      "count": 1,
+      "studies": [
+        "DRA002489"
+      ]
+    },
+    "Anax parthenope": {
+      "count": 1,
+      "studies": [
+        "DRA002494"
+      ]
+    },
+    "Fagopyrum esculentum": {
+      "count": 1,
+      "studies": [
+        "DRA002511"
+      ]
+    },
+    "Takifugu rubripes": {
+      "count": 5,
+      "studies": [
+        "DRA002516"
+      ]
+    },
+    "Aedes aegypti": {
+      "count": 2,
+      "studies": [
+        "DRA002522"
+      ]
+    },
+    "Synechocystis sp. PCC 6803": {
+      "count": 4,
+      "studies": [
+        "DRA004890",
+        "DRA002534"
+      ]
+    },
+    "Macrobrachium rosenbergii": {
+      "count": 1,
+      "studies": [
+        "DRA002547"
+      ]
+    },
+    "Fragaria x ananassa": {
+      "count": 1,
+      "studies": [
+        "DRA002553"
+      ]
+    },
+    "Patiria pectinifera": {
+      "count": 2,
+      "studies": [
+        "DRA002578"
+      ]
+    },
+    "Rhizophagus irregularis DAOM 181602=DAOM 197198": {
+      "count": 49,
+      "studies": [
+        "DRA002591",
+        "DRA006038",
+        "DRA005233"
+      ]
+    },
+    "Vibrio halioticoli": {
+      "count": 3,
+      "studies": [
+        "DRA002596"
+      ]
+    },
+    "Gluconobacter thailandicus NBRC 3255": {
+      "count": 1,
+      "studies": [
+        "DRA002602"
+      ]
+    },
+    "Gluconobacter thailandicus NBRC 3257": {
+      "count": 1,
+      "studies": [
+        "DRA002603"
+      ]
+    },
+    "human metagenome": {
+      "count": 197,
+      "studies": [
+        "DRA004741",
+        "DRA003590",
+        "DRA002617",
+        "DRA005144"
+      ]
+    },
+    "Humulus lupulus var. lupulus": {
+      "count": 8,
+      "studies": [
+        "DRA002630"
+      ]
+    },
+    "Humulus lupulus var. cordifolius": {
+      "count": 3,
+      "studies": [
+        "DRA002630"
+      ]
+    },
+    "Humulus lupulus": {
+      "count": 1,
+      "studies": [
+        "DRA002630"
+      ]
+    },
+    "Danio rerio": {
+      "count": 21,
+      "studies": [
+        "DRA002642",
+        "DRA005199",
+        "DRA005484",
+        "DRA004275"
+      ]
+    },
+    "Vibrio owensii": {
+      "count": 1,
+      "studies": [
+        "DRA002646"
+      ]
+    },
+    "Dugesia japonica": {
+      "count": 3,
+      "studies": [
+        "DRA002722"
+      ]
+    },
+    "pig gut metagenome": {
+      "count": 4,
+      "studies": [
+        "DRA002734",
+        "DRA002736",
+        "DRA002735",
+        "DRA002733"
+      ]
+    },
+    "uncultured microorganism": {
+      "count": 2,
+      "studies": [
+        "DRA002745",
+        "DRA002743"
+      ]
+    },
+    "Ischnura asiatica": {
+      "count": 1,
+      "studies": [
+        "DRA002768"
+      ]
+    },
+    "Sympetrum frequens": {
+      "count": 4,
+      "studies": [
+        "DRA002800",
+        "DRA002799",
+        "DRA002793"
+      ]
+    },
+    "Oreochromis mossambicus": {
+      "count": 3,
+      "studies": [
+        "DRA002809",
+        "DRA002807",
+        "DRA002814"
+      ]
+    },
+    "Acinetobacter baylyi": {
+      "count": 1,
+      "studies": [
+        "DRA002821"
+      ]
+    },
+    "Cananga odorata var. fruticosa": {
+      "count": 1,
+      "studies": [
+        "DRA002822"
+      ]
+    },
+    "Mus musculus castaneus": {
+      "count": 1,
+      "studies": [
+        "DRA002838"
+      ]
+    },
+    "Ptychodera flava": {
+      "count": 1,
+      "studies": [
+        "DRA002855"
+      ]
+    },
+    "Karenia mikimotoi": {
+      "count": 1,
+      "studies": [
+        "DRA002947"
+      ]
+    },
+    "Sarracenia purpurea subsp. venosa": {
+      "count": 4,
+      "studies": [
+        "DRA002955"
+      ]
+    },
+    "Wasmannia auropunctata": {
+      "count": 33,
+      "studies": [
+        "DRA002958"
+      ]
+    },
+    "marine metagenome": {
+      "count": 164,
+      "studies": [
+        "DRA005790",
+        "DRA005791",
+        "DRA004533",
+        "DRA005203",
+        "DRA005228",
+        "DRA002967"
+      ]
+    },
+    "Spinacia oleracea": {
+      "count": 2,
+      "studies": [
+        "DRA002974",
+        "DRA002980"
+      ]
+    },
+    "Strongyloides venezuelensis": {
+      "count": 1,
+      "studies": [
+        "DRA002988"
+      ]
+    },
+    "Bursaphelenchus xylophilus": {
+      "count": 3,
+      "studies": [
+        "DRA002996",
+        "DRA002997",
+        "DRA002992"
+      ]
+    },
+    "Mycobacterium tuberculosis variant bovis BCG str. Tokyo 172": {
+      "count": 16,
+      "studies": [
+        "DRA002999"
+      ]
+    },
+    "Glycine max": {
+      "count": 12,
+      "studies": [
+        "DRA004043",
+        "DRA004035",
+        "DRA003247",
+        "DRA003004",
+        "DRA004038",
+        "DRA004040",
+        "DRA004044"
+      ]
+    },
+    "Human immunodeficiency virus 1": {
+      "count": 13,
+      "studies": [
+        "DRA003039",
+        "DRA004004"
+      ]
+    },
+    "Vollenhovia emeryi": {
+      "count": 25,
+      "studies": [
+        "DRA003726",
+        "DRA003040",
+        "DRA003725"
+      ]
+    },
+    "Cantina marsupialis": {
+      "count": 1,
+      "studies": [
+        "DRA003063"
+      ]
+    },
+    "Naumovozyma castellii": {
+      "count": 2,
+      "studies": [
+        "DRA003067"
+      ]
+    },
+    "Saitoella complicata NRRL Y-17804": {
+      "count": 2,
+      "studies": [
+        "DRA003112"
+      ]
+    },
+    "Cuscuta japonica": {
+      "count": 5,
+      "studies": [
+        "DRA003114"
+      ]
+    },
+    "Streptomyces thermocarboxydus": {
+      "count": 1,
+      "studies": [
+        "DRA003133"
+      ]
+    },
+    "Streptomyces olivoreticuli": {
+      "count": 1,
+      "studies": [
+        "DRA003164"
+      ]
+    },
+    "Streptomyces luteocolor": {
+      "count": 1,
+      "studies": [
+        "DRA003165"
+      ]
+    },
+    "Caenorhabditis elegans": {
+      "count": 8,
+      "studies": [
+        "DRA003222",
+        "DRA003221"
+      ]
+    },
+    "Pan troglodytes": {
+      "count": 2,
+      "studies": [
+        "DRA003228"
+      ]
+    },
+    "Monomorium pharaonis": {
+      "count": 229,
+      "studies": [
+        "DRA003820",
+        "DRA003275"
+      ]
+    },
+    "Macaca nemestrina": {
+      "count": 10,
+      "studies": [
+        "DRA003280"
+      ]
+    },
+    "Apiotrichum domesticum": {
+      "count": 1,
+      "studies": [
+        "DRA003281"
+      ]
+    },
+    "Exophiala spinifera": {
+      "count": 1,
+      "studies": [
+        "DRA003319"
+      ]
+    },
+    "Sarocladium oryzae": {
+      "count": 1,
+      "studies": [
+        "DRA003320"
+      ]
+    },
+    "Mrakia aquatica": {
+      "count": 1,
+      "studies": [
+        "DRA003329"
+      ]
+    },
+    "Trichosporon inkin": {
+      "count": 1,
+      "studies": [
+        "DRA003385"
+      ]
+    },
+    "Pestalotiopsis sp. JCM 9685": {
+      "count": 1,
+      "studies": [
+        "DRA003417"
+      ]
+    },
+    "Hippocampus abdominalis": {
+      "count": 1,
+      "studies": [
+        "DRA003465"
+      ]
+    },
+    "Laqueus rubellus": {
+      "count": 1,
+      "studies": [
+        "DRA003489"
+      ]
+    },
+    "Pyricularia oryzae": {
+      "count": 15,
+      "studies": [
+        "DRA004665",
+        "DRA003498"
+      ]
+    },
+    "food metagenome": {
+      "count": 66,
+      "studies": [
+        "DRA003527",
+        "DRA005337"
+      ]
+    },
+    "Conus episcopatus": {
+      "count": 3,
+      "studies": [
+        "DRA003531"
+      ]
+    },
+    "rat gut metagenome": {
+      "count": 165,
+      "studies": [
+        "DRA003560",
+        "DRA004784"
+      ]
+    },
+    "Dictyostelium discoideum": {
+      "count": 2,
+      "studies": [
+        "DRA003565"
+      ]
+    },
+    "Escherichia coli K-12": {
+      "count": 7,
+      "studies": [
+        "DRA003579",
+        "DRA004782"
+      ]
+    },
+    "Polyblepharides amylifera": {
+      "count": 1,
+      "studies": [
+        "DRA003588"
+      ]
+    },
+    "Pyramimonas parkeae": {
+      "count": 1,
+      "studies": [
+        "DRA003588"
+      ]
+    },
+    "Callithrix jacchus": {
+      "count": 1,
+      "studies": [
+        "DRA003594"
+      ]
+    },
+    "Ambrosiozyma monospora": {
+      "count": 1,
+      "studies": [
+        "DRA003638"
+      ]
+    },
+    "Solicoccozyma phenolica": {
+      "count": 1,
+      "studies": [
+        "DRA003641"
+      ]
+    },
+    "Pilasporangium apinafurcum": {
+      "count": 1,
+      "studies": [
+        "DRA003672"
+      ]
+    },
+    "Helicobacter pylori": {
+      "count": 2,
+      "studies": [
+        "DRA003681"
+      ]
+    },
+    "Takashimella tepidaria (nom. inval.)": {
+      "count": 1,
+      "studies": [
+        "DRA003707"
+      ]
+    },
+    "Vollenhovia yambaru": {
+      "count": 1,
+      "studies": [
+        "DRA003725"
+      ]
+    },
+    "Vollenhovia okinawana": {
+      "count": 1,
+      "studies": [
+        "DRA003725"
+      ]
+    },
+    "Vollenhovia nipponica": {
+      "count": 23,
+      "studies": [
+        "DRA003725"
+      ]
+    },
+    "Vibrio phage CKB-S2": {
+      "count": 1,
+      "studies": [
+        "DRA003738"
+      ]
+    },
+    "Escherichia coli str. K-12 substr. MDS42": {
+      "count": 1,
+      "studies": [
+        "DRA003743"
+      ]
+    },
+    "Acetobacter pasteurianus NBRC 3277": {
+      "count": 1,
+      "studies": [
+        "DRA003763"
+      ]
+    },
+    "Acetobacter pasteurianus NBRC 3278": {
+      "count": 1,
+      "studies": [
+        "DRA003764"
+      ]
+    },
+    "Acetobacter pasteurianus NBRC 3280": {
+      "count": 1,
+      "studies": [
+        "DRA003766"
+      ]
+    },
+    "Acetobacter pasteurianus NBRC 3299": {
+      "count": 1,
+      "studies": [
+        "DRA003768"
+      ]
+    },
+    "Aquarana catesbeiana": {
+      "count": 5,
+      "studies": [
+        "DRA003770"
+      ]
+    },
+    "Saccharomyces pastorianus": {
+      "count": 3,
+      "studies": [
+        "DRA003781",
+        "DRA003782",
+        "DRA004951"
+      ]
+    },
+    "Mycobacterium tuberculosis": {
+      "count": 7,
+      "studies": [
+        "DRA003808"
+      ]
+    },
+    "fermentation metagenome": {
+      "count": 14,
+      "studies": [
+        "DRA003811",
+        "DRA004903"
+      ]
+    },
+    "viral metagenome": {
+      "count": 1,
+      "studies": [
+        "DRA003818"
+      ]
+    },
+    "Solenopsis invicta": {
+      "count": 12,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Myrmica sulcinodis": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Myrmica ruginodis": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Myrmica rubra": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Monomorium chinense": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Lasius turcicus": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Lasius neglectus": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Linepithema humile": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Formica truncorum": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Formica pressilabris": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Formica pratensis": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Formica fusca": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Formica exsecta": {
+      "count": 4,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Formica cinerea": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Formica aquilonia": {
+      "count": 6,
+      "studies": [
+        "DRA003820"
+      ]
+    },
+    "Apiotrichum laibachii": {
+      "count": 1,
+      "studies": [
+        "DRA003849"
+      ]
+    },
+    "Malassezia dermatis": {
+      "count": 1,
+      "studies": [
+        "DRA003872"
+      ]
+    },
+    "Termitomyces sp. JCM 13351": {
+      "count": 1,
+      "studies": [
+        "DRA003876"
+      ]
+    },
+    "Solicoccozyma terricola": {
+      "count": 1,
+      "studies": [
+        "DRA003878"
+      ]
+    },
+    "Clostridia bacterium UC5.1-1A9": {
+      "count": 1,
+      "studies": [
+        "DRA003885"
+      ]
+    },
+    "Clostridia bacterium UC5.1-2D9": {
+      "count": 1,
+      "studies": [
+        "DRA003888"
+      ]
+    },
+    "Clostridia bacterium UC5.1-1D1": {
+      "count": 1,
+      "studies": [
+        "DRA003896"
+      ]
+    },
+    "Clostridia bacterium UC5.1-2H11": {
+      "count": 1,
+      "studies": [
+        "DRA003898"
+      ]
+    },
+    "Actinobacteria bacterium UC5.1-1C2": {
+      "count": 1,
+      "studies": [
+        "DRA003907"
+      ]
+    },
+    "Coturnix japonica": {
+      "count": 2,
+      "studies": [
+        "DRA003919"
+      ]
+    },
+    "Cocos nucifera": {
+      "count": 3,
+      "studies": [
+        "DRA003921"
+      ]
+    },
+    "Lysobacter enzymogenes": {
+      "count": 2,
+      "studies": [
+        "DRA003922"
+      ]
+    },
+    "Hordeum vulgare subsp. vulgare": {
+      "count": 19,
+      "studies": [
+        "DRA003931"
+      ]
+    },
+    "Hordeum vulgare subsp. spontaneum": {
+      "count": 1,
+      "studies": [
+        "DRA003931"
+      ]
+    },
+    "Oncorhynchus mykiss": {
+      "count": 1,
+      "studies": [
+        "DRA004013"
+      ]
+    },
+    "Streptomyces scabiei": {
+      "count": 1,
+      "studies": [
+        "DRA004015"
+      ]
+    },
+    "Streptomyces acidiscabies": {
+      "count": 2,
+      "studies": [
+        "DRA004017",
+        "DRA004018"
+      ]
+    },
+    "uncultured prokaryote": {
+      "count": 56,
+      "studies": [
+        "DRA004031",
+        "DRA004571",
+        "DRA004565"
+      ]
+    },
+    "Triparma laevis": {
+      "count": 1,
+      "studies": [
+        "DRA004053"
+      ]
+    },
+    "Psychotria homalosperma": {
+      "count": 1,
+      "studies": [
+        "DRA004086"
+      ]
+    },
+    "Brachypodium distachyon": {
+      "count": 1,
+      "studies": [
+        "DRA004125"
+      ]
+    },
+    "Cardamine leucantha": {
+      "count": 16,
+      "studies": [
+        "DRA004151"
+      ]
+    },
+    "Strobilomyces confusus": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Boletus reticulatus": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces aff. confusus L5-ST81": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces aff. strobilaceus L20-ST58": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces hongoi": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces strobilaceus": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces aff. strobilaceus L22-ST29": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces echinocephalus": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces aff. strobilaceus L23-s438": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces aff. confusus L_4": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces seminudus": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces nigricans": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces verruculosus": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces mirandus": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces sp. L12-s309": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces aff. strobilaceus L19-s305": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces aff. strobilaceus L21-s224": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces sp. L16-N30": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces sp. L27-N27": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces sp. L14-N26": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces velutipes": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces sp. L13-N9": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces sp. L28-N1": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces aff. foveatus L8-fr10": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces mollis": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces sp. L9-fb16": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces sp. L11-fb10": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces aff. foveatus L7-fb9": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Strobilomyces annulatus": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Afroboletus luteolus": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "Afroboletus pterosporus": {
+      "count": 1,
+      "studies": [
+        "DRA004156"
+      ]
+    },
+    "fungus metagenome": {
+      "count": 7,
+      "studies": [
+        "DRA004161",
+        "DRA004340"
+      ]
+    },
+    "bacterial mixed DNA library": {
+      "count": 1,
+      "studies": [
+        "DRA004172"
+      ]
+    },
+    "Prunus armeniaca": {
+      "count": 1,
+      "studies": [
+        "DRA004183"
+      ]
+    },
+    "Prunus avium": {
+      "count": 8,
+      "studies": [
+        "DRA004762",
+        "DRA004183",
+        "DRA004761"
+      ]
+    },
+    "Prunus dulcis": {
+      "count": 2,
+      "studies": [
+        "DRA004183"
+      ]
+    },
+    "Prunus persica": {
+      "count": 2,
+      "studies": [
+        "DRA004183"
+      ]
+    },
+    "Sarcina ventriculi": {
+      "count": 1,
+      "studies": [
+        "DRA004187"
+      ]
+    },
+    "Gynochthodes boninensis": {
+      "count": 1,
+      "studies": [
+        "DRA004197"
+      ]
+    },
+    "sediment metagenome": {
+      "count": 25,
+      "studies": [
+        "DRA005491",
+        "DRA004225",
+        "DRA004212"
+      ]
+    },
+    "Metrosideros boninensis": {
+      "count": 2,
+      "studies": [
+        "DRA004252"
+      ]
+    },
+    "Influenza A virus (A/Vietnam/13V H3_9/2012(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Vietnam/13V H3_8/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Vietnam/13V H3_4/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Vietnam/13V H3_3/2012(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Vietnam/13V H3_2/2012(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Vietnam/13V H3_10/2012(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Okinawa/14T007/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Okinawa/14T006/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Okinawa/14T004/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Gunma/14G002/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Gunma/14G003/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Gunma/14G004/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Gunma/14G005/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Gunma/14G008/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Gunma/14G011/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Gunma/14G013/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Hokkaido/13H009/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Hokkaido/13H011/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Kyoto/13K012/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Kyoto/13K025/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Kyoto/13K054/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Kyoto/14K001/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Kyoto/14K002/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Kyoto/14K003/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Kyoto/14K005/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Kyoto/14K007/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Lebanon/14L41/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Lebanon/14L45/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Lebanon/14L56/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Lebanon/14L78/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M002/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M004/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M006/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M007/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M011/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M016/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M020/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M029/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M035/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M044/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M056/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M061/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M062/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M070/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M076/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M082/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M084/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M085/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M087/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M088/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M089/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M098/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M102/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M105/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M109/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M118/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M124/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/13M300/2013(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/14M039/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/14M059/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/14M122/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/14M187/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/14M240/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/14M391/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Myanmar/14M465/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/13N004/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/13N007/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/13N020/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/13N046/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/13N049/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/13N053/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/13N063/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/13N100/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/13N101/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N005/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N010/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N012/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N013/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N014/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N015/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N017/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N018/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N023/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N024/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N039/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Nagasaki/14N072/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/13F024/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/13F071/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/13F173/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/13F335/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/13F416/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/13NU003/2014(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/14F002/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/14F004/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/14F005/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/14F007/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/14F009/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/14F067/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Niigata/14F197/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Influenza A virus (A/Okinawa/14T003/2015(H3N2))": {
+      "count": 1,
+      "studies": [
+        "DRA004293"
+      ]
+    },
+    "Vicia sativa": {
+      "count": 12,
+      "studies": [
+        "DRA004306",
+        "DRA004302",
+        "DRA004301"
+      ]
+    },
+    "Psychotria manillensis": {
+      "count": 1,
+      "studies": [
+        "DRA004323"
+      ]
+    },
+    "Saccharomyces cerevisiae BY4741": {
+      "count": 15,
+      "studies": [
+        "DRA004917",
+        "DRA004329"
+      ]
+    },
+    "Escherichia phage phiX174": {
+      "count": 12,
+      "studies": [
+        "DRA004331"
+      ]
+    },
+    "Turritopsis sp. SK-2016": {
+      "count": 6,
+      "studies": [
+        "DRA004346"
+      ]
+    },
+    "Thryonomys swinderianus": {
+      "count": 24,
+      "studies": [
+        "DRA004350"
+      ]
+    },
+    "Streptococcus pyogenes": {
+      "count": 83,
+      "studies": [
+        "DRA004365"
+      ]
+    },
+    "Ligia exotica": {
+      "count": 2,
+      "studies": [
+        "DRA004368"
+      ]
+    },
+    "Blastochloris viridis": {
+      "count": 1,
+      "studies": [
+        "DRA004373"
+      ]
+    },
+    "Diospyros kaki": {
+      "count": 92,
+      "studies": [
+        "DRA004452",
+        "DRA005160",
+        "DRA006042"
+      ]
+    },
+    "Diospyros lotus": {
+      "count": 16,
+      "studies": [
+        "DRA004452",
+        "DRA005160"
+      ]
+    },
+    "Eucalyptus urophylla x Eucalyptus grandis": {
+      "count": 4,
+      "studies": [
+        "DRA004453",
+        "DRA005369"
+      ]
+    },
+    "Acropora digitifera": {
+      "count": 1,
+      "studies": [
+        "DRA004462"
+      ]
+    },
+    "Drosophila pseudoobscura": {
+      "count": 21,
+      "studies": [
+        "DRA004463"
+      ]
+    },
+    "Drosophila obscura": {
+      "count": 17,
+      "studies": [
+        "DRA004463"
+      ]
+    },
+    "Drosophila miranda": {
+      "count": 21,
+      "studies": [
+        "DRA004463"
+      ]
+    },
+    "GO-respiring enrichment culture": {
+      "count": 1,
+      "studies": [
+        "DRA004469"
+      ]
+    },
+    "Rosellinia necatrix": {
+      "count": 5,
+      "studies": [
+        "DRA004471"
+      ]
+    },
+    "Phaeobacter italicus": {
+      "count": 1,
+      "studies": [
+        "DRA004476"
+      ]
+    },
+    "Arachis hypogaea": {
+      "count": 16,
+      "studies": [
+        "DRA004503",
+        "DRA005805",
+        "DRA005803"
+      ]
+    },
+    "Oryza latifolia": {
+      "count": 7,
+      "studies": [
+        "DRA004526"
+      ]
+    },
+    "Lactuca sativa": {
+      "count": 36,
+      "studies": [
+        "DRA004542"
+      ]
+    },
+    "Rattus norvegicus": {
+      "count": 25,
+      "studies": [
+        "DRA004543"
+      ]
+    },
+    "Chenopodium quinoa": {
+      "count": 1,
+      "studies": [
+        "DRA004558"
+      ]
+    },
+    "Haplochromis sp. 'macula'": {
+      "count": 3,
+      "studies": [
+        "DRA004559"
+      ]
+    },
+    "Haplochromis pyrrhocephalus": {
+      "count": 3,
+      "studies": [
+        "DRA004559"
+      ]
+    },
+    "Dicyema japonicum": {
+      "count": 1,
+      "studies": [
+        "DRA004566"
+      ]
+    },
+    "synthetic construct": {
+      "count": 1,
+      "studies": [
+        "DRA004579"
+      ]
+    },
+    "Oryza barthii": {
+      "count": 21,
+      "studies": [
+        "DRA004588"
+      ]
+    },
+    "Bacillus subtilis": {
+      "count": 8,
+      "studies": [
+        "DRA004593"
+      ]
+    },
+    "Euglena agilis": {
+      "count": 1,
+      "studies": [
+        "DRA004594"
+      ]
+    },
+    "root associated fungus metagenome": {
+      "count": 317,
+      "studies": [
+        "DRA004595"
+      ]
+    },
+    "Cephalotus follicularis": {
+      "count": 5,
+      "studies": [
+        "DRA004599"
+      ]
+    },
+    "Castanea crenata": {
+      "count": 4,
+      "studies": [
+        "DRA004605"
+      ]
+    },
+    "Lilium hybrid division I": {
+      "count": 2,
+      "studies": [
+        "DRA004630"
+      ]
+    },
+    "Aspergillus nidulans": {
+      "count": 13,
+      "studies": [
+        "DRA004717",
+        "DRA004637"
+      ]
+    },
+    "Aspergillus fumigatus": {
+      "count": 3,
+      "studies": [
+        "DRA004640",
+        "DRA004639",
+        "DRA004641"
+      ]
+    },
+    "Bombyx mandarina": {
+      "count": 3,
+      "studies": [
+        "DRA005795",
+        "DRA004652"
+      ]
+    },
+    "Physcomitrella patens/Arabidopsis thaliana mixed library": {
+      "count": 1,
+      "studies": [
+        "DRA004653"
+      ]
+    },
+    "Setaria italica": {
+      "count": 3,
+      "studies": [
+        "DRA004656"
+      ]
+    },
+    "Pyricularia grisea": {
+      "count": 1,
+      "studies": [
+        "DRA004665"
+      ]
+    },
+    "Phlebia sp. MG60": {
+      "count": 2,
+      "studies": [
+        "DRA004667"
+      ]
+    },
+    "Phanerodontia chrysosporium": {
+      "count": 2,
+      "studies": [
+        "DRA004668"
+      ]
+    },
+    "Populus tremula x Populus tremuloides": {
+      "count": 11,
+      "studies": [
+        "DRA004670"
+      ]
+    },
+    "Escherichia coli str. K-12 substr. MG1655": {
+      "count": 19,
+      "studies": [
+        "DRA005771",
+        "DRA004671"
+      ]
+    },
+    "Selar crumenophthalmus": {
+      "count": 1,
+      "studies": [
+        "DRA004689"
+      ]
+    },
+    "Atule mate": {
+      "count": 1,
+      "studies": [
+        "DRA004691"
+      ]
+    },
+    "Coilia nasus": {
+      "count": 1,
+      "studies": [
+        "DRA004695"
+      ]
+    },
+    "Parapterois heterurus": {
+      "count": 1,
+      "studies": [
+        "DRA004706"
+      ]
+    },
+    "Drosophila subobscura": {
+      "count": 1,
+      "studies": [
+        "DRA004735"
+      ]
+    },
+    "Drosophila lacteicornis": {
+      "count": 1,
+      "studies": [
+        "DRA004735"
+      ]
+    },
+    "Scaptomyza elmoi": {
+      "count": 1,
+      "studies": [
+        "DRA004735"
+      ]
+    },
+    "Chymomyza costata": {
+      "count": 1,
+      "studies": [
+        "DRA004735"
+      ]
+    },
+    "Drosophila guttifera": {
+      "count": 1,
+      "studies": [
+        "DRA004735"
+      ]
+    },
+    "Drosophila hydei": {
+      "count": 1,
+      "studies": [
+        "DRA004735"
+      ]
+    },
+    "Drosophila parapallidosa": {
+      "count": 1,
+      "studies": [
+        "DRA004735"
+      ]
+    },
+    "Paulinella micropora": {
+      "count": 1,
+      "studies": [
+        "DRA004743"
+      ]
+    },
+    "human skin metagenome": {
+      "count": 168,
+      "studies": [
+        "DRA004759",
+        "DRA005151"
+      ]
+    },
+    "Semisulcospira libertina": {
+      "count": 35,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira extensa": {
+      "count": 1,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira decipiens": {
+      "count": 11,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira arenicola": {
+      "count": 4,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira rugosa": {
+      "count": 3,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira reiniana": {
+      "count": 4,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira fuscata": {
+      "count": 3,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira fluvialis": {
+      "count": 3,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira niponica": {
+      "count": 7,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira reticulata": {
+      "count": 3,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira multigranosa": {
+      "count": 3,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira habei": {
+      "count": 5,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira kurodai": {
+      "count": 3,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira shiraishiensis": {
+      "count": 3,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira morii": {
+      "count": 3,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira takeshimensis": {
+      "count": 3,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "Semisulcospira nakasekoae": {
+      "count": 3,
+      "studies": [
+        "DRA004774"
+      ]
+    },
+    "uncultured ammonia-oxidizing bacterium": {
+      "count": 14,
+      "studies": [
+        "DRA004808",
+        "DRA004799",
+        "DRA004800",
+        "DRA005420",
+        "DRA004794"
+      ]
+    },
+    "Gallus gallus": {
+      "count": 46,
+      "studies": [
+        "DRA005546",
+        "DRA004812"
+      ]
+    },
+    "Acanthaster planci": {
+      "count": 1,
+      "studies": [
+        "DRA004862"
+      ]
+    },
+    "Entamoeba nuttalli": {
+      "count": 1,
+      "studies": [
+        "DRA004867"
+      ]
+    },
+    "Vargula hilgendorfii": {
+      "count": 1,
+      "studies": [
+        "DRA004870"
+      ]
+    },
+    "bovine gut metagenome": {
+      "count": 2,
+      "studies": [
+        "DRA004876"
+      ]
+    },
+    "Zygosaccharomyces rouxii": {
+      "count": 2,
+      "studies": [
+        "DRA004883",
+        "DRA004951"
+      ]
+    },
+    "Rhodobacter capsulatus SB 1003": {
+      "count": 2,
+      "studies": [
+        "DRA004895",
+        "DRA004893"
+      ]
+    },
+    "Abies sachalinensis": {
+      "count": 6,
+      "studies": [
+        "DRA005544",
+        "DRA004910",
+        "DRA004909"
+      ]
+    },
+    "Saccharomyces cerevisiae": {
+      "count": 3,
+      "studies": [
+        "DRA005895",
+        "DRA005581",
+        "DRA004951"
+      ]
+    },
+    "Gasterosteus aculeatus": {
+      "count": 200,
+      "studies": [
+        "DRA004952",
+        "DRA005065"
+      ]
+    },
+    "Onion yellows phytoplasma OY-M": {
+      "count": 1,
+      "studies": [
+        "DRA004959"
+      ]
+    },
+    "Lactobacillus amylovorus": {
+      "count": 5,
+      "studies": [
+        "DRA004982",
+        "DRA004990",
+        "DRA005000",
+        "DRA004969",
+        "DRA004966"
+      ]
+    },
+    "Limosilactobacillus mucosae": {
+      "count": 1,
+      "studies": [
+        "DRA004974"
+      ]
+    },
+    "Limosilactobacillus reuteri": {
+      "count": 1,
+      "studies": [
+        "DRA005004"
+      ]
+    },
+    "human skeleton metagenome": {
+      "count": 1,
+      "studies": [
+        "DRA005042"
+      ]
+    },
+    "Blastophaga nipponica": {
+      "count": 13,
+      "studies": [
+        "DRA005046",
+        "DRA005052",
+        "DRA005053"
+      ]
+    },
+    "Blastophaga taiwanensis": {
+      "count": 17,
+      "studies": [
+        "DRA005046",
+        "DRA005052",
+        "DRA005053"
+      ]
+    },
+    "Blastophaga tannoensis": {
+      "count": 11,
+      "studies": [
+        "DRA005046",
+        "DRA005053"
+      ]
+    },
+    "Blastophaga yeni": {
+      "count": 3,
+      "studies": [
+        "DRA005046"
+      ]
+    },
+    "dust metagenome": {
+      "count": 13,
+      "studies": [
+        "DRA005058"
+      ]
+    },
+    "Reticulitermes speratus": {
+      "count": 116,
+      "studies": [
+        "DRA005071"
+      ]
+    },
+    "seawater metagenome": {
+      "count": 353,
+      "studies": [
+        "DRA005491",
+        "DRA005078",
+        "DRA005190"
+      ]
+    },
+    "riverine metagenome": {
+      "count": 218,
+      "studies": [
+        "DRA005106"
+      ]
+    },
+    "Lates calcarifer": {
+      "count": 207,
+      "studies": [
+        "DRA005109"
+      ]
+    },
+    "Hevea brasiliensis": {
+      "count": 3,
+      "studies": [
+        "DRA005116"
+      ]
+    },
+    "Heliopora coerulea": {
+      "count": 1,
+      "studies": [
+        "DRA005137"
+      ]
+    },
+    "microbial fuel cell metagenome": {
+      "count": 6,
+      "studies": [
+        "DRA005155"
+      ]
+    },
+    "Brassica rapa": {
+      "count": 2,
+      "studies": [
+        "DRA005183",
+        "DRA005195"
+      ]
+    },
+    "spider metagenome": {
+      "count": 939,
+      "studies": [
+        "DRA005184"
+      ]
+    },
+    "Rumex nepalensis": {
+      "count": 1,
+      "studies": [
+        "DRA005212"
+      ]
+    },
+    "insect gut metagenome": {
+      "count": 83,
+      "studies": [
+        "DRA005579",
+        "DRA005590",
+        "DRA005220"
+      ]
+    },
+    "groundwater metagenome": {
+      "count": 8,
+      "studies": [
+        "DRA005823",
+        "DRA005250"
+      ]
+    },
+    "Garcinia mangostana": {
+      "count": 12,
+      "studies": [
+        "DRA005255"
+      ]
+    },
+    "Oryza longistaminata": {
+      "count": 271,
+      "studies": [
+        "DRA005304"
+      ]
+    },
+    "Oryzias latipes": {
+      "count": 60,
+      "studies": [
+        "DRA005309",
+        "DRA005854"
+      ]
+    },
+    "Caloptilia sp. A274": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A273": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A272": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A271": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A1": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A2": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A3": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A4": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A5": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A6": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A7": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A8": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A9": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A10": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A11": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A12": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A13": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A14": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A15": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A16": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A17": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A18": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A19": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A20": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A21": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A22": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A23": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A24": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A25": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A26": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A27": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A28": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A29": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A30": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A31": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A32": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A33": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A34": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A35": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A36": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A37": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A38": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A39": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A40": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A41": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A42": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A43": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A44": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A45": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A46": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A47": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A48": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A49": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A50": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A51": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A52": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A53": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A54": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A55": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A56": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A57": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A58": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A59": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A60": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A61": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A62": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A63": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A64": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A65": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A66": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A67": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A68": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A69": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A70": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A71": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A72": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A73": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A74": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A75": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A76": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A77": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A78": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A79": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A80": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A81": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A82": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A83": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A84": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A85": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A86": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A87": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A88": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A89": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A90": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A91": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A92": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A93": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A94": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A95": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A96": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A97": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A98": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A99": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A100": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A101": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A102": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A103": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A104": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A105": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A106": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A107": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A108": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A109": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A110": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A111": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A112": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A113": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A114": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A115": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A116": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A117": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A118": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A119": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A120": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A121": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A122": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A123": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A124": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A125": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A126": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A127": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A128": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A129": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A130": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A131": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A132": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A133": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A134": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A135": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A136": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A137": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A138": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A139": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A140": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A141": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A142": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A143": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A144": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A145": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A146": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A147": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A148": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A149": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A150": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A151": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A152": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A153": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A154": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A155": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A156": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A157": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A158": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A159": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A160": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A161": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A162": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A163": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A164": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A165": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A166": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A167": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A168": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A169": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A170": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A171": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A172": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A173": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A174": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A175": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A176": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A177": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A178": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A179": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A180": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A181": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A182": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A183": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A184": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A185": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A186": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A187": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A188": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A189": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A190": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A191": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A192": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A193": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A194": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A195": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A196": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A197": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A198": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A199": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A200": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A201": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A202": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A203": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A204": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A205": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A206": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A207": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A208": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A209": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A210": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A211": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A212": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A213": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A214": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A215": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A216": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A217": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A218": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A219": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A220": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A221": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A222": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A223": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A224": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A225": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A226": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A227": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A228": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A229": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A230": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A231": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A232": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A233": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A234": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A235": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A236": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A237": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A238": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A239": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A240": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A241": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A242": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A243": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A244": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A245": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A246": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A247": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A248": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A249": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A250": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A251": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A252": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A253": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A254": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A255": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A256": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A257": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A258": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A259": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A260": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A261": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A262": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A263": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A264": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A265": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A266": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A267": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A268": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A269": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "Caloptilia sp. A270": {
+      "count": 1,
+      "studies": [
+        "DRA005331"
+      ]
+    },
+    "feces metagenome": {
+      "count": 7,
+      "studies": [
+        "DRA005342",
+        "DRA005870"
+      ]
+    },
+    "Enterovirus sp.": {
+      "count": 1,
+      "studies": [
+        "DRA005344"
+      ]
+    },
+    "marine plankton metagenome": {
+      "count": 26,
+      "studies": [
+        "DRA005367"
+      ]
+    },
+    "Nannophya pygmaea": {
+      "count": 1,
+      "studies": [
+        "DRA005401"
+      ]
+    },
+    "Escherichia coli O157": {
+      "count": 25,
+      "studies": [
+        "DRA005403"
+      ]
+    },
+    "Macrotyloma uniflorum": {
+      "count": 91,
+      "studies": [
+        "DRA005416"
+      ]
+    },
+    "Macrotyloma axillare": {
+      "count": 1,
+      "studies": [
+        "DRA005416"
+      ]
+    },
+    "uncultured ammonia-oxidizing archaeon": {
+      "count": 10,
+      "studies": [
+        "DRA005420"
+      ]
+    },
+    "Komagataeibacter diospyri": {
+      "count": 1,
+      "studies": [
+        "DRA005433"
+      ]
+    },
+    "Allium cepa var. aggregatum": {
+      "count": 1,
+      "studies": [
+        "DRA005457"
+      ]
+    },
+    "Nitrospira sp. KM1": {
+      "count": 1,
+      "studies": [
+        "DRA005480"
+      ]
+    },
+    "Hodotermopsis sjostedti": {
+      "count": 7,
+      "studies": [
+        "DRA005483"
+      ]
+    },
+    "Staphylococcus haemolyticus": {
+      "count": 12,
+      "studies": [
+        "DRA005495"
+      ]
+    },
+    "Staphylococcus epidermidis": {
+      "count": 12,
+      "studies": [
+        "DRA005495"
+      ]
+    },
+    "saline spring metagenome": {
+      "count": 14,
+      "studies": [
+        "DRA005516"
+      ]
+    },
+    "Papilio memnon": {
+      "count": 17,
+      "studies": [
+        "DRA005523"
+      ]
+    },
+    "Brassica rapa subsp. pekinensis": {
+      "count": 6,
+      "studies": [
+        "DRA005538"
+      ]
+    },
+    "marine sediment metagenome": {
+      "count": 11,
+      "studies": [
+        "DRA005539"
+      ]
+    },
+    "Chrysanthemum seticuspe": {
+      "count": 98,
+      "studies": [
+        "DRA005542",
+        "DRA005543"
+      ]
+    },
+    "Norwalk virus": {
+      "count": 17,
+      "studies": [
+        "DRA005551"
+      ]
+    },
+    "Sphingobium amiense NBRC 102518": {
+      "count": 1,
+      "studies": [
+        "DRA005554"
+      ]
+    },
+    "Hordeum vulgare": {
+      "count": 6,
+      "studies": [
+        "DRA005563"
+      ]
+    },
+    "Scheffersomyces shehatae": {
+      "count": 2,
+      "studies": [
+        "DRA005601"
+      ]
+    },
+    "Carabus uenoi": {
+      "count": 6,
+      "studies": [
+        "DRA005623"
+      ]
+    },
+    "Carabus iwawakianus": {
+      "count": 5,
+      "studies": [
+        "DRA005623"
+      ]
+    },
+    "Carabus maiyasanus": {
+      "count": 6,
+      "studies": [
+        "DRA005623"
+      ]
+    },
+    "Carabus japonicus": {
+      "count": 2,
+      "studies": [
+        "DRA005623"
+      ]
+    },
+    "Streptococcus agalactiae": {
+      "count": 2,
+      "studies": [
+        "DRA005683",
+        "DRA005686"
+      ]
+    },
+    "Apteronemobius asahinai": {
+      "count": 4,
+      "studies": [
+        "DRA005702"
+      ]
+    },
+    "Ipomoea batatas": {
+      "count": 3,
+      "studies": [
+        "DRA005710",
+        "DRA005707",
+        "DRA005709"
+      ]
+    },
+    "Campylobacter jejuni": {
+      "count": 1,
+      "studies": [
+        "DRA005731"
+      ]
+    },
+    "Campylobacter coli": {
+      "count": 1,
+      "studies": [
+        "DRA005731"
+      ]
+    },
+    "hydrothermal vent metagenome": {
+      "count": 2,
+      "studies": [
+        "DRA005734"
+      ]
+    },
+    "Bacteroides fragilis": {
+      "count": 1,
+      "studies": [
+        "DRA005736"
+      ]
+    },
+    "Salmonella enterica subsp. enterica serovar Paratyphi A": {
+      "count": 102,
+      "studies": [
+        "DRA005740"
+      ]
+    },
+    "rock metagenome": {
+      "count": 8,
+      "studies": [
+        "DRA005747"
+      ]
+    },
+    "insect metagenome": {
+      "count": 6,
+      "studies": [
+        "DRA005752"
+      ]
+    },
+    "Cricetulus griseus": {
+      "count": 57,
+      "studies": [
+        "DRA005765",
+        "DRA005919",
+        "DRA006016"
+      ]
+    },
+    "fish gut metagenome": {
+      "count": 16,
+      "studies": [
+        "DRA005770"
+      ]
+    },
+    "pond metagenome": {
+      "count": 1,
+      "studies": [
+        "DRA005770"
+      ]
+    },
+    "Harmonia axyridis": {
+      "count": 12,
+      "studies": [
+        "DRA005777"
+      ]
+    },
+    "Oryza sativa": {
+      "count": 2,
+      "studies": [
+        "DRA005784"
+      ]
+    },
+    "Thermobia domestica": {
+      "count": 1,
+      "studies": [
+        "DRA005797"
+      ]
+    },
+    "Nitzschia sp. IriIs04": {
+      "count": 2,
+      "studies": [
+        "DRA005799",
+        "DRA005800"
+      ]
+    },
+    "Sorghum bicolor subsp. drummondii": {
+      "count": 1,
+      "studies": [
+        "DRA005802"
+      ]
+    },
+    "Sorghum x almum": {
+      "count": 1,
+      "studies": [
+        "DRA005802"
+      ]
+    },
+    "crab metagenome": {
+      "count": 21,
+      "studies": [
+        "DRA005812"
+      ]
+    },
+    "lung metagenome": {
+      "count": 3,
+      "studies": [
+        "DRA005870"
+      ]
+    },
+    "Arabidopsis halleri subsp. gemmifera": {
+      "count": 400,
+      "studies": [
+        "DRA005873",
+        "DRA005871"
+      ]
+    },
+    "estuary metagenome": {
+      "count": 40,
+      "studies": [
+        "DRA005884"
+      ]
+    },
+    "Eleusine coracana subsp. coracana": {
+      "count": 1,
+      "studies": [
+        "DRA005897"
+      ]
+    },
+    "Marchantia polymorpha": {
+      "count": 9,
+      "studies": [
+        "DRA005914"
+      ]
+    },
+    "lake water metagenome": {
+      "count": 13,
+      "studies": [
+        "DRA005939"
+      ]
+    },
+    "Dianthus caryophyllus": {
+      "count": 8,
+      "studies": [
+        "DRA005974"
+      ]
+    },
+    "Symplocarpus renifolius": {
+      "count": 47,
+      "studies": [
+        "DRA005977"
+      ]
+    },
+    "activated sludge metagenome": {
+      "count": 15,
+      "studies": [
+        "DRA005982"
+      ]
+    },
+    "shrimp gut metagenome": {
+      "count": 77,
+      "studies": [
+        "DRA005998"
+      ]
+    },
+    "Bletilla striata": {
+      "count": 15,
+      "studies": [
+        "DRA005999"
+      ]
+    },
+    "Tulasnella sp. HR1-1": {
+      "count": 1,
+      "studies": [
+        "DRA006009"
+      ]
+    },
+    "Mustela putorius furo": {
+      "count": 2,
+      "studies": [
+        "DRA006013"
+      ]
+    },
+    "Schizosaccharomyces pombe 972h-": {
+      "count": 20,
+      "studies": [
+        "DRA006014"
+      ]
+    },
+    "Enterobacter hormaechei": {
+      "count": 50,
+      "studies": [
+        "DRA006017"
+      ]
+    },
+    "Enterobacter hormaechei subsp. steigerwaltii": {
+      "count": 17,
+      "studies": [
+        "DRA006017"
+      ]
+    },
+    "Enterobacter kobei": {
+      "count": 1,
+      "studies": [
+        "DRA006017"
+      ]
+    },
+    "Enterobacter asburiae": {
+      "count": 3,
+      "studies": [
+        "DRA006017"
+      ]
+    },
+    "Nitrospira japonica": {
+      "count": 1,
+      "studies": [
+        "DRA006028"
+      ]
+    }
+  },
+  "strategies": {
+    "WGS": {
+      "count": 1869,
+      "organisms": {}
+    },
+    "FL-cDNA": {
+      "count": 115,
+      "organisms": {}
+    },
+    "CLONE": {
+      "count": 2,
+      "organisms": {}
+    },
+    "ChIP-Seq": {
+      "count": 209,
+      "organisms": {}
+    },
+    "EST": {
+      "count": 9,
+      "organisms": {}
+    },
+    "MNase-Seq": {
+      "count": 7,
+      "organisms": {}
+    },
+    "OTHER": {
+      "count": 1300,
+      "organisms": {}
+    },
+    "AMPLICON": {
+      "count": 6236,
+      "organisms": {}
+    },
+    "RNA-Seq": {
+      "count": 3264,
+      "organisms": {}
+    },
+    "miRNA-Seq": {
+      "count": 104,
+      "organisms": {}
+    },
+    "WXS": {
+      "count": 754,
+      "organisms": {}
+    },
+    "CTS": {
+      "count": 12,
+      "organisms": {}
+    },
+    "Bisulfite-Seq": {
+      "count": 194,
+      "organisms": {}
+    },
+    "WGA": {
+      "count": 19,
+      "organisms": {}
+    },
+    "CLONEEND": {
+      "count": 8,
+      "organisms": {}
+    },
+    "RIP-Seq": {
+      "count": 8,
+      "organisms": {}
+    },
+    "RAD-Seq": {
+      "count": 646,
+      "organisms": {}
+    },
+    "ncRNA-Seq": {
+      "count": 3,
+      "organisms": {}
+    },
+    "ATAC-seq": {
+      "count": 29,
+      "organisms": {}
+    },
+    "Targeted-Capture": {
+      "count": 12,
+      "organisms": {}
+    }
+  },
+  "sources": {
+    "GENOMIC": 5010,
+    "TRANSCRIPTOMIC": 3836,
+    "METATRANSCRIPTOMIC": 48,
+    "OTHER": 93,
+    "METAGENOMIC": 5642,
+    "VIRAL RNA": 140,
+    "SYNTHETIC": 31
+  },
+  "selections": {
+    "RANDOM": 2019,
+    "cDNA": 1337,
+    "other": 186,
+    "ChIP": 188,
+    "MNase": 34,
+    "PCR": 6434,
+    "RT-PCR": 68,
+    "unspecified": 745,
+    "Restriction Digest": 467,
+    "size fractionation": 363,
+    "RACE": 276,
+    "RANDOM PCR": 35,
+    "CAGE": 207,
+    "Reduced Representation": 983,
+    "Hybrid Selection": 168,
+    "padlock probes capture method": 56,
+    "MDA": 13,
+    "Oligo-dT": 615,
+    "repeat fractionation": 1,
+    "PolyA": 354,
+    "Inverse rRNA": 251
+  },
+  "attributes": {
+    "sample_name": 12649,
+    "strain": 3302,
+    "sample comment": 1251,
+    "common name": 20,
+    "sub_species": 584,
+    "note": 2,
+    "cell_line": 402,
+    "lat_lon": 6853,
+    "environmental_sample": 1,
+    "serovar": 145,
+    "subsp.": 1,
+    "sample_treatment": 1,
+    "sample treatment": 7,
+    "culture_condition_oxygen": 4,
+    "antibody": 3,
+    "time_course_sampling": 1,
+    "country": 6,
+    "cell line": 4,
+    "cultivar": 1894,
+    "developmental stage": 15,
+    "locus_tag_prefix": 49,
+    "accession": 1,
+    "isolate": 1793,
+    "tgcagag": 2,
+    "cacggct": 2,
+    "tcgagct": 2,
+    "gagtgct": 2,
+    "gacggag": 2,
+    "ccgagag": 2,
+    "tcaggtc": 1,
+    "tgatgct": 1,
+    "cgatgag": 1,
+    "ctacgt": 3,
+    "ctagta": 2,
+    "ctagtg": 2,
+    "ctatcg": 3,
+    "ctatgc": 2,
+    "ctcaga": 3,
+    "ctcagt": 2,
+    "cgtctc": 2,
+    "ctctgc": 2,
+    "ctgaca": 1,
+    "ctgacg": 2,
+    "ctgact": 2,
+    "ctgaga": 2,
+    "ctctga": 2,
+    "cgtgtc": 3,
+    "ctacag": 2,
+    "ctacga": 2,
+    "ctacgc": 2,
+    "acgtat": 1,
+    "agcatg": 1,
+    "agcgca": 1,
+    "agcgct": 1,
+    "agcgtc": 1,
+    "agctat": 1,
+    "agctcg": 1,
+    "agctgc": 1,
+    "cacagc": 1,
+    "cacatg": 2,
+    "cacgac": 1,
+    "cacgag": 1,
+    "cacgat": 1,
+    "cacgta": 2,
+    "cactag": 2,
+    "cactat": 1,
+    "cagact": 1,
+    "cagagc": 1,
+    "cagagt": 1,
+    "cagatc": 1,
+    "cagatg": 1,
+    "cagcac": 1,
+    "cagcag": 1,
+    "cagcat": 1,
+    "cagcga": 1,
+    "cagcgc": 1,
+    "cagtat": 1,
+    "cagtca": 1,
+    "cagtcg": 1,
+    "cagtct": 1,
+    "cagtga": 1,
+    "cagtgc": 1,
+    "catcta": 1,
+    "catctc": 1,
+    "catctg": 1,
+    "catgac": 1,
+    "catgag": 1,
+    "catgat": 1,
+    "cgacgc": 1,
+    "cgacgt": 1,
+    "cgactc": 1,
+    "cgactg": 1,
+    "cgagca": 1,
+    "cgcatg": 1,
+    "cgcgat": 1,
+    "cgcgta": 1,
+    "cgcgtc": 1,
+    "cgctac": 1,
+    "cgctag": 1,
+    "ctgcgc": 1,
+    "acgata": 1,
+    "ctgctc": 1,
+    "ctgctg": 1,
+    "ctgtac": 1,
+    "gacagc": 1,
+    "ctgcta": 1,
+    "acgcag": 1,
+    "acgcga": 1,
+    "acgcgt": 1,
+    "acgctg": 1,
+    "variety": 15,
+    "tissue": 18,
+    "submitters": 2,
+    "patient": 6,
+    "age": 371,
+    "sex": 923,
+    "sample_provider": 4,
+    "ontology id": 4,
+    "cell_type": 712,
+    "rna_extraction_protocol": 4,
+    "rna_lot": 4,
+    "rna_od_260_230": 4,
+    "rna_od_260_280": 4,
+    "rna_sample_type": 4,
+    "14.tsa_2h_02": 1,
+    "15.tsa_2h_03": 1,
+    "16.veh/tsa_2h_01": 1,
+    "17.veh/tsa_2h_02": 1,
+    "18.veh/tsa_2h_03": 1,
+    "19.tsa_2d_01": 1,
+    "2.vpa_2h_02": 1,
+    "20.tsa_2d_02": 1,
+    "21.tsa_2d_03": 1,
+    "22.veh/tsa_2d_01": 1,
+    "1.vpa_2h_01": 1,
+    "24.veh/tsa_2d_03": 1,
+    "3.vpa_2h_03": 1,
+    "4.veh/vpa_2h_01": 1,
+    "5.veh/vpa_2h_02": 1,
+    "6.veh/vpa_2h_03": 1,
+    "7.vpa_2d_01": 1,
+    "8.vpa_2d_02": 1,
+    "9.vpa_2d_03": 1,
+    "23.veh/tsa_2d_02": 1,
+    "10.veh/vpa_2d_01": 1,
+    "11.veh/vpa_2d_02": 1,
+    "12.veh/vpa_2d_03": 1,
+    "13.tsa_2h_01": 1,
+    "atgcgc": 1,
+    "cgcgac": 2,
+    "ctagcg": 1,
+    "agtcgc": 1,
+    "ctagac": 2,
+    "atatga": 1,
+    "collection_date": 8984,
+    "env_broad_scale": 6788,
+    "env_local_scale": 6788,
+    "env_medium": 6788,
+    "estimated_size": 1736,
+    "geo_loc_name": 8821,
+    "isol_growth_condt": 2610,
+    "num_replicons": 2247,
+    "ploidy": 2040,
+    "project_name": 6806,
+    "propagation": 2173,
+    "ecotype": 1480,
+    "biosamplemodel": 6788,
+    "biosample id": 2,
+    "catcat": 1,
+    "cgatgc / catgca": 1,
+    "cagtgt": 1,
+    "ctctac": 1,
+    "ctgctg / catgac": 1,
+    "catacg": 1,
+    "catagc": 1,
+    "catcac": 1,
+    "catcag": 1,
+    "host": 4208,
+    "culture_collection": 14,
+    "altitude": 400,
+    "rel_to_oxygen": 161,
+    "disease": 39,
+    "tissue_type": 1901,
+    "label": 92,
+    "elev": 327,
+    "depth": 1392,
+    "sample_type": 7,
+    "ref_biomaterial": 738,
+    "substrain": 7,
+    "sample_size": 281,
+    "sample_title": 339,
+    "description": 75,
+    "genotype": 126,
+    "bioproject id": 1,
+    "sample name": 1,
+    "feature": 1,
+    "biome": 1,
+    "type_status": 3,
+    "material": 1,
+    "source_mat_id": 1,
+    "samp_store_loc": 8,
+    "samp_store_temp": 155,
+    "host_disease_stat": 35,
+    "height_or_length": 3,
+    "host_common_name": 21,
+    "host_taxid": 21,
+    "life_stage": 3,
+    "air_temp_regm": 3,
+    "antibiotic_regm": 3,
+    "chem_mutagen": 3,
+    "fertilizer_regm": 3,
+    "fungicide_regm": 3,
+    "gaseous_environment": 13,
+    "growth_hormone_regm": 3,
+    "herbicide_regm": 3,
+    "humidity_regm": 3,
+    "mechanical_damage": 3,
+    "mineral_nutr_regm": 3,
+    "non_mineral_nutr_regm": 3,
+    "ph_regm": 3,
+    "pesticide_regm": 3,
+    "radiation_regm": 3,
+    "rainfall_regm": 3,
+    "salt_regm": 3,
+    "season_environment": 3,
+    "watering_regm": 3,
+    "agrochem_addition": 3,
+    "fire": 3,
+    "samp_vol_we_dna_ext": 3,
+    "tot_nitro": 3,
+    "locus_tag prefix": 1,
+    "specimen_voucher": 98,
+    "dev_stage": 535,
+    "sub_strain": 21,
+    "env_biome": 1409,
+    "host_body_site": 256,
+    "authority": 1,
+    "health_state": 3,
+    "infra_specific_name": 10,
+    "biomaterial_provider": 1412,
+    "bioproject_id": 295,
+    "biotic_relationship": 44,
+    "trophic_level": 3,
+    "phenotype": 40,
+    "collected_by": 473,
+    "samp_collect_device": 53,
+    "samp_mat_process": 15,
+    "type-material": 15,
+    "breed": 47,
+    "bio_material": 56,
+    "samp_store_dur": 5,
+    "host_height": 33,
+    "ph": 32,
+    "salinity": 39,
+    "host_subject_id": 591,
+    "host_description": 181,
+    "isolation_source": 7,
+    "substrate": 264,
+    "mating_type": 15,
+    "source_material_id": 186,
+    "annual_season_precpt": 20,
+    "annual_season_temp": 20,
+    "temp": 23,
+    "host_spec_range": 38,
+    "replicate": 482,
+    "host_age": 473,
+    "host_health_state": 126,
+    "env_feature": 147,
+    "env_material": 147,
+    "orgmod_note": 1,
+    "extrachrom_elements": 1,
+    "health_disease_stat": 10,
+    "soil_type": 9,
+    "population": 1,
+    "body_mass_index": 36,
+    "host_sex": 234,
+    "host_body_temp": 79,
+    "haplotype": 2,
+    "pathogenicity": 27,
+    "subspecf_gen_lin": 32,
+    "alkalinity": 8,
+    "ammonium": 12,
+    "calcium": 12,
+    "chloride": 12,
+    "magnesium": 8,
+    "methane": 8,
+    "phosphate": 8,
+    "sodium": 12,
+    "sulfate": 8,
+    "internal id of sample": 11,
+    "nitrate": 4,
+    "redox_potential": 4,
+    "technical_replicate": 48,
+    "growth_condition": 48,
+    "growth_protocol": 48,
+    "passage_history": 48,
+    "lab_host": 24
+  },
+  "stats": {
+    "total_experiments": 14800,
+    "total_samples": 12692,
+    "total_runs": 15538,
+    "unique_organisms": 988,
+    "unique_strategies": 20,
+    "unique_sources": 7,
+    "unique_selections": 21,
+    "unique_attributes": 297
+  }
+}
