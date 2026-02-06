@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn
 
-from .generate_boolean_query import generate_boolean
+from Query_generator.generate_boolean_query import generate_boolean
 
 app = FastAPI(title="Query Generator Wrapper")
 
