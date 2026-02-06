@@ -1,104 +1,369 @@
-# Query_generator — Backend Integration Instructions (for an AI or Frontend)
+# Query_generator — Frontend Integration (npm run dev)
 
-Purpose: enable another AI agent or a frontend developer to call the backend tools we built and obtain an NCBI-ready boolean query (or use the semantic API). This doc describes how to run the code, the expected inputs and outputs, fallback behavior, and example calls.
+**Propósito**: Instrucciones simples para que un frontend developer implemente una interfaz web que consume la API de generación de consultas booleanas NCBI.
 
-1) Requirements
-- Python 3.10+ (the repo was developed with CPython 3.12 but 3.10+ should work)
-- System packages: `curl`, network access to `localhost` and optionally HF Hub.
-- Optional: `ollama` LLM running at `http://localhost:11434/llama2` to enable query expansion.
+---
 
-2) Repository layout (important paths)
-- `Query_generator/generate_boolean_query.py` — CLI that produces an NCBI boolean query from a natural language input. Preferred tool for frontend when you need the final boolean string.
-- `Query_generator/test_queries.py` — simple CLI that calls the backend `/search` endpoint and prints human-readable results.
-- `Query_generator/quick_test.py` — full local quick-test (loads KB + FAISS + Ollama fallback checks).
-- `Query_generator/phases/` — copies of `phase1/phase2/phase3` used by the backend (KB, FAISS, API code). Keep these files; they are the authoritative KB and vector index.
+## **SETUP RÁPIDO (5 minutos)**
 
-3) How the backend works (short)
-- Input (natural language) → embeddings → FAISS vector search (top-K hits) → KB enrichment (organisms, strategies, tissues) → optional LLM expansion → boolean query builder.
-- The final boolean query builder uses the KB to decide when to tag terms as `[...]` (for example `Mus musculus[Organism]`). If KB does not validate a candidate organism, it leaves the term as an `All Fields` quoted phrase.
-
-4) How to run locally (commands an AI can execute)
-
-- 4.A — If the API is up and running on `localhost:8000` (recommended):
-
-  - Health check (recommended):
-    ```bash
-    curl -s http://localhost:8000/ | python3 -m json.tool
-    ```
-
-  - Generate boolean query by calling the CLI wrapper (no API call needed):
-    ```bash
-    python3 Query_generator/generate_boolean_query.py "Arabidopsis root drought"
-    ```
-
-  - Or call the semantic API directly (returns JSON):
-    ```bash
-    curl -s -X POST http://localhost:8000/search \
-      -H "Content-Type: application/json" \
-      -d '{"query":"Arabidopsis root drought","top_k":5,"expand":false}' | python3 -m json.tool
-    ```
-
-- 4.B — If API is not running, use the CLI that falls back to local phase copies (this repo contains the fallback):
-  ```bash
-  python3 Query_generator/generate_boolean_query.py "Mouse RNAseq"
-  ```
-
-  The script will attempt to call the API; if it times out it will load the local FAISS index from `Query_generator/phases/phase2/data/pyner_vectors.faiss` and compute the suggestions locally.
-
-5) Input/Output expectations (for the frontend or another AI agent)
-- Input: a single natural-language string describing the search intent (e.g. `"Mouse RNAseq"`, `"Arabidopsis root drought"`).
-- Output (CLI `generate_boolean_query.py`): prints two sections:
-  - Top semantic suggestions (text list with similarity scores).
-  - `Generated boolean query (NCBI-ready)`: a single-line boolean string that can be pasted into the NCBI SRA Advanced Search builder or used via Entrez E-utilities.
-
-Example output:
+### **Paso 1: Inicia el servidor backend**
+```bash
+cd /home/lahumada/disco1/Pyner_PGRLAB
+python3 Query_generator/wrapper_api.py
 ```
-(Mus musculus[Organism]) AND ("RNA-Seq" OR "RNA sequencing" OR transcriptome OR rnaseq) AND ("gene expression" OR transcriptome OR "RNA-Seq" OR expression)
+Output esperado:
+```
+INFO:     Uvicorn running on http://127.0.0.1:8001
+Press CTRL+C to quit
 ```
 
-6) Output format for programmatic consumption
-- If you prefer machine-friendly JSON, call the semantic API `/search` to get structured `results` (each result contains `query_text`, `query_type`, `similarity_score`, and `kb_data`). The frontend can then programmatically combine facets.
-- Example JSON fields from `/search`:
-  - `results`: list of objects with `query_text`, `query_type`, `similarity_score`, `kb_data`.
-  - `execution_time`: time in seconds.
+### **Paso 2: Crea tu proyecto frontend**
+```bash
+# Opción A: Vite + React
+npm create vite@latest mi-buscador -- --template react
+cd mi-buscador
+npm install
+npm run dev
 
-7) Integration tips for the frontend developer / AI agent
-- Preferred flow for a UI that needs a single boolean to run a query:
-  1. Call `/search` (POST) with `expand=false` to receive top-K semantic hits.
-  2. Show the top suggestions to the user (optional) and offer toggles (include/exclude strategies, tissues).
-  3. When user confirms, call `generate_boolean_query.py` on the backend (or the backend can call the same code path) to build the final boolean string.
+# Opción B: Next.js (más fácil si ya conoces React)
+npx create-next-app@latest
+npm run dev
+```
 
-- If the frontend wants the backend to return both the boolean and the structured items, expose a small wrapper endpoint that runs the generation function and returns:
+### **Paso 3: Consume la API desde tu frontend**
+```javascript
+// Ejemplo básico con fetch
+async function generateQuery(userQuery) {
+  const response = await fetch('http://127.0.0.1:8001/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+      query: userQuery,
+      top_k: 5,
+      expand: false 
+    })
+  });
+  return await response.json();
+}
 
-  ```json
-  {
-    "boolean_query": "(Mus musculus[Organism]) AND (...)",
-    "suggestions": [ {"query_text":"...","query_type":"...","score":0.52}, ... ]
-  }
-  ```
+// Uso
+const result = await generateQuery("Arabidopsis root drought");
+console.log(result.boolean_query);  // (("Arabidopsis"[Organism]) AND ("root" OR "drought"))
+```
 
-8) Environmental variables and optional settings
-- `HF_TOKEN` (optional): set it to speed up model downloads if the embedding model needs to fetch weights.
-- `OLLAMA_URL` (optional): point to your Ollama instance (default used by code is `http://localhost:11434/llama2`).
+---
 
-9) Security and rate limits
-- This backend is local by default. If the frontend is remote, add an authenticated API gateway in front of `localhost:8000` before exposing it publicly.
+## **¿Qué es esta API?**
 
-10) Troubleshooting
-- If `generate_boolean_query.py` times out contacting `localhost:8000`, it will attempt a local retrieval from `Query_generator/phases`. Make sure `Query_generator/phases/phase2/data/pyner_vectors.faiss` exists.
-- If organism detection is incorrect, check `Query_generator/phases/phase1/output/stage3_knowledge_base.json` — the boolean builder validates organism names against that KB.
+- **URL**: `http://127.0.0.1:8001/generate`
+- **Método**: POST
+- **Propósito**: Convierte consultas en lenguaje natural → consulta booleana NCBI lista para usar
+- **Ejemplo**: 
+  - Input: `"me gustaría buscar arabidopsis en sus raíces bajo sequía"`
+  - Output: `(("Arabidopsis" OR "Arabidopsis thaliana")[Organism]) AND ("root" OR "drought")`
 
-11) Quick programmatic example (Python) for another AI agent
+---
 
+## **Backend: Cómo funciona**
+
+- Input (natural language) → embeddings → FAISS vector search → KB enrichment (organisms, estrategias) → extracción de keywords → generador de boolean query
+- Los keywords se extraen automáticamente del texto del usuario (soporta inglés y español)
+---
+
+## **API Reference**
+
+### **POST /generate**
+
+**Request:**
+```json
+{
+  "query": "Mouse RNAseq liver",
+  "top_k": 5,
+  "expand": false
+}
+```
+
+**Response:**
+```json
+{
+  "input": "Mouse RNAseq liver",
+  "boolean_query": "(\"Mus musculus\"[Organism]) AND (\"RNA-Seq\" OR \"RNA sequencing\")[Strategy]",
+  "suggestions": [
+    {
+      "query_text": "Research studies on Mus musculus",
+      "query_type": "organism",
+      "similarity_score": 0.52,
+      "kb_data": {"organism": "Mus musculus"}
+    }
+  ],
+  "note": "Filtered 2 irrelevant results"
+}
+```
+
+---
+
+## **Ejemplo Frontend Completo (React)**
+
+### **1. Component React Simple**
+```jsx
+// QueryBuilder.jsx
+import { useState } from 'react';
+
+export default function QueryBuilder() {
+  const [query, setQuery] = useState('');
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleGenerate = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('http://127.0.0.1:8001/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          query: query,
+          top_k: 5,
+          expand: false 
+        })
+      });
+
+      if (!response.ok) throw new Error('API error');
+      const data = await response.json();
+      setResult(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="container">
+      <h1>🔍 NCBI Query Generator</h1>
+      
+      <form onSubmit={handleGenerate}>
+        <textarea
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Ej: Arabidopsis en sus raíces bajo sequía..."
+          rows={4}
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Generando...' : 'Generar Query'}
+        </button>
+      </form>
+
+      {error && <p className="error">Error: {error}</p>}
+
+      {result && (
+        <div className="results">
+          <h2>Resultado:</h2>
+          
+          <div className="boolean-box">
+            <h3>Boolean Query (copiar a NCBI):</h3>
+            <code>{result.boolean_query}</code>
+            <button onClick={() => navigator.clipboard.writeText(result.boolean_query)}>
+              📋 Copiar
+            </button>
+          </div>
+
+          {result.suggestions.length > 0 && (
+            <div className="suggestions">
+              <h3>Sugerencias:</h3>
+              <ul>
+                {result.suggestions.map((s, i) => (
+                  <li key={i}>
+                    <strong>{s.query_type.toUpperCase()}</strong> 
+                    {s.query_text} 
+                    <span className="score">{s.similarity_score.toFixed(3)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### **2. Estilos (CSS)**
+```css
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 { color: #333; }
+
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover { background: #0056b3; }
+button:disabled { background: #ccc; cursor: not-allowed; }
+
+.boolean-box {
+  background: #f0f0f0;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.boolean-box code {
+  display: block;
+  background: #fff;
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+  margin: 10px 0;
+}
+
+.suggestions {
+  margin-top: 20px;
+}
+
+.suggestions li {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score {
+  background: #e7f3ff;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #0056b3;
+}
+
+.error {
+  color: red;
+  padding: 10px;
+  background: #ffe7e7;
+  border-radius: 4px;
+}
+```
+
+---
+
+## **Pasos por pasos: Setup + Deploy Local**
+
+### **Para Linux/Mac:**
+```bash
+# 1. Terminal 1: Inicia el backend
+cd /home/lahumada/disco1/Pyner_PGRLAB
+python3 Query_generator/wrapper_api.py
+
+# 2. Terminal 2: Crea tu frontend
+npm create vite@latest mi-buscador -- --template react
+cd mi-buscador
+npm install
+npm run dev
+
+# 3. Abre http://localhost:5173 en el navegador
+```
+
+### **Para Windows (PowerShell):**
+```powershell
+# 1. PowerShell 1
+cd C:\ruta\a\Pyner_PGRLAB
+python Query_generator\wrapper_api.py
+
+# 2. PowerShell 2
+npm create vite@latest mi-buscador -- --template react
+cd mi-buscador
+npm install
+npm run dev
+```
+
+---
+
+## **Solución de Errores Comunes**
+
+| Error | Solución |
+|-------|----------|
+| `CORS error` | Asegúrate de que `wrapper_api.py` esté corriendo + usa `http://127.0.0.1:8001` exacto |
+| `Connection refused` | Backend no está iniciado. Verifica que Python esté corriendo en puerto 8001 |
+| `No keywords extracted` | Normal si la consulta no tiene términos biológicos conocidos. La query se genera igual con organismos. |
+| `Model not found (Ollama)` | Es OK - usa fallback local. No necesitas Ollama instalado |
+
+---
+
+## **Tus Responsabilidades + Backend**
+
+### **Tú (Frontend developer):**
+- ✅ HTML/CSS/JavaScript atractivo
+- ✅ Inputs para el usuario 
+- ✅ Llamadas fetch a `http://127.0.0.1:8001/generate`
+- ✅ Mostrar resultados + botón para copiar
+
+### **Backend (ya hecho):**
+- ✅ Extrae keywords del texto natural (inglés + español)
+- ✅ Busca en vector DB (FAISS)
+- ✅ Valida organismos contra KB
+- ✅ Genera boolean query listo para NCBI
+- ✅ API en puerto 8001
+
+---
+
+## **Estructura de Archivos Backend (FYI)**
+
+```
+Query_generator/
+  ├── generate_boolean_query.py    # CLI + función core
+  ├── wrapper_api.py               # FastAPI server (puerto 8001)
+  ├── FRONTEND_INTEGRATION.md      # Este archivo
+  └── phases/
+      ├── phase1/output/stage3_knowledge_base.json
+      └── phase2/data/pyner_vectors.faiss
+```
+
+---
+
+## **Requirements Backend**
 ```python
-import subprocess, json
-
-def get_boolean(query):
-    proc = subprocess.run(['python3','Query_generator/generate_boolean_query.py', query], capture_output=True, text=True)
-    return proc.stdout
-
-print(get_boolean('Arabidopsis root drought'))
+# Esto ya está instalado pero por si acaso:
+fastapi
+uvicorn
+sentence-transformers
+faiss-cpu  # o faiss-gpu
 ```
+
+Para verificar:
+```bash
+python3 -c "import fastapi, uvicorn, faiss; print('✅ All OK')"
+```
+
+---
+
+**¿Preguntas?** Revisa los logs de `wrapper_api.py` si algo falla. El backend logea todas las queries y errores.
 
 12) Notes for frontend design team
 - We only provide backend logic and boolean generation. The frontend should:
