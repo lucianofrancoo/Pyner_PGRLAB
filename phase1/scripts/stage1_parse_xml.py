@@ -26,6 +26,9 @@ from collections import defaultdict
 from typing import Dict, List, Any, Optional, Tuple
 import sys
 
+# Add parent directory to Python path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from config import (
     NCBI_SRA_PATH, OUTPUT_DIR, MAX_FILES_PHASE1_STAGE1,
     CHECKPOINT_INTERVAL, DEBUG_PRINT_INTERVAL
