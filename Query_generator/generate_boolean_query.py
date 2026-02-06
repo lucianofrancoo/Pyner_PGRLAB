@@ -57,9 +57,20 @@ ORGANISM_VARIANTS = {
     'Staphylococcus aureus': ['Staphylococcus', 'Staphylococcus aureus'],
 }
 
-STRATEGY_SYNS = [ '"RNA-Seq"', '"RNA sequencing"', 'transcriptome', 'rnaseq' ]
-GENE_EXPR_SYNS = [ '"gene expression"', 'transcriptome', '"RNA-Seq"', 'expression' ]
-CHIP_SYNS = [ '"ChIP-Seq"', '"ChIP sequencing"', '"chromatin immunoprecipitation"' ]
+STRATEGY_SYNS = [ '"RNA-Seq"', '"RNA seq"', '"RNA sequencing"', 'transcriptome' ]
+RNASEQ_SYNS = [ '"RNA-Seq"', '"RNA seq"', '"RNA sequencing"', '"whole transcriptome"' ]
+WGS_SYNS = [ '"whole genome sequencing"', '"WGS"', '"whole genome"' ]
+METAGENOMICS_SYNS = [ 'metagenomic', 'metagenomics', '"16S rRNA"', '"16S"' ]
+CHIP_SYNS = [ '"ChIP-Seq"', '"ChIP seq"', '"chromatin immunoprecipitation"', '"ChIP sequencing"' ]
+ATACSEQ_SYNS = [ '"ATAC-Seq"', '"ATAC seq"', '"assay for transposase-accessible chromatin"' ]
+DNASEQ_SYNS = [ '"DNase-Seq"', '"DNase seq"', '"digital genomic footprinting"' ]
+WES_SYNS = [ '"whole exome sequencing"', '"WES"', '"exome sequencing"' ]
+TARGETSEQ_SYNS = [ '"targeted sequencing"', '"amplicon sequencing"', '"deep sequencing"' ]
+
+# Gene expression specific synonyms - SEPARATE from sequencing strategies
+GENE_EXPR_SYNS = [ '"gene expression"', '"expression profiling"', '"expression analysis"', 'microarray' ]
+QPCR_SYNS = [ '"qPCR"', '"q-PCR"', '"quantitative PCR"', '"RT-qPCR"', '"real-time PCR"' ]
+
 GUT_SYNS = [ 'gut', 'intestinal', 'fecal' ]
 METAGENOME_SYNS = [ 'metagenome', 'metatranscriptome' ]
 
@@ -235,15 +246,33 @@ def build_boolean(results: List[dict], seed_organisms: List[str] = None, kb_orgs
                 pass  # Do NOT add to facets; discard
 
         elif qtype == 'strategy':
-            # Strategy: map known sequencing strategies
-            if 'chip' in qtext.lower():
+            # Detect specific sequencing strategy to use appropriate synonyms
+            qtext_lower = qtext.lower()
+            
+            if 'chip' in qtext_lower or 'chromatin' in qtext_lower or 'immunoprecipitation' in qtext_lower:
                 facets.append(CHIP_SYNS)
-            elif 'rna' in qtext.lower() or 'rnaseq' in qtext.lower() or 'rna-seq' in qtext.lower():
-                facets.append(STRATEGY_SYNS)
+            elif 'atac' in qtext_lower or 'transposase' in qtext_lower:
+                facets.append(ATACSEQ_SYNS)
+            elif 'dnase' in qtext_lower or 'dnasei' in qtext_lower:
+                facets.append(DNASEQ_SYNS)
+            elif 'rna-seq' in qtext_lower or 'rna seq' in qtext_lower or 'rnaseq' in qtext_lower or 'rna sequencing' in qtext_lower:
+                facets.append(RNASEQ_SYNS)
+            elif 'wgs' in qtext_lower or 'whole genome sequencing' in qtext_lower or ('whole' in qtext_lower and 'genome' in qtext_lower):
+                facets.append(WGS_SYNS)
+            elif 'wes' in qtext_lower or 'exome' in qtext_lower or ('whole' in qtext_lower and 'exome' in qtext_lower):
+                facets.append(WES_SYNS)
+            elif 'qpcr' in qtext_lower or 'q-pcr' in qtext_lower or 'real-time pcr' in qtext_lower or 'qt-pcr' in qtext_lower:
+                facets.append(QPCR_SYNS)
+            elif '16s' in qtext_lower or 'metagenomic' in qtext_lower or '16s rrna' in qtext_lower:
+                facets.append(METAGENOMICS_SYNS)
+            elif 'amplicon' in qtext_lower or 'targeted' in qtext_lower:
+                facets.append(TARGETSEQ_SYNS)
             else:
+                # Generic strategy: use raw phrase
                 facets.append([raw_phrase])
 
         elif qtype == 'gene_expression':
+            # Gene expression analysis - different from sequencing strategies
             facets.append(GENE_EXPR_SYNS)
 
         elif 'metagenome' in qtext.lower() or 'gut' in qtext.lower():
