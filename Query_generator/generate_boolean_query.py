@@ -82,6 +82,34 @@ NON_ORGANISM_KEYWORDS = {
     'gene expression', 'transcriptome',
 }
 
+# Query type relevance mapping: what user search terms should match what result types
+# If user searches for these terms, they're probably interested in these query types
+RELEVANCE_MAP = {
+    # Stress/environment related
+    'drought': ['organism', 'strategy'],  # NOT gene_expression generally
+    'stress': ['organism', 'strategy'],
+    'treatment': ['organism', 'strategy'],
+    'condition': ['organism', 'strategy'],
+    'disease': ['organism', 'strategy'],
+    'infection': ['organism', 'strategy'],
+    'immune': ['organism', 'strategy'],
+    'pathogen': ['organism', 'strategy'],
+    
+    # Development/anatomy
+    'root': ['organism', 'strategy'],
+    'leaf': ['organism', 'strategy'],
+    'development': ['organism', 'strategy'],
+    'growth': ['organism', 'strategy'],
+    'morphogenesis': ['organism', 'strategy'],
+    
+    # Expression analysis
+    'expression': ['gene_expression', 'strategy'],
+    'profiling': ['gene_expression', 'strategy'],
+    'microarray': ['gene_expression'],
+    'transcriptome': ['strategy'],
+    'rna': ['strategy'],
+}
+
 
 def call_search_api(query: str, top_k: int = 5, expand: bool = False) -> dict:
     cmd = [
@@ -157,7 +185,72 @@ Respond with exactly ONE word: organism, search_term, or ambiguous"""
     return 'ambiguous'
 
 
-def extract_species_from_text(text: str, kb_orgs: Dict[str, str] = None) -> List[str]:
+def extract_query_keywords(query: str) -> set:
+    """Extract key search terms from user query.
+    
+    Example: "Arabidopsis root drought" -> {'arabidopsis', 'root', 'drought'}
+    """
+    words = query.lower().split()
+    keywords = set()
+    for word in words:
+        # Remove punctuation and add
+        clean_word = re.sub(r'[^\w]', '', word)
+        if len(clean_word) > 2:  # Skip short words
+            keywords.add(clean_word)
+    return keywords
+
+
+def get_relevant_query_types(user_query: str) -> set:
+    """Determine which result types are relevant for this user query.
+    
+    If user searches for 'drought', they probably want organism + strategy results,
+    NOT gene_expression results.
+    """
+    keywords = extract_query_keywords(user_query)
+    relevant_types = {'organism', 'strategy'}  # Always include organism and strategy
+    
+    for keyword in keywords:
+        if keyword in RELEVANCE_MAP:
+            relevant_types.update(RELEVANCE_MAP[keyword])
+    
+    return relevant_types
+
+
+def filter_results_by_relevance(results: List[dict], user_query: str) -> List[dict]:
+    """Filter semantic results to keep only those relevant to user query.
+    
+    If user searches for 'drought' but gets 'gene expression' results, discard them.
+    """
+    relevant_types = get_relevant_query_types(user_query)
+    keywords = extract_query_keywords(user_query)
+    
+    filtered = []
+    for r in results:
+        qtype = r.get('query_type', '').lower()
+        qtext = r.get('query_text', '').lower()
+        
+        # Always keep organism type
+        if qtype == 'organism':
+            filtered.append(r)
+            continue
+        
+        # Keep strategy if it's relevant
+        if qtype == 'strategy':
+            filtered.append(r)
+            continue
+        
+        # For gene_expression: only keep if user explicitly searched for it
+        if qtype == 'gene_expression':
+            expr_keywords = {'expression', 'profiling', 'microarray', 'transcriptome'}
+            if any(kw in keywords for kw in expr_keywords):
+                filtered.append(r)
+            # Otherwise skip gene_expression results when user didn't ask for them
+            continue
+        
+        # Keep other types by default
+        filtered.append(r)
+    
+    return filtered
     """Extract organism names from query text — STRICT version.
     
     Strategy:
@@ -466,7 +559,10 @@ def local_retrieve(query: str, top_k: int = 5):
 
 
 def generate_boolean(query: str, top_k: int = 5, expand: bool = False) -> dict:
-    """Programmatic entrypoint: returns dict with suggestions and boolean query."""
+    """Programmatic entrypoint: returns dict with suggestions and boolean query.
+    
+    Results are filtered for relevance to the user's query keywords.
+    """
     kb_orgs = load_kb_organisms()
     seed_species = extract_species_from_text(query, kb_orgs)
 
@@ -480,12 +576,15 @@ def generate_boolean(query: str, top_k: int = 5, expand: bool = False) -> dict:
         except Exception as e2:
             raise RuntimeError(f"Both API and local retrieval failed: {e2}")
 
-    # Build boolean with KB context
-    boolean = build_boolean(results, seed_organisms=seed_species, kb_orgs=kb_orgs)
+    # Filter results for relevance to the actual user query
+    filtered_results = filter_results_by_relevance(results, query)
+    
+    # Build boolean with filtered, relevant results
+    boolean = build_boolean(filtered_results, seed_organisms=seed_species, kb_orgs=kb_orgs)
 
-    # Prepare suggestions list
+    # Prepare suggestions list (show what was actually used, not all raw results)
     suggestions = []
-    for r in results:
+    for r in filtered_results:
         suggestions.append({
             'query_text': r.get('query_text'),
             'query_type': r.get('query_type'),
@@ -496,7 +595,8 @@ def generate_boolean(query: str, top_k: int = 5, expand: bool = False) -> dict:
     return {
         'input': query,
         'boolean_query': boolean,
-        'suggestions': suggestions
+        'suggestions': suggestions,
+        'note': f'Filtered {len(results) - len(filtered_results)} irrelevant results'
     }
 
 
@@ -520,11 +620,20 @@ def main():
             print(f"Local retrieval failed: {e2}", file=sys.stderr)
             sys.exit(1)
     
-    print('\nTop suggestions from semantic search:')
+    # Filter for relevance
+    filtered_results = filter_results_by_relevance(results, query)
+    
+    print('\nAll semantic search results:')
     for i, r in enumerate(results, 1):
-        print(f" {i}. [{r.get('similarity_score'):.3f}] {r.get('query_text')} ({r.get('query_type')})")
+        is_filtered = r not in filtered_results
+        status = "❌ FILTERED (irrelevant)" if is_filtered else "✅ KEPT"
+        print(f" {i}. [{r.get('similarity_score'):.3f}] {r.get('query_text')} ({r.get('query_type')}) {status}")
+    
+    if len(filtered_results) < len(results):
+        print(f"\n⚠️  Filtered out {len(results) - len(filtered_results)} irrelevant results")
 
-    boolean = build_boolean(results, seed_organisms=seed_species, kb_orgs=kb_orgs)
+    print(f'\n📊 Using {len(filtered_results)} relevant results to build boolean query')
+    boolean = build_boolean(filtered_results, seed_organisms=seed_species, kb_orgs=kb_orgs)
     print('\nGenerated boolean query (NCBI-ready):\n')
     print(boolean)
     print('\n-- End')
