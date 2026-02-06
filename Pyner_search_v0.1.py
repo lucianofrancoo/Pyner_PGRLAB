@@ -17,11 +17,11 @@ import ollama
 # ============================================
 
 if len(sys.argv) < 2:
-    print("❌ Uso: python3 Pyner_search_v0.2.py <keywords separados por espacio>")
+    print(" Uso: python3 Pyner_search_v0.2.py <keywords separados por espacio>")
     sys.exit(1)
 
 keywords = sys.argv[1:]
-print("\n🔍 Generando término de búsqueda a partir de keywords:")
+print("\n Generando término de búsqueda a partir de keywords:")
 print("   ", ", ".join(keywords))
 print("--------------------------------------------------")
 
@@ -63,7 +63,7 @@ Considera incluir al menos 3 sinónimos relevantes y términos relacionados para
 # 4️⃣ LLAMADA AL MODELO LOCAL
 # ============================================
 
-print("\n🧠 Llamando al LLM (qwen2.5:14b)...\n")
+print("\n Llamando al LLM (qwen2.5:14b)...\n")
 
 try:
     response = client.generate(
@@ -73,14 +73,14 @@ try:
     )
     respuesta_llm = response['response'].strip()
 except Exception as e:
-    print(f"❌ Error al llamar al modelo: {e}")
+    print(f" Error al llamar al modelo: {e}")
     sys.exit(1)
 
 # ============================================
 # 5️⃣ INTERPRETAR LA RESPUESTA
 # ============================================
 
-print("🧩 Respuesta cruda del modelo:\n")
+print(" Respuesta cruda del modelo:\n")
 print(respuesta_llm)
 print("\n--------------------------------------------------")
 
@@ -89,7 +89,7 @@ try:
     natural_query = data.get("natural_query", "N/A")
     esearch_query = data.get("esearch_query", "N/A")
 except json.JSONDecodeError:
-    print("⚠️ El modelo no devolvió un JSON válido.")
+    print(" El modelo no devolvió un JSON válido.")
     natural_query = respuesta_llm
     esearch_query = "No disponible"
 
@@ -97,10 +97,10 @@ except json.JSONDecodeError:
 # 6️⃣ MOSTRAR RESULTADOS
 # ============================================
 
-print("✅ Término de búsqueda generado:\n")
-print(f"🔹 Natural query : {natural_query}")
-print(f"🔹 ESearch query : {esearch_query}\n")
+print(" Término de búsqueda generado:\n")
+print(f" Natural query : {natural_query}")
+print(f" ESearch query : {esearch_query}\n")
 
 print("--------------------------------------------------")
-print("💾 Copia el valor de 'esearch_query' para usarlo directamente en Pyner_V0.2.py")
+print(" Copia el valor de 'esearch_query' para usarlo directamente en Pyner_V0.2.py")
 print("--------------------------------------------------")

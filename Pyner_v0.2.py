@@ -23,7 +23,7 @@ client = ollama.Client()
 # PASO 1: BUSCAR EN NCBI SRA
 # ============================================
 
-print("🔍 Buscando en NCBI SRA: arabidopsis + sequía...")
+print(" Buscando en NCBI SRA: arabidopsis + sequía...")
 
 search_term = 'arabidopsis[Organism] AND (drought OR "water stress" OR "water deficit" OR dehydration OR "sequía")'
 
@@ -35,8 +35,8 @@ handle = Entrez.esearch(
 search_results = Entrez.read(handle)
 handle.close()
 
-print(f"✅ Encontrados {search_results['Count']} estudios totales")
-print(f"📊 Procesando los primeros {len(search_results['IdList'])} estudios...\n")
+print(f" Encontrados {search_results['Count']} estudios totales")
+print(f" Procesando los primeros {len(search_results['IdList'])} estudios...\n")
 
 # ============================================
 # PASO 2: RECORRER ESTUDIOS SIN REPETIR BIOPROJECT
@@ -47,7 +47,7 @@ resultados = []
 
 for idx, estudio_id in enumerate(search_results['IdList']):
     print("\n" + "=" * 60)
-    print(f"🧩 Estudio {idx+1} | ID: {estudio_id}")
+    print(f" Estudio {idx+1} | ID: {estudio_id}")
     print("=" * 60)
 
     handle = Entrez.esummary(db="sra", id=estudio_id, rettype="docsum")
@@ -55,7 +55,7 @@ for idx, estudio_id in enumerate(search_results['IdList']):
     handle.close()
 
     if "ExpXml" not in estudio:
-        print("⚠️ Este registro no tiene ExpXml, se omite.")
+        print(" Este registro no tiene ExpXml, se omite.")
         continue
 
     exp_xml = estudio["ExpXml"]
@@ -64,14 +64,14 @@ for idx, estudio_id in enumerate(search_results['IdList']):
     try:
         root = ET.fromstring(wrapped_xml)
     except ET.ParseError as e:
-        print(f"❌ Error al parsear XML: {e}")
+        print(f" Error al parsear XML: {e}")
         continue
 
     bioproject = root.findtext(".//Bioproject", "")
 
     # 🚫 Evitar repetir BioProjects
     if bioproject in bioprojects_vistos:
-        print(f"⏭️ BioProject {bioproject} ya procesado, se salta.")
+        print(f" BioProject {bioproject} ya procesado, se salta.")
         continue
     bioprojects_vistos.add(bioproject)
 
@@ -142,7 +142,7 @@ Only return the JSON, no explanations.
         )
         result_json = json.loads(response['response'])
     except Exception as e:
-        print(f"❌ Error en LLM: {e}")
+        print(f" Error en LLM: {e}")
         result_json = {"error": str(e)}
 
     # Guardar resultados
@@ -163,6 +163,6 @@ Only return the JSON, no explanations.
 if resultados:
     df = pd.DataFrame(resultados)
     df.to_csv("Pyner_SRA_arabidopsis_drought_unique.csv", index=False)
-    print(f"\n✅ Resultados guardados en Pyner_SRA_arabidopsis_drought_unique.csv")
+    print(f"\n Resultados guardados en Pyner_SRA_arabidopsis_drought_unique.csv")
 else:
-    print("\n⚠️ No se generaron resultados.")
+    print("\n No se generaron resultados.")
