@@ -28,6 +28,35 @@ COMMON_MAP = {
     'arabidopsis': 'Arabidopsis thaliana',
 }
 
+# Organism search variants: {full_name: [variant1, variant2, ...]}
+# Includes: full scientific name, genus, and common names
+ORGANISM_VARIANTS = {
+    'Arabidopsis thaliana': ['Arabidopsis', 'Arabidopsis thaliana'],
+    'Homo sapiens': ['Homo', 'Homo sapiens', 'human'],
+    'Mus musculus': ['Mus', 'Mus musculus', 'mouse'],
+    'Rattus norvegicus': ['Rattus', 'Rattus norvegicus', 'rat'],
+    'Danio rerio': ['Danio', 'Danio rerio', 'zebrafish'],
+    'Caenorhabditis elegans': ['Caenorhabditis', 'Caenorhabditis elegans'],
+    'Drosophila melanogaster': ['Drosophila', 'Drosophila melanogaster'],
+    'Escherichia coli': ['Escherichia', 'Escherichia coli', 'E. coli'],
+    'Saccharomyces cerevisiae': ['Saccharomyces', 'Saccharomyces cerevisiae'],
+    'Oncorhyncus mykiss': ['Oncorhyncus', 'Oncorhyncus mykiss', 'rainbow trout'],
+    'Bos taurus': ['Bos', 'Bos taurus', 'cattle', 'cow'],
+    'Sus scrofa': ['Sus', 'Sus scrofa', 'pig', 'swine'],
+    'Gallus gallus': ['Gallus', 'Gallus gallus', 'chicken'],
+    'Canis lupus familiaris': ['Canis', 'Canis lupus familiaris', 'dog'],
+    'Equus caballus': ['Equus', 'Equus caballus', 'horse'],
+    'Oryza sativa': ['Oryza', 'Oryza sativa', 'rice'],
+    'Zea mays': ['Zea', 'Zea mays', 'maize', 'corn'],
+    'Triticum aestivum': ['Triticum', 'Triticum aestivum', 'wheat'],
+    'Hordeum vulgare': ['Hordeum', 'Hordeum vulgare', 'barley'],
+    'Solanum lycopersicum': ['Solanum', 'Solanum lycopersicum', 'tomato'],
+    'Plasmodium falciparum': ['Plasmodium', 'Plasmodium falciparum'],
+    'Mycobacterium tuberculosis': ['Mycobacterium', 'Mycobacterium tuberculosis'],
+    'Streptococcus pneumoniae': ['Streptococcus', 'Streptococcus pneumoniae'],
+    'Staphylococcus aureus': ['Staphylococcus', 'Staphylococcus aureus'],
+}
+
 STRATEGY_SYNS = [ '"RNA-Seq"', '"RNA sequencing"', 'transcriptome', 'rnaseq' ]
 GENE_EXPR_SYNS = [ '"gene expression"', 'transcriptome', '"RNA-Seq"', 'expression' ]
 CHIP_SYNS = [ '"ChIP-Seq"', '"ChIP sequencing"', '"chromatin immunoprecipitation"' ]
@@ -167,7 +196,10 @@ def extract_species_from_text(text: str, kb_orgs: Dict[str, str] = None) -> List
 
 
 def build_boolean(results: List[dict], seed_organisms: List[str] = None, kb_orgs: Dict[str, str] = None) -> str:
-    """Build NCBI-ready boolean query from semantic search results."""
+    """Build NCBI-ready boolean query from semantic search results.
+    
+    For each organism, includes all variants (genus, full name, common names).
+    """
     if kb_orgs is None:
         kb_orgs = load_kb_organisms()
     
@@ -188,13 +220,15 @@ def build_boolean(results: List[dict], seed_organisms: List[str] = None, kb_orgs
             if species:
                 # Found a validated organism in the text
                 for s in species:
-                    if s not in organisms:
-                        organisms.append(f"{s}[Organism]")
+                    org_tag = _organism_with_variants(s)
+                    if org_tag not in organisms:
+                        organisms.append(org_tag)
             elif qtext.lower() in kb_orgs:
                 # Direct KB match (exact organism name)
                 org_name = kb_orgs[qtext.lower()]
-                if f"{org_name}[Organism]" not in organisms:
-                    organisms.append(f"{org_name}[Organism]")
+                org_tag = _organism_with_variants(org_name)
+                if org_tag not in organisms:
+                    organisms.append(org_tag)
             else:
                 # Low confidence: this phrase is likely NOT a pure organism
                 # Skip it to avoid polluting the boolean query
@@ -224,9 +258,9 @@ def build_boolean(results: List[dict], seed_organisms: List[str] = None, kb_orgs
     # Include seed organisms detected from the original query
     if seed_organisms:
         for s in seed_organisms:
-            tag = f"{s}[Organism]" if not s.endswith('[Organism]') else s
-            if tag not in organisms:
-                organisms.append(tag)
+            org_tag = _organism_with_variants(s)
+            if org_tag not in organisms:
+                organisms.append(org_tag)
 
     if organisms:
         clause_list.append('(' + ' OR '.join(organisms) + ')')
@@ -250,6 +284,16 @@ def build_boolean(results: List[dict], seed_organisms: List[str] = None, kb_orgs
     if not clause_list:
         return ''
     return ' AND '.join(clause_list)
+
+
+def _organism_with_variants(organism_name: str) -> str:
+    """Build organism clause with all search variants (genus, full name, common names).
+    
+    Example: Arabidopsis thaliana -> '("Arabidopsis" OR "Arabidopsis thaliana")[Organism]'
+    """
+    variants = ORGANISM_VARIANTS.get(organism_name, [organism_name])
+    quoted_variants = [f'"{v}"' for v in variants]
+    return '(' + ' OR '.join(quoted_variants) + ')[Organism]'
 
 
 def local_retrieve(query: str, top_k: int = 5):
