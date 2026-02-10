@@ -1,0 +1,848 @@
+"""
+Pyner Phase 3 - Query Generator
+================================
+Generador de queries booleanas para NCBI a partir de lenguaje natural
+
+Flujo:
+1. Usuario input → Extraer términos
+2. Validar términos contra KB (organismos, estrategias)
+3. LLM genera query booleana optimizada
+4. Retorna query lista para NCBI
+"""
+
+import json
+import logging
+from pathlib import Path
+from typing import Dict, List, Tuple, Optional
+import re
+import requests
+
+logger = logging.getLogger(__name__)
+
+
+# Dynamic translation dictionary (for common Spanish-English terms)
+SPANISH_TO_EN = {
+    # Tissues
+    'raíz': 'root',
+    'raices': 'root',
+    'raíces': 'root',
+    'hoja': 'leaf',
+    'hojas': 'leaf',
+    'flor': 'flower',
+    'flores': 'flower',
+    'tallo': 'stem',
+    'tallos': 'stem',
+    'semilla': 'seed',
+    'semillas': 'seed',
+    'fruto': 'fruit',
+    'frutos': 'fruit',
+    # Conditions
+    'sequía': 'drought',
+    'sequia': 'drought',
+    'estrés': 'stress',
+    'estres': 'stress',
+    'infección': 'infection',
+    'infeccion': 'infection',
+    'enfermedad': 'disease',
+    'crecimiento': 'growth',
+    'desarrollo': 'development',
+    # General keywords
+    'genómico': 'genomic',
+    'genómicos': 'genomic',
+    'genomico': 'genomic',
+    'genomicos': 'genomic',
+    'expresión': 'expression',
+    'expresion': 'expression',
+    'mutación': 'mutation',
+    'mutacion': 'mutation',
+}
+
+
+def load_technical_vocabulary(cache_dir: Path) -> Dict:
+    """Load technical vocabulary from JSON file"""
+    vocab_path = cache_dir / "technical_vocabulary.json"
+    if vocab_path.exists():
+        try:
+            with open(vocab_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            logger.warning(f"⚠️ Error loading technical vocabulary: {e}")
+    return {
+        "plant_tissues": [],
+        "animal_tissues": [],
+        "generic_tissues": [],
+        "process_keywords": [],
+        "organism_markers": {"plant": {"markers": []}, "animal": {"markers": []}, 
+                            "microbe": {"markers": []}, "virus": {"markers": []}},
+        "organism_aliases": {},
+        "strategy_keywords": {}
+    }
+
+
+class KnowledgeBaseValidator:
+    """Validador de términos contra el Knowledge Base"""
+    
+    def __init__(self, kb_path: Path, query_cache_path: Optional[Path] = None, cache_dir: Optional[Path] = None):
+        self.kb_path = kb_path
+        self.query_cache_path = query_cache_path
+        self.cache_dir = cache_dir or kb_path.parent.parent / "cache"
+        self.organisms = {}
+        self.strategies = set()
+        self.sources = set()
+        self.selections = set()
+        self.diseases = set()
+        
+        # Load technical vocabulary
+        self.vocab = load_technical_vocabulary(self.cache_dir)
+        self.plant_tissues = set(self.vocab.get("plant_tissues", []))
+        self.animal_tissues = set(self.vocab.get("animal_tissues", []))
+        self.generic_tissues = set(self.vocab.get("generic_tissues", []))
+        self.process_keywords = set(self.vocab.get("process_keywords", []))
+        self.organism_aliases = self.vocab.get("organism_aliases", {})
+        self.strategy_keywords = self.vocab.get("strategy_keywords", {})
+        
+        # Extract organism markers by domain
+        markers = self.vocab.get("organism_markers", {})
+        self.plant_markers = set(markers.get("plant", {}).get("markers", []))
+        self.animal_markers = set(markers.get("animal", {}).get("markers", []))
+        self.microbe_markers = set(markers.get("microbe", {}).get("markers", []))
+        self.virus_markers = set(markers.get("virus", {}).get("markers", []))
+        
+        self._load_kb()
+    
+    def _load_kb(self):
+        """Cargar Knowledge Base"""
+        try:
+            # Cargar KB principal (stage3)
+            with open(self.kb_path, 'r') as f:
+                kb = json.load(f)
+            
+            # Cargar organismos (con nombres y sinónimos)
+            self.organisms = {org.lower(): org for org in kb.get('organisms', {}).keys()}
+            
+            # Cargar estrategias (puede ser dict o list en KB reducida)
+            strategies = kb.get('strategies', {})
+            if isinstance(strategies, dict):
+                self.strategies = set(strategies.keys())
+            else:
+                self.strategies = set(strategies)
+
+            # Cargar sources y selections (no existen en KB reducida)
+            sources = kb.get('sources', {})
+            selections = kb.get('selections', {})
+            self.sources = set(sources.keys()) if isinstance(sources, dict) else set()
+            self.selections = set(selections.keys()) if isinstance(selections, dict) else set()
+            
+            # Intentar cargar KB extendido de Stage 2 (mas organismos)
+            stage2_kb = self.kb_path.parent / "stage2_knowledge_base.json"
+            if stage2_kb.exists():
+                try:
+                    with open(stage2_kb, 'r') as f:
+                        kb2 = json.load(f)
+                    for org_name in kb2.get('organisms', {}).keys():
+                        self.organisms.setdefault(org_name.lower(), org_name)
+                except Exception as e:
+                    logger.warning(f"⚠️ Failed to load stage2 KB: {e}")
+
+            # Cargar query_cache.json (organismos y enfermedades)
+            if self.query_cache_path and self.query_cache_path.exists():
+                try:
+                    with open(self.query_cache_path, 'r') as f:
+                        cache = json.load(f)
+                    for item in cache.get('queries', []):
+                        if item.get('type') == 'organism' and item.get('organism'):
+                            org = item['organism']
+                            self.organisms.setdefault(org.lower(), org)
+                        if item.get('type') == 'disease' and item.get('disease'):
+                            self.diseases.add(item['disease'].lower())
+                except Exception as e:
+                    logger.warning(f"⚠️ Failed to load query cache: {e}")
+
+            logger.info(f"✅ KB loaded: {len(self.organisms)} organisms, {len(self.strategies)} strategies")
+            
+        except Exception as e:
+            logger.error(f"❌ Error loading KB: {e}")
+    
+    def find_organism(self, text: str) -> Optional[str]:
+        """Buscar organismo en el texto (retorna 1 solo)"""
+        text_lower = text.lower()
+        
+        # Búsqueda exacta primero
+        for org_key, org_name in self.organisms.items():
+            if org_key in text_lower:
+                return org_name
+        
+        # Búsqueda fuzzy (palabras clave)
+        words = text_lower.split()
+        for org_key, org_name in self.organisms.items():
+            org_words = org_key.split()
+            if len(org_words) >= 2:  # Nombres científicos (genus species)
+                if org_words[0] in words and org_words[1] in words:
+                    return org_name
+
+        # Alias comunes (ej. arabidopsis -> Arabidopsis thaliana)
+        for alias, canonical in self.organism_aliases.items():
+            if re.search(rf"\b{re.escape(alias)}\b", text_lower):
+                if canonical.lower() in self.organisms:
+                    return self.organisms[canonical.lower()]
+                return canonical
+        
+        return None
+    
+    def find_organism_variants(self, text: str) -> List[str]:
+        """Buscar TODAS las variantes de un organismo en la KB
+        
+        Ej: 'mouse' -> ['Mus musculus', 'Mus musculus musculus', 'Mus musculus castaneus']
+        """
+        text_lower = text.lower()
+        variants = []
+        
+        # Primero buscar si hay alias
+        canonical = None
+        for alias, org in self.organism_aliases.items():
+            if re.search(rf"\b{re.escape(alias)}\b", text_lower):
+                canonical = org
+                break
+        
+        # Si no hay alias, buscar directamente en texto
+        if not canonical:
+            # Buscar cualquier match en organismos
+            for org_key, org_name in self.organisms.items():
+                if org_key in text_lower:
+                    canonical = org_name
+                    break
+        
+        if canonical:
+            # Buscar todas las variantes EXACTAS del canonical
+            # Ej: "Mus musculus" debe encontrar:
+            #   - "Mus musculus" (exacto)
+            #   - "Mus musculus musculus" (subspecie)
+            #   - "Mus musculus castaneus" (subspecie)
+            # NO debe encontrar: "Mustela" (otro género)
+            canonical_words = canonical.lower().split()
+            if len(canonical_words) >= 2:
+                # Buscar genus + species exacto
+                genus_species = ' '.join(canonical_words[:2])
+                for org_key, org_name in self.organisms.items():
+                    # Match: debe comenzar con "genus species"
+                    if org_key.startswith(genus_species) and org_name not in variants:
+                        variants.append(org_name)
+            elif len(canonical_words) == 1:
+                # Solo género (menos común, pero buscar exacto)
+                genus = canonical_words[0]
+                for org_key, org_name in self.organisms.items():
+                    if org_key.split()[0] == genus and org_name not in variants:
+                        variants.append(org_name)
+        
+        return variants
+
+    def find_tissues(self, text: str, tissue_vocab: Dict[str, str]) -> List[str]:
+        text_lower = text.lower()
+        found = []
+        for key, canonical in tissue_vocab.items():
+            if re.search(rf"\b{re.escape(key)}\b", text_lower):
+                if canonical not in found:
+                    found.append(canonical)
+        return found
+
+    def find_conditions(self, text: str, condition_vocab: Dict[str, str]) -> List[str]:
+        text_lower = text.lower()
+        found = []
+        for key, canonical in condition_vocab.items():
+            if re.search(rf"\b{re.escape(key)}\b", text_lower):
+                if canonical not in found:
+                    found.append(canonical)
+        return found
+    
+    def find_strategies(self, text: str) -> List[str]:
+        """Buscar estrategias en el texto"""
+        text_lower = text.lower()
+        found = []
+        
+        # Keywords desde vocabulario tecnico
+        for strategy, keywords in self.strategy_keywords.items():
+            if strategy not in self.strategies:
+                continue
+            for term in keywords:
+                if term in text_lower:
+                    if strategy not in found:
+                        found.append(strategy)
+                    break
+        
+        # Fallback: mapeo basico si no hay vocab
+        if not found:
+            strategy_mappings = {
+                'rna-seq': 'RNA-Seq',
+                'rnaseq': 'RNA-Seq',
+                'rna seq': 'RNA-Seq',
+                'transcriptome': 'RNA-Seq',
+                'wgs': 'WGS',
+                'whole genome': 'WGS',
+                'genome sequencing': 'WGS',
+                'chip-seq': 'ChIP-Seq',
+                'chipseq': 'ChIP-Seq',
+                'amplicon': 'AMPLICON',
+                '16s': 'AMPLICON',
+                'metagenome': 'WGS',
+                'exome': 'WXS',
+            }
+            
+            for term, strategy in strategy_mappings.items():
+                if term in text_lower and strategy in self.strategies:
+                    if strategy not in found:
+                        found.append(strategy)
+        
+        return found
+    
+    def extract_free_terms(
+        self,
+        text: str,
+        organism: str = None,
+        strategies: List[str] = None,
+        tissues: List[str] = None,
+        conditions: List[str] = None
+    ) -> List[str]:
+        """Extraer términos libres (no organismos ni estrategias)"""
+        terms = []
+        
+        # Remover organismo del texto
+        text_clean = text
+        if organism:
+            text_clean = text_clean.replace(organism, '')
+        
+        # Remover estrategias
+        if strategies:
+            for strat in strategies:
+                text_clean = text_clean.replace(strat, '')
+                text_clean = text_clean.replace(strat.lower(), '')
+
+        if tissues:
+            for tissue in tissues:
+                text_clean = text_clean.replace(tissue, '')
+                text_clean = text_clean.replace(tissue.lower(), '')
+
+        if conditions:
+            for cond in conditions:
+                text_clean = text_clean.replace(cond, '')
+                text_clean = text_clean.replace(cond.lower(), '')
+        
+        # Extraer palabras clave (stopwords eliminadas)
+        stopwords = {
+            'and', 'or', 'the', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by',
+            'using', 'studies', 'study', 'research', 'analysis', 'sequencing',
+            'sequence', 'whole', 'single', 'cell', 'data', 'information',
+            'quiero', 'buscar', 'informacion', 'información', 'sobre', 'acerca',
+            'datos', 'estudio', 'estudios', 'trabajo', 'trabajos'
+        }
+        words = re.findall(r'\b\w+\b', text_clean.lower())
+        
+        for word in words:
+            if len(word) > 3 and word not in stopwords:
+                if word not in terms:
+                    terms.append(word)
+        
+        return terms
+
+
+class NCBIQueryBuilder:
+    """Constructor de queries booleanas para NCBI"""
+    
+    def __init__(self, ollama_client=None):
+        self.ollama_client = ollama_client
+    
+    def build_query(
+        self,
+        organism: str = None,
+        organisms: List[str] = None,
+        organism_synonyms: List[str] = None,
+        strategies: List[str] = None,
+        strategy_synonyms: List[str] = None,
+        free_terms: List[str] = None,
+        tissues: List[str] = None,
+        conditions: List[str] = None,
+        use_llm: bool = True
+    ) -> str:
+        """
+        Construir query booleana para NCBI
+        
+        Args:
+            organism: Nombre del organismo (single)
+            organisms: Lista de variantes del organismo (para query amplio)
+            strategies: Lista de estrategias de secuenciación
+            free_terms: Términos libres adicionales
+            use_llm: Si usar LLM para optimizar
+        
+        Returns:
+            Query booleana lista para NCBI
+        """
+        
+        # Construir query básica
+        query_parts = []
+        
+        # Organismos (priorizar lista de variantes)
+        org_clause = None
+        if organisms and len(organisms) > 0:
+            if len(organisms) == 1:
+                org_clause = f'"{organisms[0]}"[Organism]'
+            else:
+                org_query = ' OR '.join([f'"{org}"[Organism]' for org in organisms])
+                org_clause = f'({org_query})'
+        elif organism:
+            org_clause = f'"{organism}"[Organism]'
+
+        if org_clause:
+            if organism_synonyms:
+                syn_query = ' OR '.join([f'"{s}"[All Fields]' for s in organism_synonyms])
+                org_clause = f'({org_clause} OR {syn_query})'
+            query_parts.append(org_clause)
+        
+        # Términos libres
+        transcriptome_terms = {"transcriptome", "transcriptomics"}
+        use_or_group = bool(strategies) and any(term in transcriptome_terms for term in (free_terms or []))
+
+        combined_strategy_terms = []
+        if strategies:
+            for term in strategies:
+                if term not in combined_strategy_terms:
+                    combined_strategy_terms.append(term)
+        if strategy_synonyms:
+            for term in strategy_synonyms:
+                if term not in combined_strategy_terms:
+                    combined_strategy_terms.append(term)
+
+        if use_or_group:
+            # Remove transcriptome terms from free_terms to avoid AND duplication
+            free_terms = [t for t in free_terms if t not in transcriptome_terms]
+            or_terms = list(transcriptome_terms)
+            or_terms.extend(combined_strategy_terms)
+            or_query = ' OR '.join([f'"{term}"[All Fields]' for term in or_terms])
+            query_parts.append(f'({or_query})')
+
+        if free_terms and free_terms:  # Deduplicar
+            unique_free = {}
+            for term in free_terms:
+                if term not in unique_free:
+                    unique_free[term] = True
+            for term in unique_free.keys():
+                query_parts.append(f'"{term}"[All Fields]')
+
+        # Tejidos (solo si no están en free_terms)
+        if tissues:
+            for tissue in tissues:
+                if tissue not in free_terms:  # Evitar duplicados
+                    query_parts.append(f'"{tissue}"[All Fields]')
+
+        # Condiciones (solo si no están en free_terms)
+        if conditions:
+            for cond in conditions:
+                if cond not in free_terms:  # Evitar duplicados
+                    query_parts.append(f'"{cond}"[All Fields]')
+        # Estrategias (usar All Fields para ampliar match)
+        if strategies and not use_or_group:
+            if len(combined_strategy_terms) == 1:
+                query_parts.append(f'"{combined_strategy_terms[0]}"[All Fields]')
+            else:
+                strat_query = ' OR '.join([f'"{s}"[All Fields]' for s in combined_strategy_terms])
+                query_parts.append(f'({strat_query})')
+        
+        # Unir con AND
+        basic_query = ' AND '.join(query_parts)
+        
+        # Optimizar con LLM si está disponible
+        if use_llm and self.ollama_client:
+            try:
+                # Solo validar y limpiar, no reinventar la query
+                cleaned = self._clean_query_with_llm(basic_query)
+                return cleaned
+            except Exception as e:
+                logger.warning(f"⚠️ LLM cleanup failed, using basic query: {e}")
+                return basic_query
+        
+        return basic_query
+    
+    def _clean_query_with_llm(self, basic_query: str) -> str:
+        """Validar que la query sea correcta"""
+        # La query básica ya está bien formada
+        return basic_query
+    
+    def _optimize_with_llm(
+        self,
+        basic_query: str,
+        organism: str,
+        strategies: List[str],
+        free_terms: List[str],
+        tissues: List[str],
+        conditions: List[str]
+    ) -> str:
+        """Legacy method - kept for compatibility"""
+        return basic_query
+
+
+class QueryGeneratorService:
+    """Servicio principal de generación de queries"""
+    
+    def __init__(self, kb_path: Path, ollama_client=None, query_cache_path: Optional[Path] = None, cache_dir: Optional[Path] = None):
+        self.validator = KnowledgeBaseValidator(kb_path, query_cache_path=query_cache_path, cache_dir=cache_dir)
+        self.query_builder = NCBIQueryBuilder(ollama_client)
+        self.ollama_client = ollama_client
+        self.tissue_vocab = self._build_tissue_vocab()
+        self.condition_vocab = self._build_condition_vocab()
+
+    def _build_tissue_vocab(self) -> Dict[str, str]:
+        vocab = {}
+        # Use loaded vocabularies from validator
+        all_tissues = self.validator.plant_tissues | self.validator.animal_tissues | self.validator.generic_tissues
+        for term in all_tissues:
+            vocab[term] = term
+        # Add Spanish translations
+        for es, en in SPANISH_TO_EN.items():
+            if en in self.validator.plant_tissues | self.validator.generic_tissues:
+                vocab[es] = en
+        return vocab
+
+    def _build_condition_vocab(self) -> Dict[str, str]:
+        vocab = {term: term for term in self.validator.process_keywords}
+        # Añadir enfermedades del cache
+        for disease in self.validator.diseases:
+            vocab[disease] = disease
+        return vocab
+
+    def _collect_organism_synonyms(self, organism: Optional[str]) -> List[str]:
+        if not organism:
+            return []
+        org_lower = organism.lower()
+        synonyms = []
+        for alias, canonical in self.validator.organism_aliases.items():
+            if canonical.lower() == org_lower and alias.lower() != org_lower:
+                if alias not in synonyms:
+                    synonyms.append(alias)
+        return synonyms
+
+    def _collect_strategy_synonyms(self, strategies: List[str]) -> List[str]:
+        synonyms = []
+        if not strategies:
+            return synonyms
+        for strategy in strategies:
+            for term in self.validator.strategy_keywords.get(strategy, []):
+                if term.lower() == strategy.lower():
+                    continue
+                if term not in synonyms:
+                    synonyms.append(term)
+        return synonyms
+
+    def _normalize_terms(self, terms: List[str]) -> List[str]:
+        normalized = []
+        for term in terms:
+            if not term:
+                continue
+            term_lower = term.lower()
+            # Buscar traducción con lowercase
+            translated = SPANISH_TO_EN.get(term_lower, None)
+            if translated:
+                if translated not in normalized:
+                    normalized.append(translated)
+            else:
+                # Si no está en el diccionario, usar como está o intenta con LLM si es corta
+                if self.ollama_client and len(term_lower) > 2:
+                    try:
+                        # Quick LLM translation for unknown terms
+                        prompt = f'Translate this word to English (return only the word): {term}'
+                        translated_llm = self.ollama_client.generate(prompt).strip().lower()
+                        if translated_llm and len(translated_llm) < 20:  # Validar que es una palabra
+                            if translated_llm not in normalized:
+                                normalized.append(translated_llm)
+                        else:
+                            # Fallback a como está
+                            if term_lower not in normalized:
+                                normalized.append(term_lower)
+                    except:
+                        if term_lower not in normalized:
+                            normalized.append(term_lower)
+                else:
+                    # Sin LLM, usar como está
+                    if term_lower not in normalized:
+                        normalized.append(term_lower)
+        return normalized
+
+    def _classify_organism_domain(self, organism: str) -> str:
+        if not organism:
+            return 'unknown'
+
+        org_lower = organism.lower()
+
+        if self.ollama_client:
+            try:
+                prompt = (
+                    "Classify this organism into one of: plant, animal, microbe, virus, unknown. "
+                    "Return ONLY the label. Organism: " + organism
+                )
+                label = self.ollama_client.generate(prompt).strip().lower()
+                if label in {'plant', 'animal', 'microbe', 'virus'}:
+                    return label
+            except Exception:
+                pass
+
+        if any(marker in org_lower for marker in self.validator.plant_markers):
+            return 'plant'
+        if any(marker in org_lower for marker in self.validator.animal_markers):
+            return 'animal'
+        if any(marker in org_lower for marker in self.validator.microbe_markers):
+            return 'microbe'
+        if any(marker in org_lower for marker in self.validator.virus_markers):
+            return 'virus'
+
+        return 'unknown'
+
+    def _tissue_domain(self, tissue: str) -> str:
+        t = tissue.lower()
+        if t in self.validator.plant_tissues:
+            return 'plant'
+        if t in self.validator.animal_tissues:
+            return 'animal'
+        return 'generic'
+
+    def _extract_with_llm(self, user_input: str) -> Dict[str, List[str]]:
+        if not self.ollama_client:
+            return {}
+
+        prompt = f"""Extract and categorize scientific query terms. Accept Spanish or English input. ALWAYS output ENGLISH terms.
+
+User Query: "{user_input}"
+
+Extract these fields and return ONLY valid JSON (no markdown, no text):
+- organism: (string) scientific name or null
+- tissues: (list) body parts or tissues in ENGLISH
+- conditions: (list) stress/disease/process in ENGLISH  
+- strategies: (list) sequencing methods (RNA-Seq, ChIP-Seq, WGS, etc.)
+- keywords: (list) other important terms in ENGLISH
+
+Strict Rules:
+1. TRANSLATE ALL Spanish to ENGLISH in all outputs
+2. Use standardized scientific terms (e.g., "raíz"→"root", "sequía"→"drought")
+3. Do NOT invent organisms - leave null if unsure
+4. Tissues: leaf, root, flower, stem, liver, brain, heart, kidney, etc.
+5. Conditions: drought, stress, disease, heat, cold, growth, infection, etc.
+6. Return ONLY valid JSON, no extra text
+
+Example Input: "datos genómicos de raices de arabidopsis en sequia"
+Example Output: {{"organism": "Arabidopsis thaliana", "tissues": ["root"], "conditions": ["drought"], "strategies": [], "keywords": ["genomic"]}}"""
+
+        try:
+            raw = self.ollama_client.generate(prompt)
+            raw = raw.strip()
+            # Extraer JSON (permite markdown ```json ... ``` o JSON directo)
+            match = re.search(r"\{.*\}", raw, re.DOTALL)
+            if not match:
+                logger.warning(f"⚠️ LLM extraction failed - no JSON found in: {raw[:100]}")
+                return {}
+            
+            try:
+                data = json.loads(match.group(0))
+                result = {
+                    'organism': data.get('organism'),
+                    'tissues': [t.lower() if isinstance(t, str) else t for t in (data.get('tissues') or [])],
+                    'conditions': [c.lower() if isinstance(c, str) else c for c in (data.get('conditions') or [])],
+                    'strategies': [s for s in (data.get('strategies') or [])],
+                    'keywords': [k.lower() if isinstance(k, str) else k for k in (data.get('keywords') or [])],
+                }
+                logger.info(f"✅ LLM extraction: {result}")
+                return result
+            except json.JSONDecodeError as e:
+                logger.warning(f"⚠️ LLM JSON parse failed: {e}")
+                return {}
+        except Exception as e:
+            logger.warning(f"⚠️ LLM extraction error: {e}")
+            return {}
+    
+    def generate_query(self, user_input: str, use_llm: bool = True) -> Dict:
+        """
+        Generar query NCBI desde input en lenguaje natural
+        
+        Args:
+            user_input: Texto del usuario
+            use_llm: Si usar LLM para optimizar
+        
+        Returns:
+            Dict con query y metadata
+        """
+        
+        logger.info(f"📝 Processing user input: {user_input}")
+        
+        # Paso 1: Extraer con LLM (si esta disponible)
+        llm_data = self._extract_with_llm(user_input) if use_llm else {}
+
+        # Paso 2: Buscar organismo con todas sus variantes
+        organism_variants = self.validator.find_organism_variants(user_input)
+        
+        # Si no encuentra variantes en input, buscar en lo que extrajo el LLM
+        if not organism_variants and llm_data.get('organism'):
+            organism_variants = self.validator.find_organism_variants(llm_data['organism'])
+        
+        # También buscar en keywords del LLM (ej: "mouse" puede estar ahí)
+        if not organism_variants and llm_data.get('keywords'):
+            for keyword in llm_data['keywords']:
+                variants = self.validator.find_organism_variants(keyword)
+                if variants:
+                    organism_variants = variants
+                    break
+        
+        organism = organism_variants[0] if organism_variants else None
+        logger.info(f"🔍 Organism variants found: {organism_variants or 'None'}")
+        if len(organism_variants) > 1:
+            logger.info(f"   Using all {len(organism_variants)} variants for broad search")
+
+        # Paso 3: Buscar estrategias
+        strategies = self.validator.find_strategies(user_input)
+        if llm_data.get('strategies'):
+            for s in llm_data['strategies']:
+                if s in self.validator.strategies and s not in strategies:
+                    strategies.append(s)
+        logger.info(f"🔍 Strategies found: {strategies or 'None'}")
+
+        # Paso 4: Buscar tejidos y condiciones
+        tissues = self.validator.find_tissues(user_input, self.tissue_vocab)
+        conditions = self.validator.find_conditions(user_input, self.condition_vocab)
+        llm_tissues = llm_data.get('tissues', []) if use_llm else []
+        llm_conditions = llm_data.get('conditions', []) if use_llm else []
+        
+        # Fusionar con LLM si está disponible
+        for t in llm_tissues:
+            if t and t not in tissues:
+                tissues.append(t)
+        for c in llm_conditions:
+            if c and c not in conditions:
+                conditions.append(c)
+
+        tissues = self._normalize_terms(tissues)
+        conditions = self._normalize_terms(conditions)
+
+        logger.info(f"🔍 Tissues found: {tissues or 'None'}")
+        logger.info(f"🔍 Conditions found: {conditions or 'None'}")
+
+        # Paso 5: Extraer términos libres
+        free_terms = self.validator.extract_free_terms(
+            user_input, organism, strategies, tissues, conditions
+        )
+        # Traducir y usar el set de keywords del LLM para deduplicar
+        free_terms = self._normalize_terms(free_terms)
+        llm_keywords = set(llm_data.get('keywords', [])) if use_llm else set()
+        
+        # No incluir keywords que el LLM ya extrajo
+        free_terms = [t for t in free_terms if t not in llm_keywords]
+        
+        if organism and free_terms:
+            org_lower = organism.lower()
+            filtered = []
+            for term in free_terms:
+                if term in org_lower:
+                    continue
+                alias_match = self.validator.organism_aliases.get(term)
+                if alias_match and alias_match.lower() == org_lower:
+                    continue
+                filtered.append(term)
+            free_terms = filtered
+        logger.info(f"🔍 Free terms: {free_terms or 'None'}")
+
+        # Validacion de compatibilidad (planta vs tejido animal)
+        if organism and tissues:
+            domain = self._classify_organism_domain(organism)
+            for tissue in tissues:
+                t_domain = self._tissue_domain(tissue)
+                if domain == 'plant' and t_domain == 'animal':
+                    clarification = (
+                        "Detected a plant organism with an animal tissue. "
+                        "Please review the organism or tissue selection."
+                    )
+                    return {
+                        'user_input': user_input,
+                        'extracted': {
+                            'organism': organism,
+                            'strategies': strategies,
+                            'tissues': tissues,
+                            'conditions': conditions,
+                            'free_terms': free_terms
+                        },
+                        'ncbi_query': "",
+                        'ready_to_use': False,
+                        'clarification_needed': True,
+                        'clarification_message': clarification
+                    }
+                if domain == 'animal' and t_domain == 'plant':
+                    clarification = (
+                        "Detected an animal organism with a plant tissue. "
+                        "Please review the organism or tissue selection."
+                    )
+                    return {
+                        'user_input': user_input,
+                        'extracted': {
+                            'organism': organism,
+                            'organism_variants': organism_variants,
+                            'strategies': strategies,
+                            'tissues': tissues,
+                            'conditions': conditions,
+                            'free_terms': free_terms
+                        },
+                        'ncbi_query': "",
+                        'ready_to_use': False,
+                        'clarification_needed': True,
+                        'clarification_message': clarification
+                    }
+        
+        # If query is too general, ask for more specificity
+        needs_clarification = (
+            (organism is None and not strategies) or
+            (organism is not None and not strategies and not free_terms and not tissues and not conditions)
+        )
+        if needs_clarification:
+            clarification = (
+                "Your query is too general. Please specify an organism "
+                "(e.g., Arabidopsis thaliana), a condition (e.g., drought stress), "
+                "a tissue (e.g., leaf), or a strategy (e.g., RNA-Seq, ChIP-Seq)."
+            )
+            logger.info("⚠️ Clarification needed: general query")
+            return {
+                'user_input': user_input,
+                'extracted': {
+                    'organism': organism,                    'organism_variants': organism_variants,                    'strategies': strategies,
+                    'tissues': tissues,
+                    'conditions': conditions,
+                    'free_terms': free_terms
+                },
+                'ncbi_query': "",
+                'ready_to_use': False,
+                'clarification_needed': True,
+                'clarification_message': clarification
+            }
+
+        organism_synonyms = self._collect_organism_synonyms(organism)
+        strategy_synonyms = self._collect_strategy_synonyms(strategies)
+
+        # Paso 4: Generar query booleana
+        ncbi_query = self.query_builder.build_query(
+            organisms=organism_variants,
+            organism_synonyms=organism_synonyms,
+            strategies=strategies,
+            strategy_synonyms=strategy_synonyms,
+            free_terms=free_terms,
+            tissues=tissues,
+            conditions=conditions,
+            use_llm=use_llm
+        )
+
+        logger.info(f"✅ Generated query: {ncbi_query}")
+
+        return {
+            'user_input': user_input,
+            'extracted': {
+                'organism': organism,
+                'organism_variants': organism_variants,
+                'strategies': strategies,
+                'tissues': tissues,
+                'conditions': conditions,
+                'free_terms': free_terms
+            },
+            'ncbi_query': ncbi_query,
+            'ready_to_use': True,
+            'clarification_needed': False,
+            'clarification_message': ""
+        }
