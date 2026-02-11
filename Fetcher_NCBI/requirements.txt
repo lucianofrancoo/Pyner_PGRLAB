@@ -1,0 +1,6 @@
+# Fetcher_NCBI Requirements
+# =========================
+# Required Python packages for NCBI SRA data fetching
+
+# BioPython - NCBI Entrez API access
+biopython>=1.80

@@ -5,8 +5,9 @@ fully cleaned, production-ready **Query Generator** with a 3-phase pipeline.
 
 ---
 
-## What Was Completed (Query Generator)
+## What Was Completed
 
+### Query Generator ✅
 - **Phase 1:** Knowledge Base extraction from 7.2M+ NCBI SRA XML files.
 - **Phase 2:** Vector database and query cache (FAISS + curated vocabulary).
 - **Phase 3:** FastAPI + CLI query generator with synonym expansion and
@@ -15,6 +16,15 @@ fully cleaned, production-ready **Query Generator** with a 3-phase pipeline.
   and technical vocabulary before starting.
 - **Project cleanup:** Obsolete scripts, duplicated docs, logs, and caches were
   removed; documentation consolidated under `Query_generator/`.
+
+### Fetcher_NCBI ✅
+- **NCBI SRA fetching:** Query NCBI Sequence Read Archive using boolean queries.
+- **Automatic deduplication:** Tracks processed BioProjects to avoid duplicates.
+- **Metadata extraction:** Parses XML responses for organism, library strategy, 
+  biosample, and more.
+- **Rate limiting:** Respects NCBI API guidelines (3 req/sec without key, 10/sec 
+  with key).
+- **Integration:** Seamless pipeline with Query Generator output.
 
 ---
 
@@ -28,25 +38,41 @@ fully cleaned, production-ready **Query Generator** with a 3-phase pipeline.
   - `Query_generator/phases/phase3/` — FastAPI + CLI Query Generator.
   - `Query_generator/test_api.sh` — API smoke test.
 
+- `Fetcher_NCBI/` — NCBI SRA data fetcher (NEW).
+  - `Fetcher_NCBI/README.md` — Complete usage documentation.
+  - `Fetcher_NCBI/main.py` — CLI interface for fetching data.
+  - `Fetcher_NCBI/test_integration.sh` — Integration test with Query Generator.
+
 - `scripts_iniciales_beta/` — Archived early scripts (kept for reference).
 - `archive_old/` — Archived auxiliary files (kept for reference).
 - `docs/` — Legacy docs outside Query Generator (kept as requested).
 
 ---
 
-## Next Phases (Not Described Yet)
+## Complete Workflow
 
-- **fetcher_ncbi**
-- **data analyzer**
+**Query Generator → Fetcher_NCBI**
 
----
+```bash
+# 1. Generate optimized NCBI query from natural language
+cd Query_generator/phases/phase3
+python api/main.py "arabidopsis drought stress rna-seq"
 
-## Quick Start
+# 2. Fetch data from NCBI SRA
+cd ../../Fetcher_NCBI
+python main.py -q "GENERATED_QUERY_HERE" -m 1000 -o results.json
+
+# Or use the integration test
+bash test_integration.sh
+```
+
+**Quick Start (Query Generator only)**
 
 ```bash
 cd Query_generator/phases/phase3
 python api/main.py "arabidopsis drought rna-seq"
 ```
 
-For full documentation, see `Query_generator/README.md` and
-`Query_generator/phases/README.md`.
+For full documentation:
+- Query Generator: `Query_generator/README.md` and `Query_generator/phases/README.md`
+- Fetcher_NCBI: `Fetcher_NCBI/README.md`

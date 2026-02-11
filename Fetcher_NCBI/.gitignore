@@ -1,0 +1,19 @@
+# Fetcher_NCBI .gitignore
+# =======================
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+logs/
+*.log
+
+# Data files (results and cache)
+data/*.json
+data/*.csv
+
+# Keep directory structure
+!data/.gitkeep
+!logs/.gitkeep
