@@ -48,8 +48,8 @@ from config import (
     USE_GPU, DEBUG_PRINT_INTERVAL
 )
 from utils import (
-    setup_logging, print_section_header, ProgressTracker,
-    SystemMonitor, CheckpointManager, print_stage_summary
+    setup_logging, print_section_header, print_stage_summary,
+    SystemMonitor, ProgressTracker, CheckpointManager
 )
 from stage1_parse_xml import XMLParser, IndexBuilder
 
@@ -165,7 +165,7 @@ def run_parallel_stage(stage_number: int, max_files: int):
     
     Args:
         stage_number: 2 o 3
-        max_files: Máximo archivos a procesar
+        max_files: Máximo archivos a procesar (float('inf') para ilimitado)
     """
     
     # Setup
@@ -176,7 +176,8 @@ def run_parallel_stage(stage_number: int, max_files: int):
     
     print_section_header(logger, f"STAGE {stage_number}: PARALLEL GPU PROCESSING")
     
-    logger.info(f"🎯 Objetivo: Procesar {max_files:,} archivos con {NUM_WORKERS} workers")
+    max_files_display = "UNLIMITED" if max_files == float('inf') else f"{max_files:,}"
+    logger.info(f"🎯 Objetivo: Procesar {max_files_display} archivos con {NUM_WORKERS} workers")
     logger.info(f"🎮 GPUs disponibles: {GPU_IDS}")
     logger.info(f"⚙️  Batch size: {BATCH_SIZE}")
     
@@ -185,7 +186,10 @@ def run_parallel_stage(stage_number: int, max_files: int):
     
     logger.info(f"📁 Buscando BioProjects en: {NCBI_SRA_PATH}")
     bioproject_dirs = sorted([d for d in NCBI_SRA_PATH.iterdir() if d.is_dir()])
-    bioproject_dirs = bioproject_dirs[:max_files]
+    
+    # Apply limit only if not unlimited
+    if max_files != float('inf'):
+        bioproject_dirs = bioproject_dirs[:int(max_files)]
     
     logger.info(f"📊 Total BioProjects a procesar: {len(bioproject_dirs):,}")
     
@@ -386,4 +390,6 @@ if __name__ == "__main__":
     if args.stage == 2:
         run_parallel_stage(2, MAX_FILES_PHASE1_STAGE2)
     else:
-        run_parallel_stage(3, MAX_FILES_PHASE1_STAGE3)
+        # Stage 3: Use unlimited if None, otherwise use configured value
+        max_files_stage3 = MAX_FILES_PHASE1_STAGE3 if MAX_FILES_PHASE1_STAGE3 is not None else float('inf')
+        run_parallel_stage(3, max_files_stage3)

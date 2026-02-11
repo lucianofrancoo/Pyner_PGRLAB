@@ -1,496 +1,502 @@
 {
   "stage": 3,
-  "timestamp": "2026-02-06T12:34:13.027746",
-  "files_processed": 500000,
+  "timestamp": "2026-02-09T11:54:59.945332",
+  "files_processed": 1340468,
   "statistics": {
-    "total_experiments": 365771189,
-    "total_samples": 543621104,
-    "total_runs": 392485125,
-    "unique_organisms": 18413,
-    "unique_strategies": 37,
+    "total_experiments": 1304476325,
+    "total_samples": 1668568862,
+    "total_runs": 1461605826,
+    "unique_organisms": 82730,
+    "unique_strategies": 42,
     "unique_sources": 9,
-    "unique_selections": 28
+    "unique_selections": 29
   },
   "organisms": {
     "Severe acute respiratory syndrome coronavirus 2": {
-      "count": 310741490,
-      "studies": 139977
+      "count": 1129261780,
+      "studies": 272008
     },
     "Homo sapiens": {
-      "count": 66493236,
-      "studies": 20306
-    },
-    "human gut metagenome": {
-      "count": 44744612,
-      "studies": 11469
+      "count": 630659857,
+      "studies": 69282
     },
     "Mus musculus": {
-      "count": 35235123,
-      "studies": 17770
+      "count": 336609025,
+      "studies": 41426
     },
-    "metagenome": {
-      "count": 25023253,
-      "studies": 2925
-    },
-    "Escherichia coli": {
-      "count": 15550248,
-      "studies": 10598
+    "human gut metagenome": {
+      "count": 140748428,
+      "studies": 13068
     },
     "soil metagenome": {
-      "count": 12777256,
-      "studies": 255
+      "count": 138566485,
+      "studies": 5541
     },
-    "Plasmodium falciparum": {
-      "count": 10567053,
-      "studies": 15264
+    "metagenome": {
+      "count": 122753616,
+      "studies": 6776
     },
-    "Streptococcus pneumoniae": {
-      "count": 10498548,
-      "studies": 15924
-    },
-    "marine metagenome": {
-      "count": 10480924,
-      "studies": 92
-    },
-    "Mycobacterium tuberculosis": {
-      "count": 9286410,
-      "studies": 8922
-    },
-    "Vibrio cholerae": {
-      "count": 8890051,
-      "studies": 1699
-    },
-    "mouse gut metagenome": {
-      "count": 8631769,
-      "studies": 183
-    },
-    "Bos taurus": {
-      "count": 7751420,
-      "studies": 143
-    },
-    "gut metagenome": {
-      "count": 6869930,
-      "studies": 1804
-    },
-    "unidentified": {
-      "count": 6597130,
-      "studies": 9804
-    },
-    "rhizosphere metagenome": {
-      "count": 6512824,
-      "studies": 29
-    },
-    "Arabidopsis thaliana": {
-      "count": 6479083,
-      "studies": 351
-    },
-    "Staphylococcus aureus": {
-      "count": 6103175,
-      "studies": 6899
-    },
-    "Klebsiella pneumoniae": {
-      "count": 5741894,
-      "studies": 3734
-    },
-    "human metagenome": {
-      "count": 5136794,
-      "studies": 1994
-    },
-    "Danio rerio": {
-      "count": 4906444,
-      "studies": 1784
-    },
-    "Saccharomyces cerevisiae": {
-      "count": 4740833,
-      "studies": 5846
-    },
-    "Anopheles gambiae": {
-      "count": 4658827,
-      "studies": 7605
-    },
-    "uncultured bacterium": {
-      "count": 4603192,
-      "studies": 211
-    },
-    "Gallus gallus": {
-      "count": 4160795,
-      "studies": 71
-    },
-    "wastewater metagenome": {
-      "count": 3560106,
-      "studies": 1338
-    },
-    "human oral metagenome": {
-      "count": 3397609,
-      "studies": 49
-    },
-    "Enterococcus faecium": {
-      "count": 3315851,
-      "studies": 907
+    "Escherichia coli": {
+      "count": 64426080,
+      "studies": 47005
     },
     "Salmonella enterica": {
-      "count": 3036290,
-      "studies": 2828
+      "count": 59000012,
+      "studies": 79596
     },
-    "Canis lupus familiaris": {
-      "count": 2939944,
-      "studies": 2221
+    "gut metagenome": {
+      "count": 57427898,
+      "studies": 4890
     },
-    "human vaginal metagenome": {
-      "count": 2817347,
-      "studies": 10
+    "marine metagenome": {
+      "count": 44154404,
+      "studies": 1774
     },
-    "Sus scrofa": {
-      "count": 2772933,
-      "studies": 264
+    "mouse gut metagenome": {
+      "count": 39644550,
+      "studies": 1402
     },
-    "uncultured Lachnospiraceae bacterium": {
-      "count": 2756985,
-      "studies": 125
+    "Plasmodium falciparum": {
+      "count": 38271830,
+      "studies": 19725
     },
-    "Oryza sativa": {
-      "count": 2752521,
-      "studies": 66
+    "Mycobacterium tuberculosis": {
+      "count": 35072237,
+      "studies": 11014
     },
-    "Neisseria gonorrhoeae": {
-      "count": 2599372,
-      "studies": 1943
+    "human metagenome": {
+      "count": 33667348,
+      "studies": 4611
     },
-    "uncultured Eubacteriales bacterium": {
-      "count": 2568235,
-      "studies": 619
+    "Arabidopsis thaliana": {
+      "count": 27835293,
+      "studies": 1626
     },
-    "Campylobacter jejuni": {
-      "count": 2525533,
-      "studies": 1473
+    "wastewater metagenome": {
+      "count": 26608553,
+      "studies": 2674
     },
-    "bacterium": {
-      "count": 2517723,
-      "studies": 62
-    },
-    "human skin metagenome": {
-      "count": 2515618,
-      "studies": 42
-    },
-    "feces metagenome": {
-      "count": 2364923,
-      "studies": 257
-    },
-    "Streptococcus pyogenes": {
-      "count": 2203580,
-      "studies": 778
-    },
-    "uncultured eukaryote": {
-      "count": 2175953,
-      "studies": 37
-    },
-    "Triticum aestivum": {
-      "count": 2034103,
-      "studies": 814
-    },
-    "insect metagenome": {
-      "count": 1947192,
-      "studies": 15
+    "Saccharomyces cerevisiae": {
+      "count": 26525858,
+      "studies": 9720
     },
     "plant metagenome": {
-      "count": 1924883,
-      "studies": 29
-    },
-    "uncultured prokaryote": {
-      "count": 1916491,
-      "studies": 25
-    },
-    "Acinetobacter baumannii": {
-      "count": 1896633,
+      "count": 26453460,
       "studies": 761
     },
-    "synthetic construct": {
-      "count": 1853771,
-      "studies": 1060
+    "Oryza sativa": {
+      "count": 25886116,
+      "studies": 969
     },
-    "uncultured Muribaculaceae bacterium": {
-      "count": 1812161,
-      "studies": 129
+    "uncultured bacterium": {
+      "count": 23913248,
+      "studies": 5086
     },
-    "seawater metagenome": {
-      "count": 1796699,
-      "studies": 58
+    "Streptococcus pneumoniae": {
+      "count": 22084796,
+      "studies": 20398
     },
-    "Pseudomonas aeruginosa": {
-      "count": 1791481,
-      "studies": 1507
+    "Staphylococcus aureus": {
+      "count": 21339973,
+      "studies": 10273
     },
-    "Bacteroides uniformis": {
-      "count": 1762169,
-      "studies": 380
+    "rhizosphere metagenome": {
+      "count": 20451701,
+      "studies": 650
     },
-    "Siphoviridae environmental samples": {
-      "count": 1752653,
-      "studies": 1
-    },
-    "uncultured Oscillospiraceae bacterium": {
-      "count": 1740689,
-      "studies": 325
-    },
-    "Hordeum vulgare": {
-      "count": 1520134,
-      "studies": 35
-    },
-    "Listeria monocytogenes": {
-      "count": 1505830,
-      "studies": 526
-    },
-    "Plasmodium vivax": {
-      "count": 1502497,
-      "studies": 2156
-    },
-    "marine sediment metagenome": {
-      "count": 1390668,
-      "studies": 42
-    },
-    "synthetic metagenome": {
-      "count": 1381895,
-      "studies": 40
-    },
-    "sediment metagenome": {
-      "count": 1379140,
-      "studies": 36
-    },
-    "aquatic metagenome": {
-      "count": 1346647,
-      "studies": 26
-    },
-    "Neisseria meningitidis": {
-      "count": 1299876,
-      "studies": 1306
-    },
-    "Equus caballus": {
-      "count": 1296581,
-      "studies": 49
-    },
-    "uncultured Clostridia bacterium": {
-      "count": 1286844,
-      "studies": 114
-    },
-    "Salmonella enterica subsp. enterica serovar Typhi": {
-      "count": 1177908,
-      "studies": 1169
-    },
-    "uncultured Prevotella sp.": {
-      "count": 1159101,
-      "studies": 279
-    },
-    "Streptococcus agalactiae": {
-      "count": 1137202,
-      "studies": 1827
-    },
-    "Apis mellifera": {
-      "count": 1101671,
-      "studies": 9
-    },
-    "Clostridioides difficile": {
-      "count": 1077271,
-      "studies": 663
-    },
-    "uncultured Bacteroidales bacterium": {
-      "count": 1048536,
-      "studies": 66
-    },
-    "uncultured Caudovirales phage": {
-      "count": 972787,
-      "studies": 2
-    },
-    "Phocaeicola vulgatus": {
-      "count": 963141,
-      "studies": 80
-    },
-    "mixed culture metagenome": {
-      "count": 955100,
-      "studies": 8
+    "human oral metagenome": {
+      "count": 19813757,
+      "studies": 296
     },
     "freshwater metagenome": {
-      "count": 921062,
-      "studies": 44
+      "count": 18906090,
+      "studies": 966
     },
     "Rattus norvegicus": {
-      "count": 919968,
-      "studies": 117
+      "count": 18412377,
+      "studies": 953
     },
-    "uncultured Clostridium sp.": {
-      "count": 912175,
-      "studies": 623
+    "Klebsiella pneumoniae": {
+      "count": 17107581,
+      "studies": 8210
     },
-    "indoor metagenome": {
-      "count": 895176,
-      "studies": 15
+    "feces metagenome": {
+      "count": 16887695,
+      "studies": 700
     },
-    "uncultured Alistipes sp.": {
-      "count": 860643,
-      "studies": 157
+    "Bos taurus": {
+      "count": 16786970,
+      "studies": 550
     },
-    "Oryzias latipes": {
-      "count": 848477,
-      "studies": 496
-    },
-    "human feces metagenome": {
-      "count": 848307,
-      "studies": 23
-    },
-    "Zea mays": {
-      "count": 833741,
-      "studies": 25
-    },
-    "rat gut metagenome": {
-      "count": 826169,
-      "studies": 11
-    },
-    "biofilm metagenome": {
-      "count": 808706,
-      "studies": 188
-    },
-    "human nasopharyngeal metagenome": {
-      "count": 804816,
-      "studies": 114
-    },
-    "Pseudomonas viridiflava": {
-      "count": 803952,
-      "studies": 4
-    },
-    "Oryza sativa Japonica Group": {
-      "count": 780474,
-      "studies": 58
-    },
-    "Proteus mirabilis": {
-      "count": 773099,
-      "studies": 37
-    },
-    "Salmo salar": {
-      "count": 747863,
-      "studies": 26
-    },
-    "root associated fungus metagenome": {
-      "count": 729139,
-      "studies": 14
+    "Danio rerio": {
+      "count": 15305070,
+      "studies": 5484
     },
     "Drosophila melanogaster": {
-      "count": 725796,
-      "studies": 85
+      "count": 15158818,
+      "studies": 1276
+    },
+    "Campylobacter jejuni": {
+      "count": 14442550,
+      "studies": 16223
+    },
+    "Gallus gallus": {
+      "count": 11949398,
+      "studies": 524
+    },
+    "Neisseria gonorrhoeae": {
+      "count": 11062198,
+      "studies": 2695
+    },
+    "sediment metagenome": {
+      "count": 10579768,
+      "studies": 880
+    },
+    "Vibrio cholerae": {
+      "count": 10353364,
+      "studies": 2947
+    },
+    "Hordeum vulgare subsp. vulgare": {
+      "count": 9931079,
+      "studies": 68
+    },
+    "unidentified": {
+      "count": 9873554,
+      "studies": 13840
+    },
+    "Zea mays": {
+      "count": 9861719,
+      "studies": 452
+    },
+    "seawater metagenome": {
+      "count": 9810620,
+      "studies": 1121
+    },
+    "human skin metagenome": {
+      "count": 9300212,
+      "studies": 176
+    },
+    "Listeria monocytogenes": {
+      "count": 9188934,
+      "studies": 8465
+    },
+    "root metagenome": {
+      "count": 9082847,
+      "studies": 356
+    },
+    "Enterococcus faecium": {
+      "count": 8859212,
+      "studies": 1996
+    },
+    "Streptococcus pyogenes": {
+      "count": 8776564,
+      "studies": 1305
+    },
+    "Sus scrofa": {
+      "count": 7749187,
+      "studies": 734
+    },
+    "Canis lupus familiaris": {
+      "count": 7487641,
+      "studies": 2662
+    },
+    "Pseudomonas aeruginosa": {
+      "count": 7419554,
+      "studies": 2839
+    },
+    "Macaca mulatta": {
+      "count": 7320757,
+      "studies": 603
+    },
+    "Anopheles gambiae": {
+      "count": 7183207,
+      "studies": 9846
+    },
+    "Triticum aestivum": {
+      "count": 6907222,
+      "studies": 1188
+    },
+    "aquatic metagenome": {
+      "count": 6744762,
+      "studies": 476
+    },
+    "Caenorhabditis elegans": {
+      "count": 6735997,
+      "studies": 1252
+    },
+    "Acinetobacter baumannii": {
+      "count": 6714139,
+      "studies": 1910
+    },
+    "insect metagenome": {
+      "count": 6470871,
+      "studies": 243
+    },
+    "Plasmodium vivax": {
+      "count": 6245695,
+      "studies": 2647
+    },
+    "Salmonella enterica subsp. enterica serovar Enteritidis": {
+      "count": 5973634,
+      "studies": 8016
+    },
+    "human vaginal metagenome": {
+      "count": 5945332,
+      "studies": 194
+    },
+    "synthetic construct": {
+      "count": 5775685,
+      "studies": 1437
+    },
+    "bacterium": {
+      "count": 5755345,
+      "studies": 185
+    },
+    "Solanum lycopersicum": {
+      "count": 5657305,
+      "studies": 370
+    },
+    "Streptococcus agalactiae": {
+      "count": 4972835,
+      "studies": 3563
     },
     "pig gut metagenome": {
-      "count": 706083,
-      "studies": 24
+      "count": 4694416,
+      "studies": 248
     },
-    "anaerobic digester metagenome": {
-      "count": 695394,
-      "studies": 12
+    "Oscillospiraceae bacterium": {
+      "count": 4677139,
+      "studies": 3881
     },
-    "invertebrate gut metagenome": {
-      "count": 686708,
-      "studies": 3
+    "marine sediment metagenome": {
+      "count": 4630341,
+      "studies": 330
     },
-    "spider metagenome": {
-      "count": 679836,
-      "studies": 1
+    "Salmonella enterica subsp. enterica serovar Typhimurium": {
+      "count": 4586165,
+      "studies": 5011
     },
-    "uncultured Bacilli bacterium": {
-      "count": 668134,
-      "studies": 22
+    "Campylobacter coli": {
+      "count": 4581664,
+      "studies": 6201
     },
-    "Sarcophilus harrisii": {
-      "count": 667695,
-      "studies": 1082
+    "Neisseria meningitidis": {
+      "count": 4383043,
+      "studies": 2305
     },
-    "uncultured Ruminococcus sp.": {
-      "count": 663022,
-      "studies": 300
+    "Lachnospiraceae bacterium": {
+      "count": 4330330,
+      "studies": 4955
+    },
+    "bovine gut metagenome": {
+      "count": 4222159,
+      "studies": 235
+    },
+    "Clostridioides difficile": {
+      "count": 4205192,
+      "studies": 843
+    },
+    "Eubacteriales bacterium": {
+      "count": 4000533,
+      "studies": 3342
+    },
+    "biofilm metagenome": {
+      "count": 3949256,
+      "studies": 493
+    },
+    "insect gut metagenome": {
+      "count": 3929235,
+      "studies": 156
+    },
+    "chicken gut metagenome": {
+      "count": 3821140,
+      "studies": 193
+    },
+    "mouse metagenome": {
+      "count": 3794719,
+      "studies": 204
+    },
+    "synthetic metagenome": {
+      "count": 3732222,
+      "studies": 282
+    },
+    "human nasopharyngeal metagenome": {
+      "count": 3710956,
+      "studies": 214
+    },
+    "Hordeum vulgare": {
+      "count": 3665577,
+      "studies": 184
+    },
+    "Shigella sonnei": {
+      "count": 3482794,
+      "studies": 4298
+    },
+    "food metagenome": {
+      "count": 3449128,
+      "studies": 223
+    },
+    "Ovis aries": {
+      "count": 3426322,
+      "studies": 270
+    },
+    "Bacteroides uniformis": {
+      "count": 3310197,
+      "studies": 3010
+    },
+    "human feces metagenome": {
+      "count": 3306852,
+      "studies": 68
+    },
+    "Influenza A virus": {
+      "count": 3290133,
+      "studies": 662
+    },
+    "Glycine max": {
+      "count": 3215268,
+      "studies": 287
+    },
+    "Oryza sativa Japonica Group": {
+      "count": 3205933,
+      "studies": 410
+    },
+    "uncultured prokaryote": {
+      "count": 3102701,
+      "studies": 250
+    },
+    "Shigella flexneri": {
+      "count": 2978683,
+      "studies": 4057
     },
     "food fermentation metagenome": {
-      "count": 661535,
-      "studies": 35
+      "count": 2935662,
+      "studies": 213
     },
-    "Escherichia coli #1/H766": {
-      "count": 638148,
-      "studies": 1
+    "uncultured Eubacteriales bacterium": {
+      "count": 2838512,
+      "studies": 671
+    },
+    "uncultured Lachnospiraceae bacterium": {
+      "count": 2830361,
+      "studies": 139
+    },
+    "uncultured eukaryote": {
+      "count": 2816500,
+      "studies": 47
+    },
+    "rat gut metagenome": {
+      "count": 2776618,
+      "studies": 164
+    },
+    "Hepacivirus hominis": {
+      "count": 2773761,
+      "studies": 166
+    },
+    "coral metagenome": {
+      "count": 2748097,
+      "studies": 163
+    },
+    "Bacteroidales bacterium": {
+      "count": 2745955,
+      "studies": 1724
+    },
+    "Apodemus sylvaticus": {
+      "count": 2714818,
+      "studies": 15
+    },
+    "Salmonella enterica subsp. enterica serovar Typhi": {
+      "count": 2709980,
+      "studies": 2405
+    },
+    "Apis mellifera": {
+      "count": 2688765,
+      "studies": 97
     }
   },
   "strategies": {
-    "AMPLICON": 301031392,
-    "WGS": 213886219,
-    "RNA-Seq": 81680259,
-    "OTHER": 29190939,
-    "WGA": 16387404,
-    "RAD-Seq": 9823456,
-    "Targeted-Capture": 9245019,
-    "ATAC-seq": 7231351,
-    "WXS": 2881659,
-    "Hi-C": 2500925,
-    "ChIP-Seq": 2334445,
-    "SELEX": 1760896,
-    "GBS": 1577198,
-    "Bisulfite-Seq": 1313449,
-    "miRNA-Seq": 944892,
-    "ssRNA-seq": 737827,
-    "CLONE": 352683,
-    "CLONEEND": 350247,
-    "FL-cDNA": 308057,
-    "ncRNA-Seq": 220751,
-    "MRE-Seq": 201280,
-    "Tn-Seq": 163149,
-    "POOLCLONE": 108370,
-    "RIP-Seq": 80960,
-    "MNase-Seq": 78302,
-    "WCS": 58565,
-    "Synthetic-Long-Read": 50698,
-    "EST": 37980,
-    "ChIP": 36692,
-    "Tethered Chromatin Conformation Capture": 30025,
-    "MeDIP-Seq": 23951,
-    "MBD-Seq": 20847,
-    "CTS": 9353,
-    "ChIA-PET": 8554,
-    "FAIRE-seq": 8142,
-    "DNase-Hypersensitivity": 7953,
-    "FINISHING": 1166
+    "AMPLICON": 1768281132,
+    "WGS": 864200089,
+    "RNA-Seq": 779020966,
+    "OTHER": 299639989,
+    "RAD-Seq": 87661889,
+    "Targeted-Capture": 70786890,
+    "WGA": 51084937,
+    "ChIP-Seq": 44989748,
+    "WXS": 38894018,
+    "ATAC-seq": 23815954,
+    "miRNA-Seq": 16960748,
+    "Bisulfite-Seq": 16515007,
+    "CLONE": 13938786,
+    "GBS": 13778859,
+    "Hi-C": 7610586,
+    "POOLCLONE": 7355099,
+    "ncRNA-Seq": 4316582,
+    "ssRNA-seq": 2707740,
+    "SELEX": 2505471,
+    "RIP-Seq": 2468529,
+    "WCS": 2008882,
+    "FL-cDNA": 1874615,
+    "MeDIP-Seq": 1574515,
+    "Tn-Seq": 1493213,
+    "CLONEEND": 840128,
+    "MNase-Seq": 693612,
+    "MRE-Seq": 390127,
+    "Synthetic-Long-Read": 387942,
+    "EST": 332977,
+    "DNase-Hypersensitivity": 279755,
+    "MBD-Seq": 165662,
+    "FAIRE-seq": 45118,
+    "Tethered Chromatin Conformation Capture": 40937,
+    "ChIA-PET": 36879,
+    "CTS": 35293,
+    "ChIP": 32041,
+    "DIP-Seq": 30486,
+    "FINISHING": 20061,
+    "Ribo-seq": 10656,
+    "other": 9200,
+    "Inverse rRNA": 5385,
+    "VALIDATION": 752
   },
   "sources": {
-    "GENOMIC": 136683913,
-    "METAGENOMIC": 98941470,
-    "VIRAL RNA": 74384099,
-    "TRANSCRIPTOMIC": 38983641,
-    "TRANSCRIPTOMIC SINGLE CELL": 8791874,
-    "OTHER": 3294803,
-    "GENOMIC SINGLE CELL": 1782299,
-    "SYNTHETIC": 1533459,
-    "METATRANSCRIPTOMIC": 1375631
+    "GENOMIC": 474536768,
+    "VIRAL RNA": 301712313,
+    "METAGENOMIC": 299266556,
+    "TRANSCRIPTOMIC": 167603302,
+    "TRANSCRIPTOMIC SINGLE CELL": 32756782,
+    "OTHER": 11605400,
+    "GENOMIC SINGLE CELL": 6909020,
+    "METATRANSCRIPTOMIC": 6220616,
+    "SYNTHETIC": 3865568
   },
   "selections": {
-    "PCR": 170689841,
-    "RANDOM": 91530582,
-    "RT-PCR": 20037988,
-    "PolyA": 18623409,
-    "unspecified": 12438667,
-    "Oligo-dT": 7416241,
-    "cDNA": 7072610,
-    "other": 7023236,
-    "Restriction Digest": 6213498,
-    "size fractionation": 5807668,
-    "RANDOM PCR": 5164578,
-    "Hybrid Selection": 4240619,
-    "Reduced Representation": 3432578,
-    "MNase": 1543703,
-    "ChIP": 1508738,
-    "Inverse rRNA": 995844,
-    "MDA": 462517,
-    "repeat fractionation": 363559,
-    "cDNA_randomPriming": 234285,
-    "DNase": 214549,
-    "RACE": 206782,
-    "CAGE": 201118,
-    "cDNA_oligo_dT": 169569,
-    "padlock probes capture method": 153843,
-    "5-methylcytidine antibody": 22676,
-    "MF": 1368,
-    "HMPR": 720,
-    "MBD2 protein methyl-CpG binding domain": 403
+    "PCR": 585616496,
+    "RANDOM": 280379413,
+    "RT-PCR": 90806825,
+    "cDNA": 85514337,
+    "other": 48869699,
+    "PolyA": 45622074,
+    "unspecified": 31674723,
+    "Restriction Digest": 25352284,
+    "Oligo-dT": 20396629,
+    "Hybrid Selection": 19801441,
+    "RANDOM PCR": 18263139,
+    "size fractionation": 15548820,
+    "Reduced Representation": 13802253,
+    "ChIP": 8383133,
+    "MNase": 4325647,
+    "Inverse rRNA": 2812721,
+    "MDA": 1920855,
+    "padlock probes capture method": 987309,
+    "repeat fractionation": 904036,
+    "cDNA_randomPriming": 808841,
+    "cDNA_oligo_dT": 791156,
+    "DNase": 789439,
+    "RACE": 378462,
+    "CAGE": 344279,
+    "5-methylcytidine antibody": 296946,
+    "MBD2 protein methyl-CpG binding domain": 65467,
+    "HMPR": 9935,
+    "MF": 8352,
+    "MSLL": 1614
   }
 }

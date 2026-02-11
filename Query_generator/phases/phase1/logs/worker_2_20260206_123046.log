@@ -1,3 +1,0 @@
-[2026-02-06 12:30:46,026] DEBUG    | Pyner.Phase1.worker_2 | 🚀 Worker 2 iniciado (GPU: 2)
-[2026-02-06 12:32:11,693] DEBUG    | Pyner.Phase1.worker_2 | ✅ Worker 2 terminando (58600 archivos procesados)
-[2026-02-06 12:32:11,693] DEBUG    | Pyner.Phase1.worker_2 | 🏁 Worker 2 finalizado

@@ -33,6 +33,29 @@ class OllamaClient:
         except:
             logger.warning(f"⚠️ Ollama not available at {self.host}")
             return False
+
+    def is_available(self) -> bool:
+        """Alias para health_check"""
+        return self.health_check()
+
+    def generate(self, prompt: str, temperature: float = 0.2) -> str:
+        """Generar texto usando Ollama"""
+        response = requests.post(
+            f"{self.host}/api/generate",
+            json={
+                "model": self.model,
+                "prompt": prompt,
+                "stream": False,
+                "temperature": temperature,
+            },
+            timeout=self.timeout
+        )
+
+        if response.status_code != 200:
+            raise RuntimeError(f"Ollama error: {response.status_code}")
+
+        data = response.json()
+        return data.get("response", "").strip()
     
     def expand_query(self, query: str, max_tokens: int = 100) -> List[str]:
         """Expandir query usando LLM"""

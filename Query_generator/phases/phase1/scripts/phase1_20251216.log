@@ -1,0 +1,329 @@
+[2026-02-09 16:33:21,720] INFO     | Pyner.Phase1.stage2_parallel | 
+======================================================================
+[2026-02-09 16:33:21,720] INFO     | Pyner.Phase1.stage2_parallel | 📍 STAGE 2: PARALLEL GPU PROCESSING
+[2026-02-09 16:33:21,720] INFO     | Pyner.Phase1.stage2_parallel | ======================================================================
+[2026-02-09 16:33:21,720] INFO     | Pyner.Phase1.stage2_parallel | 🎯 Objetivo: Procesar 50,000 archivos con 20 workers
+[2026-02-09 16:33:21,720] INFO     | Pyner.Phase1.stage2_parallel | 🎮 GPUs disponibles: [0, 1, 2]
+[2026-02-09 16:33:21,720] INFO     | Pyner.Phase1.stage2_parallel | ⚙️  Batch size: 100
+[2026-02-09 16:33:21,720] INFO     | Pyner.Phase1.stage2_parallel | 
+======================================================================
+[2026-02-09 16:33:21,720] INFO     | Pyner.Phase1.stage2_parallel | 📍 DISCOVERY: Encontrando archivos
+[2026-02-09 16:33:21,720] INFO     | Pyner.Phase1.stage2_parallel | ======================================================================
+[2026-02-09 16:33:21,720] INFO     | Pyner.Phase1.stage2_parallel | 📁 Buscando BioProjects en: /home/lahumada/disco1/NCBI_Metadata/TEMP_20251216_DATA
+[2026-02-09 16:33:39,235] INFO     | Pyner.Phase1.stage2_parallel | 📊 Total BioProjects a procesar: 50,000
+[2026-02-09 16:33:39,235] INFO     | Pyner.Phase1.stage2_parallel | 
+======================================================================
+[2026-02-09 16:33:39,235] INFO     | Pyner.Phase1.stage2_parallel | 📍 INITIALIZATION: Configurando workers
+[2026-02-09 16:33:39,235] INFO     | Pyner.Phase1.stage2_parallel | ======================================================================
+[2026-02-09 16:33:39,237] INFO     | Pyner.Phase1.stage2_parallel | 💼 Asignaciones de GPU: {0: 0, 1: 1, 2: 2, 3: 0, 4: 1, 5: 2, 6: 0, 7: 1, 8: 2, 9: 0, 10: 1, 11: 2, 12: 0, 13: 1, 14: 2, 15: 0, 16: 1, 17: 2, 18: 0, 19: 1}
+[2026-02-09 16:33:39,270] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 0 iniciado
+[2026-02-09 16:33:39,308] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 1 iniciado
+[2026-02-09 16:33:39,349] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 2 iniciado
+[2026-02-09 16:33:39,391] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 3 iniciado
+[2026-02-09 16:33:39,431] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 4 iniciado
+[2026-02-09 16:33:39,470] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 5 iniciado
+[2026-02-09 16:33:39,508] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 6 iniciado
+[2026-02-09 16:33:39,536] DEBUG    | Pyner.Phase1.worker_0 | 🎮 Worker 0 usando GPU 0
+[2026-02-09 16:33:39,537] DEBUG    | Pyner.Phase1.worker_0 | 🚀 Worker 0 iniciado (GPU: 0)
+[2026-02-09 16:33:39,549] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 7 iniciado
+[2026-02-09 16:33:39,579] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 8 iniciado
+[2026-02-09 16:33:39,610] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 9 iniciado
+[2026-02-09 16:33:39,643] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 10 iniciado
+[2026-02-09 16:33:39,665] DEBUG    | Pyner.Phase1.worker_1 | 🎮 Worker 1 usando GPU 1
+[2026-02-09 16:33:39,666] DEBUG    | Pyner.Phase1.worker_1 | 🚀 Worker 1 iniciado (GPU: 1)
+[2026-02-09 16:33:39,675] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 11 iniciado
+[2026-02-09 16:33:39,711] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 12 iniciado
+[2026-02-09 16:33:39,750] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 13 iniciado
+[2026-02-09 16:33:39,785] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 14 iniciado
+[2026-02-09 16:33:39,816] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 15 iniciado
+[2026-02-09 16:33:39,853] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 16 iniciado
+[2026-02-09 16:33:39,890] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 17 iniciado
+[2026-02-09 16:33:39,925] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 18 iniciado
+[2026-02-09 16:33:39,960] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 19 iniciado
+[2026-02-09 16:33:39,960] INFO     | Pyner.Phase1.stage2_parallel | 
+======================================================================
+[2026-02-09 16:33:39,960] INFO     | Pyner.Phase1.stage2_parallel | 📍 DISTRIBUTION: Enviando batches a workers
+[2026-02-09 16:33:39,960] INFO     | Pyner.Phase1.stage2_parallel | ======================================================================
+[2026-02-09 16:33:39,961] DEBUG    | Pyner.Phase1.stage2_parallel | 📤 Distribuyendo archivos entre workers...
+[2026-02-09 16:33:40,041] DEBUG    | Pyner.Phase1.worker_3 | 🎮 Worker 3 usando GPU 0
+[2026-02-09 16:33:40,041] DEBUG    | Pyner.Phase1.worker_3 | 🚀 Worker 3 iniciado (GPU: 0)
+[2026-02-09 16:33:40,042] DEBUG    | Pyner.Phase1.worker_2 | 🎮 Worker 2 usando GPU 2
+[2026-02-09 16:33:40,043] DEBUG    | Pyner.Phase1.worker_2 | 🚀 Worker 2 iniciado (GPU: 2)
+[2026-02-09 16:33:40,152] DEBUG    | Pyner.Phase1.worker_4 | 🎮 Worker 4 usando GPU 1
+[2026-02-09 16:33:40,153] DEBUG    | Pyner.Phase1.worker_4 | 🚀 Worker 4 iniciado (GPU: 1)
+[2026-02-09 16:33:40,217] DEBUG    | Pyner.Phase1.worker_5 | 🎮 Worker 5 usando GPU 2
+[2026-02-09 16:33:40,217] DEBUG    | Pyner.Phase1.worker_5 | 🚀 Worker 5 iniciado (GPU: 2)
+[2026-02-09 16:33:40,378] DEBUG    | Pyner.Phase1.worker_6 | 🎮 Worker 6 usando GPU 0
+[2026-02-09 16:33:40,379] DEBUG    | Pyner.Phase1.worker_6 | 🚀 Worker 6 iniciado (GPU: 0)
+[2026-02-09 16:33:40,567] DEBUG    | Pyner.Phase1.worker_7 | 🎮 Worker 7 usando GPU 1
+[2026-02-09 16:33:40,567] DEBUG    | Pyner.Phase1.worker_7 | 🚀 Worker 7 iniciado (GPU: 1)
+[2026-02-09 16:33:40,569] DEBUG    | Pyner.Phase1.worker_9 | 🎮 Worker 9 usando GPU 0
+[2026-02-09 16:33:40,569] DEBUG    | Pyner.Phase1.worker_9 | 🚀 Worker 9 iniciado (GPU: 0)
+[2026-02-09 16:33:40,569] DEBUG    | Pyner.Phase1.worker_10 | 🎮 Worker 10 usando GPU 1
+[2026-02-09 16:33:40,569] DEBUG    | Pyner.Phase1.worker_10 | 🚀 Worker 10 iniciado (GPU: 1)
+[2026-02-09 16:33:40,570] DEBUG    | Pyner.Phase1.worker_8 | 🎮 Worker 8 usando GPU 2
+[2026-02-09 16:33:40,570] DEBUG    | Pyner.Phase1.worker_8 | 🚀 Worker 8 iniciado (GPU: 2)
+[2026-02-09 16:33:40,573] DEBUG    | Pyner.Phase1.worker_11 | 🎮 Worker 11 usando GPU 2
+[2026-02-09 16:33:40,573] DEBUG    | Pyner.Phase1.worker_11 | 🚀 Worker 11 iniciado (GPU: 2)
+[2026-02-09 16:33:40,590] DEBUG    | Pyner.Phase1.worker_12 | 🎮 Worker 12 usando GPU 0
+[2026-02-09 16:33:40,590] DEBUG    | Pyner.Phase1.worker_12 | 🚀 Worker 12 iniciado (GPU: 0)
+[2026-02-09 16:33:40,689] DEBUG    | Pyner.Phase1.worker_14 | 🎮 Worker 14 usando GPU 2
+[2026-02-09 16:33:40,690] DEBUG    | Pyner.Phase1.worker_14 | 🚀 Worker 14 iniciado (GPU: 2)
+[2026-02-09 16:33:40,705] DEBUG    | Pyner.Phase1.worker_13 | 🎮 Worker 13 usando GPU 1
+[2026-02-09 16:33:40,705] DEBUG    | Pyner.Phase1.worker_13 | 🚀 Worker 13 iniciado (GPU: 1)
+[2026-02-09 16:33:40,709] DEBUG    | Pyner.Phase1.worker_18 | 🎮 Worker 18 usando GPU 0
+[2026-02-09 16:33:40,710] DEBUG    | Pyner.Phase1.worker_18 | 🚀 Worker 18 iniciado (GPU: 0)
+[2026-02-09 16:33:40,710] DEBUG    | Pyner.Phase1.worker_15 | 🎮 Worker 15 usando GPU 0
+[2026-02-09 16:33:40,710] DEBUG    | Pyner.Phase1.worker_15 | 🚀 Worker 15 iniciado (GPU: 0)
+[2026-02-09 16:33:40,718] DEBUG    | Pyner.Phase1.worker_17 | 🎮 Worker 17 usando GPU 2
+[2026-02-09 16:33:40,718] DEBUG    | Pyner.Phase1.worker_17 | 🚀 Worker 17 iniciado (GPU: 2)
+[2026-02-09 16:33:40,719] DEBUG    | Pyner.Phase1.worker_19 | 🎮 Worker 19 usando GPU 1
+[2026-02-09 16:33:40,719] DEBUG    | Pyner.Phase1.worker_19 | 🚀 Worker 19 iniciado (GPU: 1)
+[2026-02-09 16:33:40,722] DEBUG    | Pyner.Phase1.worker_16 | 🎮 Worker 16 usando GPU 1
+[2026-02-09 16:33:40,722] DEBUG    | Pyner.Phase1.worker_16 | 🚀 Worker 16 iniciado (GPU: 1)
+[2026-02-09 16:33:46,923] INFO     | Pyner.Phase1.stage2_parallel | 📦 Total batches distribuidos: 500
+[2026-02-09 16:33:46,924] INFO     | Pyner.Phase1.stage2_parallel | 
+======================================================================
+[2026-02-09 16:33:46,924] INFO     | Pyner.Phase1.stage2_parallel | 📍 PROCESSING: Monitoreando ejecución
+[2026-02-09 16:33:46,924] INFO     | Pyner.Phase1.stage2_parallel | ======================================================================
+[2026-02-09 16:33:47,040] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 1,000/50,000 files
+[2026-02-09 16:33:47,041] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:47,041] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 10/500 | Archivos: 1,000/50,000
+[2026-02-09 16:33:47,233] DEBUG    | Pyner.Phase1.worker_3 | ✅ Worker 3 terminando (2800 archivos procesados)
+[2026-02-09 16:33:47,233] DEBUG    | Pyner.Phase1.worker_3 | 🏁 Worker 3 finalizado
+[2026-02-09 16:33:47,236] DEBUG    | Pyner.Phase1.worker_17 | ✅ Worker 17 terminando (2800 archivos procesados)
+[2026-02-09 16:33:47,236] DEBUG    | Pyner.Phase1.worker_17 | 🏁 Worker 17 finalizado
+[2026-02-09 16:33:47,271] DEBUG    | Pyner.Phase1.worker_14 | ✅ Worker 14 terminando (3100 archivos procesados)
+[2026-02-09 16:33:47,271] DEBUG    | Pyner.Phase1.worker_14 | 🏁 Worker 14 finalizado
+[2026-02-09 16:33:47,312] DEBUG    | Pyner.Phase1.worker_6 | ✅ Worker 6 terminando (3400 archivos procesados)
+[2026-02-09 16:33:47,312] DEBUG    | Pyner.Phase1.worker_6 | 🏁 Worker 6 finalizado
+[2026-02-09 16:33:47,328] DEBUG    | Pyner.Phase1.worker_16 | ✅ Worker 16 terminando (2600 archivos procesados)
+[2026-02-09 16:33:47,328] DEBUG    | Pyner.Phase1.worker_16 | 🏁 Worker 16 finalizado
+[2026-02-09 16:33:47,339] DEBUG    | Pyner.Phase1.worker_9 | ✅ Worker 9 terminando (2400 archivos procesados)
+[2026-02-09 16:33:47,339] DEBUG    | Pyner.Phase1.worker_9 | 🏁 Worker 9 finalizado
+[2026-02-09 16:33:47,402] DEBUG    | Pyner.Phase1.worker_12 | ✅ Worker 12 terminando (5200 archivos procesados)
+[2026-02-09 16:33:47,402] DEBUG    | Pyner.Phase1.worker_12 | 🏁 Worker 12 finalizado
+[2026-02-09 16:33:47,525] DEBUG    | Pyner.Phase1.worker_19 | ✅ Worker 19 terminando (3200 archivos procesados)
+[2026-02-09 16:33:47,525] DEBUG    | Pyner.Phase1.worker_19 | 🏁 Worker 19 finalizado
+[2026-02-09 16:33:47,598] DEBUG    | Pyner.Phase1.worker_5 | ✅ Worker 5 terminando (1200 archivos procesados)
+[2026-02-09 16:33:47,599] DEBUG    | Pyner.Phase1.worker_5 | 🏁 Worker 5 finalizado
+[2026-02-09 16:33:47,629] DEBUG    | Pyner.Phase1.worker_10 | ✅ Worker 10 terminando (700 archivos procesados)
+[2026-02-09 16:33:47,629] DEBUG    | Pyner.Phase1.worker_10 | 🏁 Worker 10 finalizado
+[2026-02-09 16:33:47,650] DEBUG    | Pyner.Phase1.worker_11 | ✅ Worker 11 terminando (5000 archivos procesados)
+[2026-02-09 16:33:47,651] DEBUG    | Pyner.Phase1.worker_11 | 🏁 Worker 11 finalizado
+[2026-02-09 16:33:47,668] DEBUG    | Pyner.Phase1.worker_13 | ✅ Worker 13 terminando (900 archivos procesados)
+[2026-02-09 16:33:47,668] DEBUG    | Pyner.Phase1.worker_13 | 🏁 Worker 13 finalizado
+[2026-02-09 16:33:47,826] DEBUG    | Pyner.Phase1.worker_1 | ✅ Worker 1 terminando (1100 archivos procesados)
+[2026-02-09 16:33:47,826] DEBUG    | Pyner.Phase1.worker_1 | 🏁 Worker 1 finalizado
+[2026-02-09 16:33:47,857] DEBUG    | Pyner.Phase1.worker_2 | ✅ Worker 2 terminando (200 archivos procesados)
+[2026-02-09 16:33:47,858] DEBUG    | Pyner.Phase1.worker_2 | 🏁 Worker 2 finalizado
+[2026-02-09 16:33:48,477] DEBUG    | Pyner.Phase1.worker_18 | ✅ Worker 18 terminando (3400 archivos procesados)
+[2026-02-09 16:33:48,477] DEBUG    | Pyner.Phase1.worker_18 | 🏁 Worker 18 finalizado
+[2026-02-09 16:33:48,503] DEBUG    | Pyner.Phase1.worker_0 | ✅ Worker 0 terminando (400 archivos procesados)
+[2026-02-09 16:33:48,503] DEBUG    | Pyner.Phase1.worker_0 | 🏁 Worker 0 finalizado
+[2026-02-09 16:33:48,967] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 2,000/50,000 files
+[2026-02-09 16:33:48,968] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:48,968] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 20/500 | Archivos: 2,000/50,000
+[2026-02-09 16:33:49,061] DEBUG    | Pyner.Phase1.worker_4 | ✅ Worker 4 terminando (3100 archivos procesados)
+[2026-02-09 16:33:49,061] DEBUG    | Pyner.Phase1.worker_4 | 🏁 Worker 4 finalizado
+[2026-02-09 16:33:49,580] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 3,000/50,000 files
+[2026-02-09 16:33:49,580] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:49,580] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 30/500 | Archivos: 3,000/50,000
+[2026-02-09 16:33:49,853] DEBUG    | Pyner.Phase1.worker_15 | ✅ Worker 15 terminando (4500 archivos procesados)
+[2026-02-09 16:33:49,853] DEBUG    | Pyner.Phase1.worker_15 | 🏁 Worker 15 finalizado
+[2026-02-09 16:33:49,961] DEBUG    | Pyner.Phase1.worker_8 | ✅ Worker 8 terminando (3200 archivos procesados)
+[2026-02-09 16:33:49,962] DEBUG    | Pyner.Phase1.worker_8 | 🏁 Worker 8 finalizado
+[2026-02-09 16:33:50,971] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 4,000/50,000 files
+[2026-02-09 16:33:50,971] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:50,971] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 40/500 | Archivos: 4,000/50,000
+[2026-02-09 16:33:51,076] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 5,000/50,000 files
+[2026-02-09 16:33:51,076] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:51,076] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 50/500 | Archivos: 5,000/50,000
+[2026-02-09 16:33:51,190] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 6,000/50,000 files
+[2026-02-09 16:33:51,190] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:51,190] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 60/500 | Archivos: 6,000/50,000
+[2026-02-09 16:33:51,297] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 7,000/50,000 files
+[2026-02-09 16:33:51,297] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:51,297] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 70/500 | Archivos: 7,000/50,000
+[2026-02-09 16:33:51,627] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 8,000/50,000 files
+[2026-02-09 16:33:51,627] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:51,627] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 80/500 | Archivos: 8,000/50,000
+[2026-02-09 16:33:51,735] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 9,000/50,000 files
+[2026-02-09 16:33:51,735] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:51,735] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 90/500 | Archivos: 9,000/50,000
+[2026-02-09 16:33:51,879] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 10,000/50,000 files
+[2026-02-09 16:33:51,879] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:51,879] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 100/500 | Archivos: 10,000/50,000
+[2026-02-09 16:33:51,890] DEBUG    | Pyner.Phase1.worker_7 | ✅ Worker 7 terminando (800 archivos procesados)
+[2026-02-09 16:33:51,890] DEBUG    | Pyner.Phase1.worker_7 | 🏁 Worker 7 finalizado
+[2026-02-09 16:33:51,988] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 11,000/50,000 files
+[2026-02-09 16:33:51,988] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:51,988] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 110/500 | Archivos: 11,000/50,000
+[2026-02-09 16:33:52,103] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 12,000/50,000 files
+[2026-02-09 16:33:52,104] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:52,104] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 120/500 | Archivos: 12,000/50,000
+[2026-02-09 16:33:52,212] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 13,000/50,000 files
+[2026-02-09 16:33:52,212] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:52,212] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 130/500 | Archivos: 13,000/50,000
+[2026-02-09 16:33:52,321] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 14,000/50,000 files
+[2026-02-09 16:33:52,321] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:52,321] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 140/500 | Archivos: 14,000/50,000
+[2026-02-09 16:33:52,437] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 15,000/50,000 files
+[2026-02-09 16:33:52,437] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:52,437] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 150/500 | Archivos: 15,000/50,000
+[2026-02-09 16:33:52,545] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 16,000/50,000 files
+[2026-02-09 16:33:52,546] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:52,546] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 160/500 | Archivos: 16,000/50,000
+[2026-02-09 16:33:52,655] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 17,000/50,000 files
+[2026-02-09 16:33:52,656] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:52,656] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 170/500 | Archivos: 17,000/50,000
+[2026-02-09 16:33:52,775] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 10.0% | RAM: 1.2GB | Processed: 18,000/50,000 files
+[2026-02-09 16:33:52,775] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:52,775] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 180/500 | Archivos: 18,000/50,000
+[2026-02-09 16:33:52,885] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 19,000/50,000 files
+[2026-02-09 16:33:52,885] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:52,885] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 190/500 | Archivos: 19,000/50,000
+[2026-02-09 16:33:52,994] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 20,000/50,000 files
+[2026-02-09 16:33:52,994] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:52,994] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 200/500 | Archivos: 20,000/50,000
+[2026-02-09 16:33:53,104] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 21,000/50,000 files
+[2026-02-09 16:33:53,105] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:53,105] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 210/500 | Archivos: 21,000/50,000
+[2026-02-09 16:33:53,225] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 22,000/50,000 files
+[2026-02-09 16:33:53,226] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:53,226] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 220/500 | Archivos: 22,000/50,000
+[2026-02-09 16:33:53,337] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 10.0% | RAM: 1.2GB | Processed: 23,000/50,000 files
+[2026-02-09 16:33:53,338] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:53,338] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 230/500 | Archivos: 23,000/50,000
+[2026-02-09 16:33:53,447] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 24,000/50,000 files
+[2026-02-09 16:33:53,447] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:53,447] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 240/500 | Archivos: 24,000/50,000
+[2026-02-09 16:33:53,568] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 25,000/50,000 files
+[2026-02-09 16:33:53,568] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:53,568] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 250/500 | Archivos: 25,000/50,000
+[2026-02-09 16:33:53,679] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 26,000/50,000 files
+[2026-02-09 16:33:53,679] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:53,679] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 260/500 | Archivos: 26,000/50,000
+[2026-02-09 16:33:53,790] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 27,000/50,000 files
+[2026-02-09 16:33:53,790] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:53,790] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 270/500 | Archivos: 27,000/50,000
+[2026-02-09 16:33:53,912] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 28,000/50,000 files
+[2026-02-09 16:33:53,912] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:53,912] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 280/500 | Archivos: 28,000/50,000
+[2026-02-09 16:33:54,025] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 29,000/50,000 files
+[2026-02-09 16:33:54,025] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:54,025] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 290/500 | Archivos: 29,000/50,000
+[2026-02-09 16:33:54,137] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 30,000/50,000 files
+[2026-02-09 16:33:54,137] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:54,137] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 300/500 | Archivos: 30,000/50,000
+[2026-02-09 16:33:54,256] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 31,000/50,000 files
+[2026-02-09 16:33:54,256] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:54,256] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 310/500 | Archivos: 31,000/50,000
+[2026-02-09 16:33:54,364] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 32,000/50,000 files
+[2026-02-09 16:33:54,695] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:54,696] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 320/500 | Archivos: 32,000/50,000
+[2026-02-09 16:33:54,808] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 33,000/50,000 files
+[2026-02-09 16:33:54,808] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:54,808] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 330/500 | Archivos: 33,000/50,000
+[2026-02-09 16:33:54,925] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 34,000/50,000 files
+[2026-02-09 16:33:54,925] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:54,925] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 340/500 | Archivos: 34,000/50,000
+[2026-02-09 16:33:55,038] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 35,000/50,000 files
+[2026-02-09 16:33:55,038] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:55,038] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 350/500 | Archivos: 35,000/50,000
+[2026-02-09 16:33:55,157] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 36,000/50,000 files
+[2026-02-09 16:33:55,157] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:55,157] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 360/500 | Archivos: 36,000/50,000
+[2026-02-09 16:33:55,269] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.2GB | Processed: 37,000/50,000 files
+[2026-02-09 16:33:55,269] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:55,269] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 370/500 | Archivos: 37,000/50,000
+[2026-02-09 16:33:55,382] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 38,000/50,000 files
+[2026-02-09 16:33:55,382] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:55,383] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 380/500 | Archivos: 38,000/50,000
+[2026-02-09 16:33:55,503] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 39,000/50,000 files
+[2026-02-09 16:33:55,503] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:55,503] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 390/500 | Archivos: 39,000/50,000
+[2026-02-09 16:33:55,617] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 40,000/50,000 files
+[2026-02-09 16:33:55,617] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:55,617] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 400/500 | Archivos: 40,000/50,000
+[2026-02-09 16:33:55,738] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 41,000/50,000 files
+[2026-02-09 16:33:55,738] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:55,738] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 410/500 | Archivos: 41,000/50,000
+[2026-02-09 16:33:55,852] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 42,000/50,000 files
+[2026-02-09 16:33:55,853] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:55,853] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 420/500 | Archivos: 42,000/50,000
+[2026-02-09 16:33:55,966] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 43,000/50,000 files
+[2026-02-09 16:33:55,966] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:55,966] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 430/500 | Archivos: 43,000/50,000
+[2026-02-09 16:33:56,092] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 44,000/50,000 files
+[2026-02-09 16:33:56,092] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:56,093] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 440/500 | Archivos: 44,000/50,000
+[2026-02-09 16:33:56,205] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 45,000/50,000 files
+[2026-02-09 16:33:56,205] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:56,205] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 450/500 | Archivos: 45,000/50,000
+[2026-02-09 16:33:56,329] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 46,000/50,000 files
+[2026-02-09 16:33:56,330] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:56,330] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 460/500 | Archivos: 46,000/50,000
+[2026-02-09 16:33:56,444] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 47,000/50,000 files
+[2026-02-09 16:33:56,445] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:56,445] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 470/500 | Archivos: 47,000/50,000
+[2026-02-09 16:33:56,559] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 48,000/50,000 files
+[2026-02-09 16:33:56,560] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:56,560] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 480/500 | Archivos: 48,000/50,000
+[2026-02-09 16:33:56,685] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 49,000/50,000 files
+[2026-02-09 16:33:56,686] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:56,686] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 490/500 | Archivos: 49,000/50,000
+[2026-02-09 16:33:56,800] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Resources | CPU: 0.0% | RAM: 1.3GB | Processed: 50,000/50,000 files
+[2026-02-09 16:33:56,801] DEBUG    | Pyner.Phase1.stage2_parallel |    GPU Memory: GPU0: 0.0GB, GPU1: 0.0GB, GPU2: 0.0GB
+[2026-02-09 16:33:56,801] DEBUG    | Pyner.Phase1.stage2_parallel | 📊 Batches completados: 500/500 | Archivos: 50,000/50,000
+[2026-02-09 16:33:56,801] INFO     | Pyner.Phase1.stage2_parallel | ⏳ Parallel Processing | [████████████████████████████████████████] 100.0% (50,000/50,000) | Rate: 5062.9 files/sec | ETA: 0.0 min | Errors: 0
+[2026-02-09 16:33:56,801] DEBUG    | Pyner.Phase1.stage2_parallel | ⏳ Esperando a que workers terminen...
+[2026-02-09 16:33:56,801] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 0 terminado
+[2026-02-09 16:33:56,801] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 1 terminado
+[2026-02-09 16:33:56,802] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 2 terminado
+[2026-02-09 16:33:56,802] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 3 terminado
+[2026-02-09 16:33:56,802] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 4 terminado
+[2026-02-09 16:33:56,802] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 5 terminado
+[2026-02-09 16:33:56,803] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 6 terminado
+[2026-02-09 16:33:56,803] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 7 terminado
+[2026-02-09 16:33:56,803] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 8 terminado
+[2026-02-09 16:33:56,803] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 9 terminado
+[2026-02-09 16:33:56,804] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 10 terminado
+[2026-02-09 16:33:56,804] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 11 terminado
+[2026-02-09 16:33:56,825] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 12 terminado
+[2026-02-09 16:33:56,826] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 13 terminado
+[2026-02-09 16:33:56,826] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 14 terminado
+[2026-02-09 16:33:56,826] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 15 terminado
+[2026-02-09 16:33:56,827] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 16 terminado
+[2026-02-09 16:33:56,827] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 17 terminado
+[2026-02-09 16:33:56,827] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 18 terminado
+[2026-02-09 16:33:56,827] DEBUG    | Pyner.Phase1.stage2_parallel | ✅ Worker 19 terminado
+[2026-02-09 16:33:56,828] INFO     | Pyner.Phase1.stage2_parallel | 
+======================================================================
+[2026-02-09 16:33:56,828] INFO     | Pyner.Phase1.stage2_parallel | 📍 AGGREGATION: Combinando resultados
+[2026-02-09 16:33:56,828] INFO     | Pyner.Phase1.stage2_parallel | ======================================================================
+[2026-02-09 16:33:56,828] INFO     | Pyner.Phase1.stage2_parallel | 🔗 Combinando índices de todos los workers...
+[2026-02-09 16:33:57,032] INFO     | Pyner.Phase1.stage2_parallel | ✅ Índices combinados exitosamente
+[2026-02-09 16:33:57,032] INFO     | Pyner.Phase1.stage2_parallel | 
+======================================================================
+[2026-02-09 16:33:57,032] INFO     | Pyner.Phase1.stage2_parallel | 📍 SAVING: Guardando KB
+[2026-02-09 16:33:57,032] INFO     | Pyner.Phase1.stage2_parallel | ======================================================================
+[2026-02-09 16:33:57,032] INFO     | Pyner.Phase1.stage2_parallel | 💾 Guardando índices finales...
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel | ✅ KB guardada: /mnt/64274670-793f-4763-b132-b5c7b1178bb0/lahumada/Pyner_PGRLAB/Query_generator/phases/phase1/output/stage2_knowledge_base.json
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel | 
+======================================================================
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel | ✅ STAGE 2: PARALLEL PROCESSING COMPLETADO
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel | ======================================================================
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel |   Total de Archivos....................... 50,000
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel |   Worker Processes........................ 20
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel |   GPUs Utilizadas......................... 3
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel |   Batches Procesados...................... 500
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel |   Experimentos Extraídos.................. 2,770,225
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel |   Muestras Extraídas...................... 3,317,605
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel |   Organismos Únicos....................... 3,151
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel |   Estrategias Únicas...................... 32
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel |   Tiempo total............................ 35.32 sec (0.59 min)
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel | ======================================================================
+
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel | ⚡ Throughput: 1415.8 files/sec
+[2026-02-09 16:33:57,035] INFO     | Pyner.Phase1.stage2_parallel | ✅ Stage 2 completado exitosamente

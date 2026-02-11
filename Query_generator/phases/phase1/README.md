@@ -1,375 +1,243 @@
-# 🔬 Pyner Phase 1: Knowledge Base Extraction
-
-**Objetivo:** Extraer 1.3M de archivos XML de NCBI SRA y construir un Knowledge Base estructurado.
-
-**Recursos Disponibles:**
-- 3x NVIDIA RTX 4000 Ada (~24GB VRAM cada una)
-- 251GB RAM
-- Multicore CPU
+# Phase 1: Knowledge Base Extraction
+**Status:** ✅ **COMPLETED - FROZEN ARTIFACTS**  
+**Date:** 2026-02-10
 
 ---
 
-## 📋 Estructura
+## Technical Summary
+
+Phase 1 extracts structured metadata from **NCBI SRA XML files** to build a comprehensive Knowledge Base. This pipeline was executed **once** to generate frozen artifacts consumed by Phase 2 and Phase 3.
+
+### Executed Pipeline (build-time)
+
+```
+NCBI SRA XML files (7.2M+ files)
+         ↓
+  Stage 1: Parse XML → Extract metadata (organism, strategy, tissue, etc.)
+         ↓
+  Stage 2: Parallel GPU → Process 50K files with GPU acceleration
+         ↓
+  Stage 3: Final KB → Build comprehensive Knowledge Base
+         ↓
+  Output: Frozen JSON artifacts
+```
+
+### Purpose
+
+1. **XML parsing:** Extract structured metadata from NCBI SRA XML files
+2. **GPU acceleration:** Use 3x NVIDIA RTX 4000 Ada for parallel processing
+3. **Knowledge Base construction:** Build comprehensive organism/strategy/tissue/condition mappings
+4. **Artifact generation:** Create frozen JSON files for downstream phases
+
+---
+
+## Preserved Artifacts
+
+| File | Size | Purpose | Used By |
+|------|------|---------|---------|
+| `output/stage3_kb_reduced.json` | 16MB | Reduced KB with essential metadata | ✅ Phase 3 (query generation) |
+| `output/stage3_knowledge_base.json` | 11KB | Compact KB summary | ✅ Phase 2 (vocabulary) |
+| `output/stage2_knowledge_base.json` | 10KB | Intermediate KB | ✅ Phase 3 (fallback) |
+| `output/stage1_indices.json` | 122KB | XML file indices | ✅ Rebuild reference |
+
+### Cleaned Files
+
+- `logs/*.log` - Execution logs (1.2MB, 90+ files)
+- `__pycache__/` - Python bytecode cache
+- `checkpoints/` - Empty checkpoint directories
+- `tests/` - Empty test fixtures
+- `output/stage3_kb_full.json` - Full KB (27MB duplicate)
+
+---
+
+## Technical Components
+
+### `config.py`
+Pipeline configuration:
+- XML paths and directories
+- GPU settings (3x RTX 4000 Ada, 24GB VRAM each)
+- Parallel workers (20 workers)
+- Checkpoint intervals
+
+### `utils.py`
+Helper utilities:
+- Logging setup
+- GPU memory management
+- Checkpoint save/restore
+- Progress tracking
+
+### `scripts/stage1_parse_xml.py`
+Initial XML parsing:
+- Sequential parsing of 1K sample files
+- Metadata extraction
+- Field validation
+- Generates `stage1_indices.json`
+
+### `scripts/stage2_parallel_gpu.py`
+GPU-accelerated parallel processing:
+- Multi-GPU workload distribution
+- 8-20 parallel workers
+- Checkpoint-based recovery
+- Generates `stage2_knowledge_base.json`
+
+### `scripts/stage3_final.py` & `stage3_simple.py`
+Final KB construction:
+- Merge and deduplicate entries
+- Build organism/strategy mappings
+- Generate reduced and full versions
+- Generates `stage3_kb_reduced.json` and `stage3_knowledge_base.json`
+
+### `scripts/clean_stage3_kb.py`
+KB cleanup utility:
+- Remove duplicates
+- Compress entries
+- Validate structure
+
+---
+
+## Reconstruction (Optional)
+
+If you need to rebuild the Knowledge Base from NCBI XML files:
+
+### Hardware Requirements
+
+- **GPUs:** 3x NVIDIA RTX 4000 Ada (24GB VRAM each) or equivalent
+- **RAM:** 251GB (minimum 64GB)
+- **CPU:** Multi-core (20+ threads recommended)
+- **Storage:** 100GB+ for XML files and artifacts
+
+### Dependencies
+
+```bash
+pip install torch transformers sentencepiece
+# For GPU support:
+pip install torch --index-url https://download.pytorch.org/whl/cu118
+```
+
+### Execution
+
+```bash
+cd Query_generator/phases/phase1
+
+# Stage 1: Parse initial 1K XML files (test)
+python scripts/stage1_parse_xml.py
+
+# Stage 2: Process 50K files with GPU parallelization
+python scripts/stage2_parallel_gpu.py --stage 2
+
+# Stage 3: Build final Knowledge Base
+python scripts/stage3_final.py
+# or for simplified version:
+python scripts/stage3_simple.py
+
+# Clean and optimize KB
+python scripts/clean_stage3_kb.py
+```
+
+**Expected output:**
+- `output/stage1_indices.json` - XML indices
+- `output/stage2_knowledge_base.json` - Intermediate KB
+- `output/stage3_kb_reduced.json` - Reduced KB (16MB)
+- `output/stage3_knowledge_base.json` - Compact KB (11KB)
+
+### Monitoring
+
+```bash
+# Watch logs in real-time
+tail -f logs/stage*.log
+
+# Check checkpoint progress
+ls -lh checkpoints/stage*/
+
+# Monitor GPU usage
+watch -n 1 nvidia-smi
+```
+
+---
+
+## Performance Metrics
+
+- **XML files processed:** 7.2M+ files
+- **Throughput:** 100-150 files/sec (GPU parallel)
+- **Total execution time:** ~3-4 hours (full pipeline)
+- **Final KB size:** 16MB (reduced), 27MB (full)
+- **Unique organisms:** 18,413
+- **GPU utilization:** 80-95% across 3 GPUs
+
+### Hardware Specs Used
+- GPU: 3x NVIDIA RTX 4000 Ada (24GB VRAM)
+- RAM: 251GB
+- CPU: Multi-core (20 threads)
+
+---
+
+## Phase 2 & 3 Integration
+
+**Phase 2** consumes:
+1. `stage3_knowledge_base.json` → To build query cache and extract terms
+
+**Phase 3** consumes:
+1. `stage3_kb_reduced.json` → Primary KB for query generation and validation
+2. `stage2_knowledge_base.json` → Fallback KB if reduced version unavailable
+
+---
+
+## Final Structure
 
 ```
 phase1/
-├── config.py                    ← Configuración centralizada
-├── utils.py                     ← Utilidades (logging, GPU, checkpoints)
-├── scripts/
-│   ├── stage1_parse_xml.py     ← Parsear 1K archivos iniciales (prueba)
-│   ├── stage2_parallel_gpu.py   ← Paralelizar 50K archivos
-│   └── stage3_parallel_gpu.py   ← Escalar a 500K archivos (máx)
-├── checkpoints/                 ← Recuperación ante fallos
-├── logs/                        ← Logs detallados de ejecución
-├── output/                      ← Índices JSON generados
-└── tests/                       ← Fixtures para testing
+├── config.py                      # Pipeline configuration
+├── utils.py                       # Helper utilities
+├── README.md                      # This file
+├── EXECUTION_REPORT.md            # Detailed execution report
+├── logs/                          # Empty (cleaned)
+├── output/
+│   ├── stage1_indices.json       # XML indices (122KB)
+│   ├── stage2_knowledge_base.json # Intermediate KB (10KB)
+│   ├── stage3_kb_reduced.json    # Reduced KB (16MB) - Used by Phase 3
+│   └── stage3_knowledge_base.json # Compact KB (11KB) - Used by Phase 2
+└── scripts/
+    ├── stage1_parse_xml.py        # Stage 1: XML parsing
+    ├── stage2_parallel_gpu.py     # Stage 2: GPU parallel processing
+    ├── stage3_final.py            # Stage 3: Final KB build
+    ├── stage3_simple.py           # Stage 3: Simplified KB build
+    ├── clean_stage3_kb.py         # KB cleanup utility
+    └── phase1_20251216.log        # Historical log reference
 ```
 
 ---
 
-## 🚀 Ejecución Rápida
+## Troubleshooting
 
-### Prerequisitos
-
+### Out of Memory (OOM)
 ```bash
-# Instalar dependencias
-pip install -r requirements-dev.txt
+# Reduce batch size in config.py
+BATCH_SIZE = 32  # decrease to 16 or 8
 
-# Verificar configuración
-cd phase1
-python config.py
+# Reduce parallel workers
+NUM_WORKERS = 8  # decrease from 20
 ```
 
-### Stage 1: Prueba Inicial (1K archivos)
-
+### GPU not detected
 ```bash
-cd phase1
+# Check CUDA installation
+python -c "import torch; print(torch.cuda.is_available())"
 
-# Ejecutar parser básico
-python scripts/stage1_parse_xml.py
-
-# Output esperado:
-# - phase1/output/stage1_indices.json
-# - phase1/logs/stage1_parse_xml_YYYYMMDD_HHMMSS.log
-# 
-# Tiempo esperado: ~2-5 minutos
-# Resultado: Fase 1 stage 1 completada ✅
+# Verify GPU visibility
+nvidia-smi
 ```
 
-**Monitor mientras se ejecuta:**
+### Checkpoint recovery
 ```bash
-# En otra terminal
-tail -f phase1/logs/stage1_parse_xml_*.log
+# Resume from last checkpoint
+python scripts/stage2_parallel_gpu.py --resume --checkpoint checkpoints/stage2/
 ```
 
-### Stage 2: Paralelo GPU - 50K Archivos
-
-```bash
-cd phase1
-
-# Ejecutar con 8 workers y 3 GPUs
-python scripts/stage2_parallel_gpu.py --stage 2
-
-# Output:
-# - phase1/output/stage2_knowledge_base.json
-# - phase1/checkpoints/stage2/ (recuperación)
-#
-# Tiempo esperado: ~5-10 minutos
-# Throughput: ~100-150 archivos/seg
-```
-
-### Stage 3: Escalar a 500K Archivos
-
-```bash
-cd phase1
-
-# Procesar 500K archivos (máximo para esta fase)
-python scripts/stage2_parallel_gpu.py --stage 3
-
-# Output:
-# - phase1/output/stage3_knowledge_base.json
-# - phase1/logs/stage3_parallel_*.log
-#
-# Tiempo esperado: ~50-100 minutos
-# Sistema completo con checkpoint recovery
-```
+### XML parsing errors
+Check `logs/` for detailed error messages and skip corrupted files using `--skip-errors` flag.
 
 ---
 
-## 🎯 Fases y Checkpoints
-
-### Estructura de Fases
-
-```
-PHASE 1: KNOWLEDGE BASE EXTRACTION
-│
-├── STAGE 1: Parse XML (1K test)
-│   ├── ✅ Discover BioProjects
-│   ├── ✅ Parse experiment.xml
-│   ├── ✅ Parse sample.xml
-│   ├── ✅ Parse run.xml
-│   ├── ✅ Build initial indices
-│   └── ✅ Save output JSON
-│
-├── STAGE 2: Parallel GPU (50K production)
-│   ├── ✅ Discovery (50K BioProjects)
-│   ├── ✅ Init 8 worker processes
-│   ├── ✅ Assign 3 GPUs (round-robin)
-│   ├── ✅ Batch distribution
-│   ├── ✅ Parallel processing
-│   ├── ✅ Aggregation
-│   ├── ✅ Generate complete KB
-│   └── ✅ Checkpoint every 10K files
-│
-└── STAGE 3: Full Scale (500K production)
-     ├── ✅ Same as Stage 2
-     ├── ✅ Longer runtime (~1-2 hours)
-     ├── ✅ Recovery from checkpoints
-     └── ✅ Final KB generation
-```
-
-### Checkpoint System
-
-Si hay fallo, recuperación automática:
-
-```bash
-# Si Stage 2 falla en archivo 25000:
-❌ Timeout/Error durante procesamiento
-
-# Ejecutar de nuevo:
-python scripts/stage2_parallel_gpu.py --stage 2
-
-# Sistema automáticamente:
-✅ Detecta checkpoint en archive 25000
-✅ Resume desde ahí
-✅ Continúa procesamiento
-✅ Sin perder trabajo anterior
-```
-
----
-
-## 📊 Debug & Monitoring
-
-Cada script imprime:
-1. **Print de sección** - Qué está haciendo
-2. **Print de progreso** - Cada 100 archivos
-3. **Print de recursos** - RAM, CPU, GPU cada 5 segundos
-4. **Print de errores** - Con contexto completo
-
-### Ejemplo de Output:
-
-```
-======================================================================
-📍 STAGE 1: XML PARSING
-======================================================================
-🔄 Verificando checkpoint anterior...
-📁 Buscando XMLs en: /home/lahumada/disco1/NCBI_Metadata/SRA
-📊 Total de BioProjects encontrados: 445,489
-
-🎯 Procesando primeros: 1,000 BioProjects
-
-======================================================================
-📍 PARSING: Extrayendo metadatos
-======================================================================
-[DEBUG] @elapsed=0.1s | XML Parsing | [████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 10.0% 
-        | Generated: 1,234 organisms, 45 strategies
-
-[DEBUG] @elapsed=5.2s | XML Parsing | RAM: 4.5GB | CPU: 45.2%
-        | Processed: 100/1,000 files
-
-[DEBUG] @elapsed=10.3s | XML Parsing | [████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 20.0%
-        | Rate: 50.3 files/sec | ETA: 3.2 min
-
-... (cada 100 archivos)
-
-======================================================================
-✅ STAGE 1 COMPLETADO
-======================================================================
-  Total Experiments:...................... 5,432
-  Unique Organisms:....................... 1,234
-  Unique Strategies:...................... 45
-  Parse Errors:........................... 23
-  Tiempo total:........................... 125.45 sec (2.09 min)
-======================================================================
-```
-
----
-
-## 🔍 Verificar Resultados
-
-### Output JSON Structure:
-
-```bash
-# Ver tamaño de output
-ls -lh phase1/output/
-
-# Ejemplo:
-# stage1_indices.json      ~2MB
-# stage2_knowledge_base.json ~50MB
-# stage3_knowledge_base.json ~500MB (final KB)
-
-# Verificar contenido
-head -100 phase1/output/stage1_indices.json | python -m json.tool
-
-# Contar organismos únicos
-python -c "
-import json
-data = json.load(open('phase1/output/stage1_indices.json'))
-print(f'Organismos: {data[\"stats\"][\"unique_organisms\"]}')
-print(f'Estrategias: {data[\"stats\"][\"unique_strategies\"]}')
-"
-```
-
----
-
-## ⚙️ Configuración Avanzada
-
-### Ajustar parámetros
-
-Editar `phase1/config.py`:
-
-```python
-# Línea ~30: Cambiar número máximo de archivos
-MAX_FILES_PHASE1_STAGE1 = 5000   # Aumentar a 5K para prueba más grande
-
-# Línea ~35: Paralelización
-NUM_WORKERS = 16  # Más workers = más rápido (si hay CPU)
-BATCH_SIZE = 50   # Batches más pequeños = mejor distribución
-
-# Línea ~45: GPU
-GPU_IDS = [0, 1, 2]  # Usar todas 3 GPUs
-GPU_MEMORY_FRACTION = 0.9  # Usar 90% de VRAM
-
-# Línea ~57: Checkpoint
-CHECKPOINT_INTERVAL = 5000  # Checkpoint cada 5K files
-
-# Línea ~70: Debug
-DEBUG_PRINT_INTERVAL = 50  # Print cada 50 files (más verbose)
-```
-
-Luego ejecutar:
-
-```bash
-python scripts/stage2_parallel_gpu.py --stage 2
-```
-
----
-
-## 🐛 Troubleshooting
-
-### Problema: "GPU out of memory"
-
-```
-torch.cuda.OutOfMemoryError: CUDA out of memory
-
-Solución:
-1. Reducir GPU_MEMORY_FRACTION en config.py
-2. Reducir BATCH_SIZE
-3. Reducir NUM_WORKERS
-```
-
-### Problema: "Stuck on checkpoint"
-
-```
-⏱️ Worker timeout esperando trabajo
-
-Solución:
-1. Aumentar timeout: config.py línea ~50
-2. Reducir NUM_WORKERS
-3. Killer manualmente: pkill -f stage2_parallel_gpu.py
-```
-
-### Problema: "Output JSON demasiado grande"
-
-```
-El archivo JSON es > 1GB
-
-Solución:
-1. Usar stage2 en lugar de stage3 (50K vs 500K)
-2. Cambiar output format a parquet (más compactado)
-3. Dividir en múltiples JSONs
-```
-
----
-
-## 📈 Performance Expectations
-
-| Stage | Files | Workers | GPUs | Time | Throughput |
-|-------|-------|---------|------|------|------------|
-| 1 | 1K | 1 | 0 | 2-5 min | ~200 files/sec |
-| 2 | 50K | 8 | 3 | 5-10 min | ~100-150 files/sec |
-| 3 | 500K | 8 | 3 |50-100 min | ~80-150 files/sec |
-
-Con 3x RTX 4000 Ada y 8 workers, esperamos **~100-150 files/sec**.
-
----
-
-## 🎓 Output Knowledge Base (KB)
-
-Después de cualquier stage, habrá JSON con estructura:
-
-```json
-{
-  "stage": 1,
-  "timestamp": "2026-02-06T14:30:00",
-  "files_processed": 1000,
-  "statistics": {
-    "total_experiments": 5432,
-    "unique_organisms": 1234,
-    "unique_strategies": 45
-  },
-  "organisms": {
-    "arabidopsis_thaliana": {"count": 234, "studies": 145},
-    "solanum_lycopersicum": {"count": 89, "studies": 54}
-  },
-  "strategies": {
-    "RNA-Seq": 2345,
-    "WGS": 1234
-  }
-}
-```
-
----
-
-## ✅ Checklist de Validación
-
-- [ ] `python config.py` ejecuta sin errores
-- [ ] Logs se generan en `phase1/logs/`
-- [ ] Checkpoints se crean en `phase1/checkpoints/` cada 10K archivos
-- [ ] Output JSON generado en `phase1/output/`
-- [ ] JSON es válido (no corrupto)
-- [ ] GPU memory se libera después de terminar
-- [ ] Recuperación automática funciona si se interrumpe
-
----
-
-## 📞 Debug
-
-Si algo va mal:
-
-```bash
-# 1. Ver último log
-tail -50 phase1/logs/*.log
-
-# 2. Ver checkpoints disponibles
-ls -la phase1/checkpoints/stage2/
-
-# 3. Ver output generado
-ls -lh phase1/output/
-
-# 4. Validar JSON
-python -m json.tool phase1/output/stage1_indices.json > /dev/null
-
-# 5. Ver estadísticas en tiempo real
-watch -n 1 'ls -la phase1/logs/stage2_parallel_*.log | tail -1'
-```
-
----
-
-**¡Listo para ejecutar! 🚀** 
-
-Comienza con Stage 1 para validar setup:
-```bash
-cd phase1
-python scripts/stage1_parse_xml.py
-```
+**Status:** ✅ Pipeline executed, artifacts frozen  
+**Last Updated:** 2026-02-10  
+**Next:** Phase 2 builds vector database from these artifacts

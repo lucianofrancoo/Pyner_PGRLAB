@@ -104,7 +104,7 @@ phase3/
 │   └── __init__.py
 ├── config.py                      # Configuration (host, port, paths)
 ├── logs/                          # API logs and startup traces
-├── cache/                         # Result caching (optional)
+├── support_dictionary/            # Technical vocabulary and synonyms
 └── README.md                      # This file
 ```
 

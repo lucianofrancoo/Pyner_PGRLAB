@@ -30,19 +30,19 @@ for dir_path in [CHECKPOINTS_DIR, LOGS_DIR, OUTPUT_DIR, TESTS_DIR]:
     dir_path.mkdir(parents=True, exist_ok=True)
 
 # Data sources
-NCBI_SRA_PATH = Path("/home/lahumada/disco1/NCBI_Metadata/SRA")
+NCBI_SRA_PATH = Path("/home/lahumada/disco1/NCBI_Metadata")
 
 # ============================================
 # PROCESSING PARAMETERS
 # ============================================
 
 # Número de archivos a procesar en esta fase
-MAX_FILES_PHASE1_STAGE1 = 1000  # Stage 1: Prueba con 1K archivos
-MAX_FILES_PHASE1_STAGE2 = 50000  # Stage 2: Escalar a 50K
-MAX_FILES_PHASE1_STAGE3 = 500000  # Stage 3: Producción 500K
+MAX_FILES_PHASE1_STAGE1 = 1000      # Stage 1: Prueba con 1K archivos
+MAX_FILES_PHASE1_STAGE2 = 50000     # Stage 2: Escalar a 50K
+MAX_FILES_PHASE1_STAGE3 = -1        # Stage 3: Producción - TODOS los archivos (3.6M+)
 
 # Paralelización
-NUM_WORKERS = 8  # Procesos paralelos (ajusta según CPU cores)
+NUM_WORKERS = 20  # Procesos paralelos (20 cores disponibles en servidor TRX50)
 BATCH_SIZE = 100  # Archivos por batch
 QUEUE_SIZE = 50  # Tamaño de cola entre procesos
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     print("⚙️  PROCESSING:")
     print(f"  Max Files (Stage 1): {MAX_FILES_PHASE1_STAGE1:,}")
     print(f"  Max Files (Stage 2): {MAX_FILES_PHASE1_STAGE2:,}")
-    print(f"  Max Files (Stage 3): {MAX_FILES_PHASE1_STAGE3:,}")
+    print(f"  Max Files (Stage 3): {'UNLIMITED (all files)' if MAX_FILES_PHASE1_STAGE3 is None else f'{MAX_FILES_PHASE1_STAGE3:,}'}")
     print(f"  Workers (Parallel):  {NUM_WORKERS}")
     print(f"  Batch Size:          {BATCH_SIZE}\n")
     

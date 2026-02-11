@@ -1,1399 +1,1399 @@
 {
-  "timestamp": "1770392053.0323741",
+  "timestamp": "1770648900.0024724",
   "total_queries": 211,
   "queries": [
     {
       "type": "organism",
       "text": "Research studies on Severe acute respiratory syndrome coronavirus 2",
       "organism": "Severe acute respiratory syndrome coronavirus 2",
-      "count": 310741490,
-      "studies": 139977
+      "count": 1129261780,
+      "studies": 272008
     },
     {
       "type": "organism",
       "text": "Research studies on Homo sapiens",
       "organism": "Homo sapiens",
-      "count": 66493236,
-      "studies": 20306
+      "count": 630659857,
+      "studies": 69282
     },
     {
       "type": "gene_expression",
       "text": "Gene expression patterns in Homo sapiens",
       "organism": "Homo sapiens",
-      "count": 66493236,
-      "studies": 20306
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on human gut metagenome",
-      "organism": "human gut metagenome",
-      "count": 44744612,
-      "studies": 11469
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in human gut metagenome",
-      "organism": "human gut metagenome",
-      "count": 44744612,
-      "studies": 11469
+      "count": 630659857,
+      "studies": 69282
     },
     {
       "type": "organism",
       "text": "Research studies on Mus musculus",
       "organism": "Mus musculus",
-      "count": 35235123,
-      "studies": 17770
+      "count": 336609025,
+      "studies": 41426
     },
     {
       "type": "gene_expression",
       "text": "Gene expression patterns in Mus musculus",
       "organism": "Mus musculus",
-      "count": 35235123,
-      "studies": 17770
+      "count": 336609025,
+      "studies": 41426
     },
     {
       "type": "organism",
-      "text": "Research studies on metagenome",
-      "organism": "metagenome",
-      "count": 25023253,
-      "studies": 2925
-    },
-    {
-      "type": "comparative",
-      "text": "Comparative genomics and metagenome",
-      "organism": "metagenome",
-      "count": 25023253,
-      "studies": 2925
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Escherichia coli",
-      "organism": "Escherichia coli",
-      "count": 15550248,
-      "studies": 10598
+      "text": "Research studies on human gut metagenome",
+      "organism": "human gut metagenome",
+      "count": 140748428,
+      "studies": 13068
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Escherichia coli",
-      "organism": "Escherichia coli",
-      "count": 15550248,
-      "studies": 10598
+      "text": "Gene expression patterns in human gut metagenome",
+      "organism": "human gut metagenome",
+      "count": 140748428,
+      "studies": 13068
     },
     {
       "type": "organism",
       "text": "Research studies on soil metagenome",
       "organism": "soil metagenome",
-      "count": 12777256,
-      "studies": 255
+      "count": 138566485,
+      "studies": 5541
     },
     {
       "type": "gene_expression",
       "text": "Gene expression patterns in soil metagenome",
       "organism": "soil metagenome",
-      "count": 12777256,
-      "studies": 255
+      "count": 138566485,
+      "studies": 5541
     },
     {
       "type": "organism",
-      "text": "Research studies on Plasmodium falciparum",
-      "organism": "Plasmodium falciparum",
-      "count": 10567053,
-      "studies": 15264
+      "text": "Research studies on metagenome",
+      "organism": "metagenome",
+      "count": 122753616,
+      "studies": 6776
     },
     {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Plasmodium falciparum",
-      "organism": "Plasmodium falciparum",
-      "count": 10567053,
-      "studies": 15264
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Streptococcus pneumoniae",
-      "organism": "Streptococcus pneumoniae",
-      "count": 10498548,
-      "studies": 15924
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Streptococcus pneumoniae",
-      "organism": "Streptococcus pneumoniae",
-      "count": 10498548,
-      "studies": 15924
+      "type": "comparative",
+      "text": "Comparative genomics and metagenome",
+      "organism": "metagenome",
+      "count": 122753616,
+      "studies": 6776
     },
     {
       "type": "organism",
-      "text": "Research studies on marine metagenome",
-      "organism": "marine metagenome",
-      "count": 10480924,
-      "studies": 92
+      "text": "Research studies on Escherichia coli",
+      "organism": "Escherichia coli",
+      "count": 64426080,
+      "studies": 47005
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in marine metagenome",
-      "organism": "marine metagenome",
-      "count": 10480924,
-      "studies": 92
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Mycobacterium tuberculosis",
-      "organism": "Mycobacterium tuberculosis",
-      "count": 9286410,
-      "studies": 8922
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Mycobacterium tuberculosis",
-      "organism": "Mycobacterium tuberculosis",
-      "count": 9286410,
-      "studies": 8922
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Vibrio cholerae",
-      "organism": "Vibrio cholerae",
-      "count": 8890051,
-      "studies": 1699
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Vibrio cholerae",
-      "organism": "Vibrio cholerae",
-      "count": 8890051,
-      "studies": 1699
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on mouse gut metagenome",
-      "organism": "mouse gut metagenome",
-      "count": 8631769,
-      "studies": 183
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in mouse gut metagenome",
-      "organism": "mouse gut metagenome",
-      "count": 8631769,
-      "studies": 183
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Bos taurus",
-      "organism": "Bos taurus",
-      "count": 7751420,
-      "studies": 143
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Bos taurus",
-      "organism": "Bos taurus",
-      "count": 7751420,
-      "studies": 143
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on gut metagenome",
-      "organism": "gut metagenome",
-      "count": 6869930,
-      "studies": 1804
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in gut metagenome",
-      "organism": "gut metagenome",
-      "count": 6869930,
-      "studies": 1804
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on unidentified",
-      "organism": "unidentified",
-      "count": 6597130,
-      "studies": 9804
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in unidentified",
-      "organism": "unidentified",
-      "count": 6597130,
-      "studies": 9804
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on rhizosphere metagenome",
-      "organism": "rhizosphere metagenome",
-      "count": 6512824,
-      "studies": 29
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in rhizosphere metagenome",
-      "organism": "rhizosphere metagenome",
-      "count": 6512824,
-      "studies": 29
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Arabidopsis thaliana",
-      "organism": "Arabidopsis thaliana",
-      "count": 6479083,
-      "studies": 351
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Arabidopsis thaliana",
-      "organism": "Arabidopsis thaliana",
-      "count": 6479083,
-      "studies": 351
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Staphylococcus aureus",
-      "organism": "Staphylococcus aureus",
-      "count": 6103175,
-      "studies": 6899
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Staphylococcus aureus",
-      "organism": "Staphylococcus aureus",
-      "count": 6103175,
-      "studies": 6899
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Klebsiella pneumoniae",
-      "organism": "Klebsiella pneumoniae",
-      "count": 5741894,
-      "studies": 3734
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Klebsiella pneumoniae",
-      "organism": "Klebsiella pneumoniae",
-      "count": 5741894,
-      "studies": 3734
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on human metagenome",
-      "organism": "human metagenome",
-      "count": 5136794,
-      "studies": 1994
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in human metagenome",
-      "organism": "human metagenome",
-      "count": 5136794,
-      "studies": 1994
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Danio rerio",
-      "organism": "Danio rerio",
-      "count": 4906444,
-      "studies": 1784
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Danio rerio",
-      "organism": "Danio rerio",
-      "count": 4906444,
-      "studies": 1784
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Saccharomyces cerevisiae",
-      "organism": "Saccharomyces cerevisiae",
-      "count": 4740833,
-      "studies": 5846
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Saccharomyces cerevisiae",
-      "organism": "Saccharomyces cerevisiae",
-      "count": 4740833,
-      "studies": 5846
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Anopheles gambiae",
-      "organism": "Anopheles gambiae",
-      "count": 4658827,
-      "studies": 7605
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Anopheles gambiae",
-      "organism": "Anopheles gambiae",
-      "count": 4658827,
-      "studies": 7605
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on uncultured bacterium",
-      "organism": "uncultured bacterium",
-      "count": 4603192,
-      "studies": 211
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured bacterium",
-      "organism": "uncultured bacterium",
-      "count": 4603192,
-      "studies": 211
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Gallus gallus",
-      "organism": "Gallus gallus",
-      "count": 4160795,
-      "studies": 71
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Gallus gallus",
-      "organism": "Gallus gallus",
-      "count": 4160795,
-      "studies": 71
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on wastewater metagenome",
-      "organism": "wastewater metagenome",
-      "count": 3560106,
-      "studies": 1338
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in wastewater metagenome",
-      "organism": "wastewater metagenome",
-      "count": 3560106,
-      "studies": 1338
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on human oral metagenome",
-      "organism": "human oral metagenome",
-      "count": 3397609,
-      "studies": 49
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in human oral metagenome",
-      "organism": "human oral metagenome",
-      "count": 3397609,
-      "studies": 49
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Enterococcus faecium",
-      "organism": "Enterococcus faecium",
-      "count": 3315851,
-      "studies": 907
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Enterococcus faecium",
-      "organism": "Enterococcus faecium",
-      "count": 3315851,
-      "studies": 907
+      "text": "Gene expression patterns in Escherichia coli",
+      "organism": "Escherichia coli",
+      "count": 64426080,
+      "studies": 47005
     },
     {
       "type": "organism",
       "text": "Research studies on Salmonella enterica",
       "organism": "Salmonella enterica",
-      "count": 3036290,
-      "studies": 2828
+      "count": 59000012,
+      "studies": 79596
     },
     {
       "type": "gene_expression",
       "text": "Gene expression patterns in Salmonella enterica",
       "organism": "Salmonella enterica",
-      "count": 3036290,
-      "studies": 2828
+      "count": 59000012,
+      "studies": 79596
     },
     {
       "type": "organism",
-      "text": "Research studies on Canis lupus familiaris",
-      "organism": "Canis lupus familiaris",
-      "count": 2939944,
-      "studies": 2221
+      "text": "Research studies on gut metagenome",
+      "organism": "gut metagenome",
+      "count": 57427898,
+      "studies": 4890
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Canis lupus familiaris",
-      "organism": "Canis lupus familiaris",
-      "count": 2939944,
-      "studies": 2221
+      "text": "Gene expression patterns in gut metagenome",
+      "organism": "gut metagenome",
+      "count": 57427898,
+      "studies": 4890
     },
     {
       "type": "organism",
-      "text": "Research studies on human vaginal metagenome",
-      "organism": "human vaginal metagenome",
-      "count": 2817347,
-      "studies": 10
+      "text": "Research studies on marine metagenome",
+      "organism": "marine metagenome",
+      "count": 44154404,
+      "studies": 1774
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in human vaginal metagenome",
-      "organism": "human vaginal metagenome",
-      "count": 2817347,
-      "studies": 10
+      "text": "Gene expression patterns in marine metagenome",
+      "organism": "marine metagenome",
+      "count": 44154404,
+      "studies": 1774
     },
     {
       "type": "organism",
-      "text": "Research studies on Sus scrofa",
-      "organism": "Sus scrofa",
-      "count": 2772933,
-      "studies": 264
+      "text": "Research studies on mouse gut metagenome",
+      "organism": "mouse gut metagenome",
+      "count": 39644550,
+      "studies": 1402
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Sus scrofa",
-      "organism": "Sus scrofa",
-      "count": 2772933,
-      "studies": 264
+      "text": "Gene expression patterns in mouse gut metagenome",
+      "organism": "mouse gut metagenome",
+      "count": 39644550,
+      "studies": 1402
     },
     {
       "type": "organism",
-      "text": "Research studies on uncultured Lachnospiraceae bacterium",
-      "organism": "uncultured Lachnospiraceae bacterium",
-      "count": 2756985,
-      "studies": 125
+      "text": "Research studies on Plasmodium falciparum",
+      "organism": "Plasmodium falciparum",
+      "count": 38271830,
+      "studies": 19725
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Lachnospiraceae bacterium",
-      "organism": "uncultured Lachnospiraceae bacterium",
-      "count": 2756985,
-      "studies": 125
+      "text": "Gene expression patterns in Plasmodium falciparum",
+      "organism": "Plasmodium falciparum",
+      "count": 38271830,
+      "studies": 19725
     },
     {
       "type": "organism",
-      "text": "Research studies on Oryza sativa",
-      "organism": "Oryza sativa",
-      "count": 2752521,
-      "studies": 66
+      "text": "Research studies on Mycobacterium tuberculosis",
+      "organism": "Mycobacterium tuberculosis",
+      "count": 35072237,
+      "studies": 11014
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Oryza sativa",
-      "organism": "Oryza sativa",
-      "count": 2752521,
-      "studies": 66
+      "text": "Gene expression patterns in Mycobacterium tuberculosis",
+      "organism": "Mycobacterium tuberculosis",
+      "count": 35072237,
+      "studies": 11014
     },
     {
       "type": "organism",
-      "text": "Research studies on Neisseria gonorrhoeae",
-      "organism": "Neisseria gonorrhoeae",
-      "count": 2599372,
-      "studies": 1943
+      "text": "Research studies on human metagenome",
+      "organism": "human metagenome",
+      "count": 33667348,
+      "studies": 4611
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Neisseria gonorrhoeae",
-      "organism": "Neisseria gonorrhoeae",
-      "count": 2599372,
-      "studies": 1943
+      "text": "Gene expression patterns in human metagenome",
+      "organism": "human metagenome",
+      "count": 33667348,
+      "studies": 4611
     },
     {
       "type": "organism",
-      "text": "Research studies on uncultured Eubacteriales bacterium",
-      "organism": "uncultured Eubacteriales bacterium",
-      "count": 2568235,
-      "studies": 619
+      "text": "Research studies on Arabidopsis thaliana",
+      "organism": "Arabidopsis thaliana",
+      "count": 27835293,
+      "studies": 1626
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Eubacteriales bacterium",
-      "organism": "uncultured Eubacteriales bacterium",
-      "count": 2568235,
-      "studies": 619
+      "text": "Gene expression patterns in Arabidopsis thaliana",
+      "organism": "Arabidopsis thaliana",
+      "count": 27835293,
+      "studies": 1626
     },
     {
       "type": "organism",
-      "text": "Research studies on Campylobacter jejuni",
-      "organism": "Campylobacter jejuni",
-      "count": 2525533,
-      "studies": 1473
+      "text": "Research studies on wastewater metagenome",
+      "organism": "wastewater metagenome",
+      "count": 26608553,
+      "studies": 2674
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Campylobacter jejuni",
-      "organism": "Campylobacter jejuni",
-      "count": 2525533,
-      "studies": 1473
+      "text": "Gene expression patterns in wastewater metagenome",
+      "organism": "wastewater metagenome",
+      "count": 26608553,
+      "studies": 2674
     },
     {
       "type": "organism",
-      "text": "Research studies on bacterium",
-      "organism": "bacterium",
-      "count": 2517723,
-      "studies": 62
+      "text": "Research studies on Saccharomyces cerevisiae",
+      "organism": "Saccharomyces cerevisiae",
+      "count": 26525858,
+      "studies": 9720
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in bacterium",
-      "organism": "bacterium",
-      "count": 2517723,
-      "studies": 62
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on human skin metagenome",
-      "organism": "human skin metagenome",
-      "count": 2515618,
-      "studies": 42
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in human skin metagenome",
-      "organism": "human skin metagenome",
-      "count": 2515618,
-      "studies": 42
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on feces metagenome",
-      "organism": "feces metagenome",
-      "count": 2364923,
-      "studies": 257
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in feces metagenome",
-      "organism": "feces metagenome",
-      "count": 2364923,
-      "studies": 257
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Streptococcus pyogenes",
-      "organism": "Streptococcus pyogenes",
-      "count": 2203580,
-      "studies": 778
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Streptococcus pyogenes",
-      "organism": "Streptococcus pyogenes",
-      "count": 2203580,
-      "studies": 778
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on uncultured eukaryote",
-      "organism": "uncultured eukaryote",
-      "count": 2175953,
-      "studies": 37
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured eukaryote",
-      "organism": "uncultured eukaryote",
-      "count": 2175953,
-      "studies": 37
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Triticum aestivum",
-      "organism": "Triticum aestivum",
-      "count": 2034103,
-      "studies": 814
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Triticum aestivum",
-      "organism": "Triticum aestivum",
-      "count": 2034103,
-      "studies": 814
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on insect metagenome",
-      "organism": "insect metagenome",
-      "count": 1947192,
-      "studies": 15
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in insect metagenome",
-      "organism": "insect metagenome",
-      "count": 1947192,
-      "studies": 15
+      "text": "Gene expression patterns in Saccharomyces cerevisiae",
+      "organism": "Saccharomyces cerevisiae",
+      "count": 26525858,
+      "studies": 9720
     },
     {
       "type": "organism",
       "text": "Research studies on plant metagenome",
       "organism": "plant metagenome",
-      "count": 1924883,
-      "studies": 29
+      "count": 26453460,
+      "studies": 761
     },
     {
       "type": "gene_expression",
       "text": "Gene expression patterns in plant metagenome",
       "organism": "plant metagenome",
-      "count": 1924883,
-      "studies": 29
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on uncultured prokaryote",
-      "organism": "uncultured prokaryote",
-      "count": 1916491,
-      "studies": 25
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured prokaryote",
-      "organism": "uncultured prokaryote",
-      "count": 1916491,
-      "studies": 25
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Acinetobacter baumannii",
-      "organism": "Acinetobacter baumannii",
-      "count": 1896633,
-      "studies": 761
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Acinetobacter baumannii",
-      "organism": "Acinetobacter baumannii",
-      "count": 1896633,
+      "count": 26453460,
       "studies": 761
     },
     {
       "type": "organism",
-      "text": "Research studies on synthetic construct",
-      "organism": "synthetic construct",
-      "count": 1853771,
-      "studies": 1060
+      "text": "Research studies on Oryza sativa",
+      "organism": "Oryza sativa",
+      "count": 25886116,
+      "studies": 969
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in synthetic construct",
-      "organism": "synthetic construct",
-      "count": 1853771,
-      "studies": 1060
+      "text": "Gene expression patterns in Oryza sativa",
+      "organism": "Oryza sativa",
+      "count": 25886116,
+      "studies": 969
     },
     {
       "type": "organism",
-      "text": "Research studies on uncultured Muribaculaceae bacterium",
-      "organism": "uncultured Muribaculaceae bacterium",
-      "count": 1812161,
-      "studies": 129
+      "text": "Research studies on uncultured bacterium",
+      "organism": "uncultured bacterium",
+      "count": 23913248,
+      "studies": 5086
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Muribaculaceae bacterium",
-      "organism": "uncultured Muribaculaceae bacterium",
-      "count": 1812161,
-      "studies": 129
+      "text": "Gene expression patterns in uncultured bacterium",
+      "organism": "uncultured bacterium",
+      "count": 23913248,
+      "studies": 5086
     },
     {
       "type": "organism",
-      "text": "Research studies on seawater metagenome",
-      "organism": "seawater metagenome",
-      "count": 1796699,
-      "studies": 58
+      "text": "Research studies on Streptococcus pneumoniae",
+      "organism": "Streptococcus pneumoniae",
+      "count": 22084796,
+      "studies": 20398
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in seawater metagenome",
-      "organism": "seawater metagenome",
-      "count": 1796699,
-      "studies": 58
+      "text": "Gene expression patterns in Streptococcus pneumoniae",
+      "organism": "Streptococcus pneumoniae",
+      "count": 22084796,
+      "studies": 20398
     },
     {
       "type": "organism",
-      "text": "Research studies on Pseudomonas aeruginosa",
-      "organism": "Pseudomonas aeruginosa",
-      "count": 1791481,
-      "studies": 1507
+      "text": "Research studies on Staphylococcus aureus",
+      "organism": "Staphylococcus aureus",
+      "count": 21339973,
+      "studies": 10273
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Pseudomonas aeruginosa",
-      "organism": "Pseudomonas aeruginosa",
-      "count": 1791481,
-      "studies": 1507
+      "text": "Gene expression patterns in Staphylococcus aureus",
+      "organism": "Staphylococcus aureus",
+      "count": 21339973,
+      "studies": 10273
     },
     {
       "type": "organism",
-      "text": "Research studies on Bacteroides uniformis",
-      "organism": "Bacteroides uniformis",
-      "count": 1762169,
-      "studies": 380
+      "text": "Research studies on rhizosphere metagenome",
+      "organism": "rhizosphere metagenome",
+      "count": 20451701,
+      "studies": 650
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Bacteroides uniformis",
-      "organism": "Bacteroides uniformis",
-      "count": 1762169,
-      "studies": 380
+      "text": "Gene expression patterns in rhizosphere metagenome",
+      "organism": "rhizosphere metagenome",
+      "count": 20451701,
+      "studies": 650
     },
     {
       "type": "organism",
-      "text": "Research studies on Siphoviridae environmental samples",
-      "organism": "Siphoviridae environmental samples",
-      "count": 1752653,
-      "studies": 1
+      "text": "Research studies on human oral metagenome",
+      "organism": "human oral metagenome",
+      "count": 19813757,
+      "studies": 296
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Siphoviridae environmental samples",
-      "organism": "Siphoviridae environmental samples",
-      "count": 1752653,
-      "studies": 1
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on uncultured Oscillospiraceae bacterium",
-      "organism": "uncultured Oscillospiraceae bacterium",
-      "count": 1740689,
-      "studies": 325
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Oscillospiraceae bacterium",
-      "organism": "uncultured Oscillospiraceae bacterium",
-      "count": 1740689,
-      "studies": 325
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Hordeum vulgare",
-      "organism": "Hordeum vulgare",
-      "count": 1520134,
-      "studies": 35
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Hordeum vulgare",
-      "organism": "Hordeum vulgare",
-      "count": 1520134,
-      "studies": 35
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Listeria monocytogenes",
-      "organism": "Listeria monocytogenes",
-      "count": 1505830,
-      "studies": 526
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Listeria monocytogenes",
-      "organism": "Listeria monocytogenes",
-      "count": 1505830,
-      "studies": 526
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Plasmodium vivax",
-      "organism": "Plasmodium vivax",
-      "count": 1502497,
-      "studies": 2156
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Plasmodium vivax",
-      "organism": "Plasmodium vivax",
-      "count": 1502497,
-      "studies": 2156
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on marine sediment metagenome",
-      "organism": "marine sediment metagenome",
-      "count": 1390668,
-      "studies": 42
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in marine sediment metagenome",
-      "organism": "marine sediment metagenome",
-      "count": 1390668,
-      "studies": 42
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on synthetic metagenome",
-      "organism": "synthetic metagenome",
-      "count": 1381895,
-      "studies": 40
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in synthetic metagenome",
-      "organism": "synthetic metagenome",
-      "count": 1381895,
-      "studies": 40
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on sediment metagenome",
-      "organism": "sediment metagenome",
-      "count": 1379140,
-      "studies": 36
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in sediment metagenome",
-      "organism": "sediment metagenome",
-      "count": 1379140,
-      "studies": 36
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on aquatic metagenome",
-      "organism": "aquatic metagenome",
-      "count": 1346647,
-      "studies": 26
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in aquatic metagenome",
-      "organism": "aquatic metagenome",
-      "count": 1346647,
-      "studies": 26
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Neisseria meningitidis",
-      "organism": "Neisseria meningitidis",
-      "count": 1299876,
-      "studies": 1306
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Neisseria meningitidis",
-      "organism": "Neisseria meningitidis",
-      "count": 1299876,
-      "studies": 1306
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Equus caballus",
-      "organism": "Equus caballus",
-      "count": 1296581,
-      "studies": 49
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Equus caballus",
-      "organism": "Equus caballus",
-      "count": 1296581,
-      "studies": 49
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on uncultured Clostridia bacterium",
-      "organism": "uncultured Clostridia bacterium",
-      "count": 1286844,
-      "studies": 114
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Clostridia bacterium",
-      "organism": "uncultured Clostridia bacterium",
-      "count": 1286844,
-      "studies": 114
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Salmonella enterica subsp. enterica serovar Typhi",
-      "organism": "Salmonella enterica subsp. enterica serovar Typhi",
-      "count": 1177908,
-      "studies": 1169
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Salmonella enterica subsp. enterica serovar Typhi",
-      "organism": "Salmonella enterica subsp. enterica serovar Typhi",
-      "count": 1177908,
-      "studies": 1169
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on uncultured Prevotella sp.",
-      "organism": "uncultured Prevotella sp.",
-      "count": 1159101,
-      "studies": 279
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Prevotella sp.",
-      "organism": "uncultured Prevotella sp.",
-      "count": 1159101,
-      "studies": 279
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Streptococcus agalactiae",
-      "organism": "Streptococcus agalactiae",
-      "count": 1137202,
-      "studies": 1827
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Streptococcus agalactiae",
-      "organism": "Streptococcus agalactiae",
-      "count": 1137202,
-      "studies": 1827
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Apis mellifera",
-      "organism": "Apis mellifera",
-      "count": 1101671,
-      "studies": 9
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Apis mellifera",
-      "organism": "Apis mellifera",
-      "count": 1101671,
-      "studies": 9
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Clostridioides difficile",
-      "organism": "Clostridioides difficile",
-      "count": 1077271,
-      "studies": 663
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Clostridioides difficile",
-      "organism": "Clostridioides difficile",
-      "count": 1077271,
-      "studies": 663
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on uncultured Bacteroidales bacterium",
-      "organism": "uncultured Bacteroidales bacterium",
-      "count": 1048536,
-      "studies": 66
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Bacteroidales bacterium",
-      "organism": "uncultured Bacteroidales bacterium",
-      "count": 1048536,
-      "studies": 66
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on uncultured Caudovirales phage",
-      "organism": "uncultured Caudovirales phage",
-      "count": 972787,
-      "studies": 2
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Caudovirales phage",
-      "organism": "uncultured Caudovirales phage",
-      "count": 972787,
-      "studies": 2
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Phocaeicola vulgatus",
-      "organism": "Phocaeicola vulgatus",
-      "count": 963141,
-      "studies": 80
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Phocaeicola vulgatus",
-      "organism": "Phocaeicola vulgatus",
-      "count": 963141,
-      "studies": 80
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on mixed culture metagenome",
-      "organism": "mixed culture metagenome",
-      "count": 955100,
-      "studies": 8
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in mixed culture metagenome",
-      "organism": "mixed culture metagenome",
-      "count": 955100,
-      "studies": 8
+      "text": "Gene expression patterns in human oral metagenome",
+      "organism": "human oral metagenome",
+      "count": 19813757,
+      "studies": 296
     },
     {
       "type": "organism",
       "text": "Research studies on freshwater metagenome",
       "organism": "freshwater metagenome",
-      "count": 921062,
-      "studies": 44
+      "count": 18906090,
+      "studies": 966
     },
     {
       "type": "gene_expression",
       "text": "Gene expression patterns in freshwater metagenome",
       "organism": "freshwater metagenome",
-      "count": 921062,
-      "studies": 44
+      "count": 18906090,
+      "studies": 966
     },
     {
       "type": "organism",
       "text": "Research studies on Rattus norvegicus",
       "organism": "Rattus norvegicus",
-      "count": 919968,
-      "studies": 117
+      "count": 18412377,
+      "studies": 953
     },
     {
       "type": "gene_expression",
       "text": "Gene expression patterns in Rattus norvegicus",
       "organism": "Rattus norvegicus",
-      "count": 919968,
-      "studies": 117
+      "count": 18412377,
+      "studies": 953
     },
     {
       "type": "organism",
-      "text": "Research studies on uncultured Clostridium sp.",
-      "organism": "uncultured Clostridium sp.",
-      "count": 912175,
-      "studies": 623
+      "text": "Research studies on Klebsiella pneumoniae",
+      "organism": "Klebsiella pneumoniae",
+      "count": 17107581,
+      "studies": 8210
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Clostridium sp.",
-      "organism": "uncultured Clostridium sp.",
-      "count": 912175,
-      "studies": 623
+      "text": "Gene expression patterns in Klebsiella pneumoniae",
+      "organism": "Klebsiella pneumoniae",
+      "count": 17107581,
+      "studies": 8210
     },
     {
       "type": "organism",
-      "text": "Research studies on indoor metagenome",
-      "organism": "indoor metagenome",
-      "count": 895176,
-      "studies": 15
+      "text": "Research studies on feces metagenome",
+      "organism": "feces metagenome",
+      "count": 16887695,
+      "studies": 700
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in indoor metagenome",
-      "organism": "indoor metagenome",
-      "count": 895176,
-      "studies": 15
+      "text": "Gene expression patterns in feces metagenome",
+      "organism": "feces metagenome",
+      "count": 16887695,
+      "studies": 700
     },
     {
       "type": "organism",
-      "text": "Research studies on uncultured Alistipes sp.",
-      "organism": "uncultured Alistipes sp.",
-      "count": 860643,
-      "studies": 157
+      "text": "Research studies on Bos taurus",
+      "organism": "Bos taurus",
+      "count": 16786970,
+      "studies": 550
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Alistipes sp.",
-      "organism": "uncultured Alistipes sp.",
-      "count": 860643,
-      "studies": 157
+      "text": "Gene expression patterns in Bos taurus",
+      "organism": "Bos taurus",
+      "count": 16786970,
+      "studies": 550
     },
     {
       "type": "organism",
-      "text": "Research studies on Oryzias latipes",
-      "organism": "Oryzias latipes",
-      "count": 848477,
-      "studies": 496
+      "text": "Research studies on Danio rerio",
+      "organism": "Danio rerio",
+      "count": 15305070,
+      "studies": 5484
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Oryzias latipes",
-      "organism": "Oryzias latipes",
-      "count": 848477,
-      "studies": 496
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on human feces metagenome",
-      "organism": "human feces metagenome",
-      "count": 848307,
-      "studies": 23
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in human feces metagenome",
-      "organism": "human feces metagenome",
-      "count": 848307,
-      "studies": 23
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Zea mays",
-      "organism": "Zea mays",
-      "count": 833741,
-      "studies": 25
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Zea mays",
-      "organism": "Zea mays",
-      "count": 833741,
-      "studies": 25
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on rat gut metagenome",
-      "organism": "rat gut metagenome",
-      "count": 826169,
-      "studies": 11
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in rat gut metagenome",
-      "organism": "rat gut metagenome",
-      "count": 826169,
-      "studies": 11
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on biofilm metagenome",
-      "organism": "biofilm metagenome",
-      "count": 808706,
-      "studies": 188
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in biofilm metagenome",
-      "organism": "biofilm metagenome",
-      "count": 808706,
-      "studies": 188
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on human nasopharyngeal metagenome",
-      "organism": "human nasopharyngeal metagenome",
-      "count": 804816,
-      "studies": 114
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in human nasopharyngeal metagenome",
-      "organism": "human nasopharyngeal metagenome",
-      "count": 804816,
-      "studies": 114
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Pseudomonas viridiflava",
-      "organism": "Pseudomonas viridiflava",
-      "count": 803952,
-      "studies": 4
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Pseudomonas viridiflava",
-      "organism": "Pseudomonas viridiflava",
-      "count": 803952,
-      "studies": 4
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Oryza sativa Japonica Group",
-      "organism": "Oryza sativa Japonica Group",
-      "count": 780474,
-      "studies": 58
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Oryza sativa Japonica Group",
-      "organism": "Oryza sativa Japonica Group",
-      "count": 780474,
-      "studies": 58
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Proteus mirabilis",
-      "organism": "Proteus mirabilis",
-      "count": 773099,
-      "studies": 37
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Proteus mirabilis",
-      "organism": "Proteus mirabilis",
-      "count": 773099,
-      "studies": 37
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on Salmo salar",
-      "organism": "Salmo salar",
-      "count": 747863,
-      "studies": 26
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in Salmo salar",
-      "organism": "Salmo salar",
-      "count": 747863,
-      "studies": 26
-    },
-    {
-      "type": "organism",
-      "text": "Research studies on root associated fungus metagenome",
-      "organism": "root associated fungus metagenome",
-      "count": 729139,
-      "studies": 14
-    },
-    {
-      "type": "gene_expression",
-      "text": "Gene expression patterns in root associated fungus metagenome",
-      "organism": "root associated fungus metagenome",
-      "count": 729139,
-      "studies": 14
+      "text": "Gene expression patterns in Danio rerio",
+      "organism": "Danio rerio",
+      "count": 15305070,
+      "studies": 5484
     },
     {
       "type": "organism",
       "text": "Research studies on Drosophila melanogaster",
       "organism": "Drosophila melanogaster",
-      "count": 725796,
-      "studies": 85
+      "count": 15158818,
+      "studies": 1276
     },
     {
       "type": "gene_expression",
       "text": "Gene expression patterns in Drosophila melanogaster",
       "organism": "Drosophila melanogaster",
-      "count": 725796,
-      "studies": 85
+      "count": 15158818,
+      "studies": 1276
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Campylobacter jejuni",
+      "organism": "Campylobacter jejuni",
+      "count": 14442550,
+      "studies": 16223
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Campylobacter jejuni",
+      "organism": "Campylobacter jejuni",
+      "count": 14442550,
+      "studies": 16223
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Gallus gallus",
+      "organism": "Gallus gallus",
+      "count": 11949398,
+      "studies": 524
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Gallus gallus",
+      "organism": "Gallus gallus",
+      "count": 11949398,
+      "studies": 524
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Neisseria gonorrhoeae",
+      "organism": "Neisseria gonorrhoeae",
+      "count": 11062198,
+      "studies": 2695
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Neisseria gonorrhoeae",
+      "organism": "Neisseria gonorrhoeae",
+      "count": 11062198,
+      "studies": 2695
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on sediment metagenome",
+      "organism": "sediment metagenome",
+      "count": 10579768,
+      "studies": 880
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in sediment metagenome",
+      "organism": "sediment metagenome",
+      "count": 10579768,
+      "studies": 880
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Vibrio cholerae",
+      "organism": "Vibrio cholerae",
+      "count": 10353364,
+      "studies": 2947
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Vibrio cholerae",
+      "organism": "Vibrio cholerae",
+      "count": 10353364,
+      "studies": 2947
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Hordeum vulgare subsp. vulgare",
+      "organism": "Hordeum vulgare subsp. vulgare",
+      "count": 9931079,
+      "studies": 68
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Hordeum vulgare subsp. vulgare",
+      "organism": "Hordeum vulgare subsp. vulgare",
+      "count": 9931079,
+      "studies": 68
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on unidentified",
+      "organism": "unidentified",
+      "count": 9873554,
+      "studies": 13840
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in unidentified",
+      "organism": "unidentified",
+      "count": 9873554,
+      "studies": 13840
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Zea mays",
+      "organism": "Zea mays",
+      "count": 9861719,
+      "studies": 452
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Zea mays",
+      "organism": "Zea mays",
+      "count": 9861719,
+      "studies": 452
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on seawater metagenome",
+      "organism": "seawater metagenome",
+      "count": 9810620,
+      "studies": 1121
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in seawater metagenome",
+      "organism": "seawater metagenome",
+      "count": 9810620,
+      "studies": 1121
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on human skin metagenome",
+      "organism": "human skin metagenome",
+      "count": 9300212,
+      "studies": 176
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in human skin metagenome",
+      "organism": "human skin metagenome",
+      "count": 9300212,
+      "studies": 176
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Listeria monocytogenes",
+      "organism": "Listeria monocytogenes",
+      "count": 9188934,
+      "studies": 8465
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Listeria monocytogenes",
+      "organism": "Listeria monocytogenes",
+      "count": 9188934,
+      "studies": 8465
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on root metagenome",
+      "organism": "root metagenome",
+      "count": 9082847,
+      "studies": 356
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in root metagenome",
+      "organism": "root metagenome",
+      "count": 9082847,
+      "studies": 356
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Enterococcus faecium",
+      "organism": "Enterococcus faecium",
+      "count": 8859212,
+      "studies": 1996
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Enterococcus faecium",
+      "organism": "Enterococcus faecium",
+      "count": 8859212,
+      "studies": 1996
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Streptococcus pyogenes",
+      "organism": "Streptococcus pyogenes",
+      "count": 8776564,
+      "studies": 1305
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Streptococcus pyogenes",
+      "organism": "Streptococcus pyogenes",
+      "count": 8776564,
+      "studies": 1305
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Sus scrofa",
+      "organism": "Sus scrofa",
+      "count": 7749187,
+      "studies": 734
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Sus scrofa",
+      "organism": "Sus scrofa",
+      "count": 7749187,
+      "studies": 734
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Canis lupus familiaris",
+      "organism": "Canis lupus familiaris",
+      "count": 7487641,
+      "studies": 2662
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Canis lupus familiaris",
+      "organism": "Canis lupus familiaris",
+      "count": 7487641,
+      "studies": 2662
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Pseudomonas aeruginosa",
+      "organism": "Pseudomonas aeruginosa",
+      "count": 7419554,
+      "studies": 2839
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Pseudomonas aeruginosa",
+      "organism": "Pseudomonas aeruginosa",
+      "count": 7419554,
+      "studies": 2839
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Macaca mulatta",
+      "organism": "Macaca mulatta",
+      "count": 7320757,
+      "studies": 603
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Macaca mulatta",
+      "organism": "Macaca mulatta",
+      "count": 7320757,
+      "studies": 603
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Anopheles gambiae",
+      "organism": "Anopheles gambiae",
+      "count": 7183207,
+      "studies": 9846
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Anopheles gambiae",
+      "organism": "Anopheles gambiae",
+      "count": 7183207,
+      "studies": 9846
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Triticum aestivum",
+      "organism": "Triticum aestivum",
+      "count": 6907222,
+      "studies": 1188
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Triticum aestivum",
+      "organism": "Triticum aestivum",
+      "count": 6907222,
+      "studies": 1188
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on aquatic metagenome",
+      "organism": "aquatic metagenome",
+      "count": 6744762,
+      "studies": 476
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in aquatic metagenome",
+      "organism": "aquatic metagenome",
+      "count": 6744762,
+      "studies": 476
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Caenorhabditis elegans",
+      "organism": "Caenorhabditis elegans",
+      "count": 6735997,
+      "studies": 1252
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Caenorhabditis elegans",
+      "organism": "Caenorhabditis elegans",
+      "count": 6735997,
+      "studies": 1252
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Acinetobacter baumannii",
+      "organism": "Acinetobacter baumannii",
+      "count": 6714139,
+      "studies": 1910
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Acinetobacter baumannii",
+      "organism": "Acinetobacter baumannii",
+      "count": 6714139,
+      "studies": 1910
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on insect metagenome",
+      "organism": "insect metagenome",
+      "count": 6470871,
+      "studies": 243
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in insect metagenome",
+      "organism": "insect metagenome",
+      "count": 6470871,
+      "studies": 243
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Plasmodium vivax",
+      "organism": "Plasmodium vivax",
+      "count": 6245695,
+      "studies": 2647
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Plasmodium vivax",
+      "organism": "Plasmodium vivax",
+      "count": 6245695,
+      "studies": 2647
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Salmonella enterica subsp. enterica serovar Enteritidis",
+      "organism": "Salmonella enterica subsp. enterica serovar Enteritidis",
+      "count": 5973634,
+      "studies": 8016
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Salmonella enterica subsp. enterica serovar Enteritidis",
+      "organism": "Salmonella enterica subsp. enterica serovar Enteritidis",
+      "count": 5973634,
+      "studies": 8016
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on human vaginal metagenome",
+      "organism": "human vaginal metagenome",
+      "count": 5945332,
+      "studies": 194
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in human vaginal metagenome",
+      "organism": "human vaginal metagenome",
+      "count": 5945332,
+      "studies": 194
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on synthetic construct",
+      "organism": "synthetic construct",
+      "count": 5775685,
+      "studies": 1437
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in synthetic construct",
+      "organism": "synthetic construct",
+      "count": 5775685,
+      "studies": 1437
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on bacterium",
+      "organism": "bacterium",
+      "count": 5755345,
+      "studies": 185
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in bacterium",
+      "organism": "bacterium",
+      "count": 5755345,
+      "studies": 185
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Solanum lycopersicum",
+      "organism": "Solanum lycopersicum",
+      "count": 5657305,
+      "studies": 370
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Solanum lycopersicum",
+      "organism": "Solanum lycopersicum",
+      "count": 5657305,
+      "studies": 370
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Streptococcus agalactiae",
+      "organism": "Streptococcus agalactiae",
+      "count": 4972835,
+      "studies": 3563
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Streptococcus agalactiae",
+      "organism": "Streptococcus agalactiae",
+      "count": 4972835,
+      "studies": 3563
     },
     {
       "type": "organism",
       "text": "Research studies on pig gut metagenome",
       "organism": "pig gut metagenome",
-      "count": 706083,
-      "studies": 24
+      "count": 4694416,
+      "studies": 248
     },
     {
       "type": "gene_expression",
       "text": "Gene expression patterns in pig gut metagenome",
       "organism": "pig gut metagenome",
-      "count": 706083,
-      "studies": 24
+      "count": 4694416,
+      "studies": 248
     },
     {
       "type": "organism",
-      "text": "Research studies on anaerobic digester metagenome",
-      "organism": "anaerobic digester metagenome",
-      "count": 695394,
-      "studies": 12
+      "text": "Research studies on Oscillospiraceae bacterium",
+      "organism": "Oscillospiraceae bacterium",
+      "count": 4677139,
+      "studies": 3881
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in anaerobic digester metagenome",
-      "organism": "anaerobic digester metagenome",
-      "count": 695394,
-      "studies": 12
+      "text": "Gene expression patterns in Oscillospiraceae bacterium",
+      "organism": "Oscillospiraceae bacterium",
+      "count": 4677139,
+      "studies": 3881
     },
     {
       "type": "organism",
-      "text": "Research studies on invertebrate gut metagenome",
-      "organism": "invertebrate gut metagenome",
-      "count": 686708,
-      "studies": 3
+      "text": "Research studies on marine sediment metagenome",
+      "organism": "marine sediment metagenome",
+      "count": 4630341,
+      "studies": 330
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in invertebrate gut metagenome",
-      "organism": "invertebrate gut metagenome",
-      "count": 686708,
-      "studies": 3
+      "text": "Gene expression patterns in marine sediment metagenome",
+      "organism": "marine sediment metagenome",
+      "count": 4630341,
+      "studies": 330
     },
     {
       "type": "organism",
-      "text": "Research studies on spider metagenome",
-      "organism": "spider metagenome",
-      "count": 679836,
-      "studies": 1
+      "text": "Research studies on Salmonella enterica subsp. enterica serovar Typhimurium",
+      "organism": "Salmonella enterica subsp. enterica serovar Typhimurium",
+      "count": 4586165,
+      "studies": 5011
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in spider metagenome",
-      "organism": "spider metagenome",
-      "count": 679836,
-      "studies": 1
+      "text": "Gene expression patterns in Salmonella enterica subsp. enterica serovar Typhimurium",
+      "organism": "Salmonella enterica subsp. enterica serovar Typhimurium",
+      "count": 4586165,
+      "studies": 5011
     },
     {
       "type": "organism",
-      "text": "Research studies on uncultured Bacilli bacterium",
-      "organism": "uncultured Bacilli bacterium",
-      "count": 668134,
-      "studies": 22
+      "text": "Research studies on Campylobacter coli",
+      "organism": "Campylobacter coli",
+      "count": 4581664,
+      "studies": 6201
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Bacilli bacterium",
-      "organism": "uncultured Bacilli bacterium",
-      "count": 668134,
-      "studies": 22
+      "text": "Gene expression patterns in Campylobacter coli",
+      "organism": "Campylobacter coli",
+      "count": 4581664,
+      "studies": 6201
     },
     {
       "type": "organism",
-      "text": "Research studies on Sarcophilus harrisii",
-      "organism": "Sarcophilus harrisii",
-      "count": 667695,
-      "studies": 1082
+      "text": "Research studies on Neisseria meningitidis",
+      "organism": "Neisseria meningitidis",
+      "count": 4383043,
+      "studies": 2305
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Sarcophilus harrisii",
-      "organism": "Sarcophilus harrisii",
-      "count": 667695,
-      "studies": 1082
+      "text": "Gene expression patterns in Neisseria meningitidis",
+      "organism": "Neisseria meningitidis",
+      "count": 4383043,
+      "studies": 2305
     },
     {
       "type": "organism",
-      "text": "Research studies on uncultured Ruminococcus sp.",
-      "organism": "uncultured Ruminococcus sp.",
-      "count": 663022,
-      "studies": 300
+      "text": "Research studies on Lachnospiraceae bacterium",
+      "organism": "Lachnospiraceae bacterium",
+      "count": 4330330,
+      "studies": 4955
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in uncultured Ruminococcus sp.",
-      "organism": "uncultured Ruminococcus sp.",
-      "count": 663022,
-      "studies": 300
+      "text": "Gene expression patterns in Lachnospiraceae bacterium",
+      "organism": "Lachnospiraceae bacterium",
+      "count": 4330330,
+      "studies": 4955
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on bovine gut metagenome",
+      "organism": "bovine gut metagenome",
+      "count": 4222159,
+      "studies": 235
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in bovine gut metagenome",
+      "organism": "bovine gut metagenome",
+      "count": 4222159,
+      "studies": 235
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Clostridioides difficile",
+      "organism": "Clostridioides difficile",
+      "count": 4205192,
+      "studies": 843
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Clostridioides difficile",
+      "organism": "Clostridioides difficile",
+      "count": 4205192,
+      "studies": 843
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Eubacteriales bacterium",
+      "organism": "Eubacteriales bacterium",
+      "count": 4000533,
+      "studies": 3342
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Eubacteriales bacterium",
+      "organism": "Eubacteriales bacterium",
+      "count": 4000533,
+      "studies": 3342
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on biofilm metagenome",
+      "organism": "biofilm metagenome",
+      "count": 3949256,
+      "studies": 493
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in biofilm metagenome",
+      "organism": "biofilm metagenome",
+      "count": 3949256,
+      "studies": 493
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on insect gut metagenome",
+      "organism": "insect gut metagenome",
+      "count": 3929235,
+      "studies": 156
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in insect gut metagenome",
+      "organism": "insect gut metagenome",
+      "count": 3929235,
+      "studies": 156
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on chicken gut metagenome",
+      "organism": "chicken gut metagenome",
+      "count": 3821140,
+      "studies": 193
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in chicken gut metagenome",
+      "organism": "chicken gut metagenome",
+      "count": 3821140,
+      "studies": 193
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on mouse metagenome",
+      "organism": "mouse metagenome",
+      "count": 3794719,
+      "studies": 204
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in mouse metagenome",
+      "organism": "mouse metagenome",
+      "count": 3794719,
+      "studies": 204
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on synthetic metagenome",
+      "organism": "synthetic metagenome",
+      "count": 3732222,
+      "studies": 282
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in synthetic metagenome",
+      "organism": "synthetic metagenome",
+      "count": 3732222,
+      "studies": 282
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on human nasopharyngeal metagenome",
+      "organism": "human nasopharyngeal metagenome",
+      "count": 3710956,
+      "studies": 214
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in human nasopharyngeal metagenome",
+      "organism": "human nasopharyngeal metagenome",
+      "count": 3710956,
+      "studies": 214
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Hordeum vulgare",
+      "organism": "Hordeum vulgare",
+      "count": 3665577,
+      "studies": 184
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Hordeum vulgare",
+      "organism": "Hordeum vulgare",
+      "count": 3665577,
+      "studies": 184
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Shigella sonnei",
+      "organism": "Shigella sonnei",
+      "count": 3482794,
+      "studies": 4298
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Shigella sonnei",
+      "organism": "Shigella sonnei",
+      "count": 3482794,
+      "studies": 4298
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on food metagenome",
+      "organism": "food metagenome",
+      "count": 3449128,
+      "studies": 223
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in food metagenome",
+      "organism": "food metagenome",
+      "count": 3449128,
+      "studies": 223
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Ovis aries",
+      "organism": "Ovis aries",
+      "count": 3426322,
+      "studies": 270
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Ovis aries",
+      "organism": "Ovis aries",
+      "count": 3426322,
+      "studies": 270
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Bacteroides uniformis",
+      "organism": "Bacteroides uniformis",
+      "count": 3310197,
+      "studies": 3010
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Bacteroides uniformis",
+      "organism": "Bacteroides uniformis",
+      "count": 3310197,
+      "studies": 3010
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on human feces metagenome",
+      "organism": "human feces metagenome",
+      "count": 3306852,
+      "studies": 68
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in human feces metagenome",
+      "organism": "human feces metagenome",
+      "count": 3306852,
+      "studies": 68
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Influenza A virus",
+      "organism": "Influenza A virus",
+      "count": 3290133,
+      "studies": 662
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Influenza A virus",
+      "organism": "Influenza A virus",
+      "count": 3290133,
+      "studies": 662
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Glycine max",
+      "organism": "Glycine max",
+      "count": 3215268,
+      "studies": 287
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Glycine max",
+      "organism": "Glycine max",
+      "count": 3215268,
+      "studies": 287
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Oryza sativa Japonica Group",
+      "organism": "Oryza sativa Japonica Group",
+      "count": 3205933,
+      "studies": 410
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Oryza sativa Japonica Group",
+      "organism": "Oryza sativa Japonica Group",
+      "count": 3205933,
+      "studies": 410
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on uncultured prokaryote",
+      "organism": "uncultured prokaryote",
+      "count": 3102701,
+      "studies": 250
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in uncultured prokaryote",
+      "organism": "uncultured prokaryote",
+      "count": 3102701,
+      "studies": 250
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Shigella flexneri",
+      "organism": "Shigella flexneri",
+      "count": 2978683,
+      "studies": 4057
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Shigella flexneri",
+      "organism": "Shigella flexneri",
+      "count": 2978683,
+      "studies": 4057
     },
     {
       "type": "organism",
       "text": "Research studies on food fermentation metagenome",
       "organism": "food fermentation metagenome",
-      "count": 661535,
-      "studies": 35
+      "count": 2935662,
+      "studies": 213
     },
     {
       "type": "gene_expression",
       "text": "Gene expression patterns in food fermentation metagenome",
       "organism": "food fermentation metagenome",
-      "count": 661535,
-      "studies": 35
+      "count": 2935662,
+      "studies": 213
     },
     {
       "type": "organism",
-      "text": "Research studies on Escherichia coli #1/H766",
-      "organism": "Escherichia coli #1/H766",
-      "count": 638148,
-      "studies": 1
+      "text": "Research studies on uncultured Eubacteriales bacterium",
+      "organism": "uncultured Eubacteriales bacterium",
+      "count": 2838512,
+      "studies": 671
     },
     {
       "type": "gene_expression",
-      "text": "Gene expression patterns in Escherichia coli #1/H766",
-      "organism": "Escherichia coli #1/H766",
-      "count": 638148,
-      "studies": 1
+      "text": "Gene expression patterns in uncultured Eubacteriales bacterium",
+      "organism": "uncultured Eubacteriales bacterium",
+      "count": 2838512,
+      "studies": 671
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on uncultured Lachnospiraceae bacterium",
+      "organism": "uncultured Lachnospiraceae bacterium",
+      "count": 2830361,
+      "studies": 139
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in uncultured Lachnospiraceae bacterium",
+      "organism": "uncultured Lachnospiraceae bacterium",
+      "count": 2830361,
+      "studies": 139
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on uncultured eukaryote",
+      "organism": "uncultured eukaryote",
+      "count": 2816500,
+      "studies": 47
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in uncultured eukaryote",
+      "organism": "uncultured eukaryote",
+      "count": 2816500,
+      "studies": 47
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on rat gut metagenome",
+      "organism": "rat gut metagenome",
+      "count": 2776618,
+      "studies": 164
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in rat gut metagenome",
+      "organism": "rat gut metagenome",
+      "count": 2776618,
+      "studies": 164
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Hepacivirus hominis",
+      "organism": "Hepacivirus hominis",
+      "count": 2773761,
+      "studies": 166
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Hepacivirus hominis",
+      "organism": "Hepacivirus hominis",
+      "count": 2773761,
+      "studies": 166
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on coral metagenome",
+      "organism": "coral metagenome",
+      "count": 2748097,
+      "studies": 163
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in coral metagenome",
+      "organism": "coral metagenome",
+      "count": 2748097,
+      "studies": 163
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Bacteroidales bacterium",
+      "organism": "Bacteroidales bacterium",
+      "count": 2745955,
+      "studies": 1724
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Bacteroidales bacterium",
+      "organism": "Bacteroidales bacterium",
+      "count": 2745955,
+      "studies": 1724
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Apodemus sylvaticus",
+      "organism": "Apodemus sylvaticus",
+      "count": 2714818,
+      "studies": 15
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Apodemus sylvaticus",
+      "organism": "Apodemus sylvaticus",
+      "count": 2714818,
+      "studies": 15
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Salmonella enterica subsp. enterica serovar Typhi",
+      "organism": "Salmonella enterica subsp. enterica serovar Typhi",
+      "count": 2709980,
+      "studies": 2405
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Salmonella enterica subsp. enterica serovar Typhi",
+      "organism": "Salmonella enterica subsp. enterica serovar Typhi",
+      "count": 2709980,
+      "studies": 2405
+    },
+    {
+      "type": "organism",
+      "text": "Research studies on Apis mellifera",
+      "organism": "Apis mellifera",
+      "count": 2688765,
+      "studies": 97
+    },
+    {
+      "type": "gene_expression",
+      "text": "Gene expression patterns in Apis mellifera",
+      "organism": "Apis mellifera",
+      "count": 2688765,
+      "studies": 97
     },
     {
       "type": "strategy",

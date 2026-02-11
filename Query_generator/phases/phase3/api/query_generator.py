@@ -85,7 +85,7 @@ class KnowledgeBaseValidator:
     def __init__(self, kb_path: Path, query_cache_path: Optional[Path] = None, cache_dir: Optional[Path] = None):
         self.kb_path = kb_path
         self.query_cache_path = query_cache_path
-        self.cache_dir = cache_dir or kb_path.parent.parent / "cache"
+        self.cache_dir = cache_dir or kb_path.parent.parent / "support_dictionary"
         self.organisms = {}
         self.strategies = set()
         self.sources = set()

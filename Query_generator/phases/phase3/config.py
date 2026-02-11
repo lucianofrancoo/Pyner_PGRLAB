@@ -10,7 +10,7 @@ PROJECT_ROOT = Path(__file__).parent.parent
 PHASE2_DATA = PROJECT_ROOT / "phase2" / "data"
 PHASE3_ROOT = PROJECT_ROOT / "phase3"
 LOGS_DIR = PHASE3_ROOT / "logs"
-CACHE_DIR = PHASE3_ROOT / "cache"
+SUPPORT_DICT_DIR = PHASE3_ROOT / "support_dictionary"
 
 # API Server
 API_HOST = "0.0.0.0"
@@ -20,7 +20,7 @@ API_RELOAD = True
 
 # Ollama LLM
 OLLAMA_HOST = "http://localhost:11434"
-OLLAMA_MODEL = "llama2"
+OLLAMA_MODEL = "qwen2.5:14b"
 OLLAMA_TIMEOUT = 30
 QUERY_EXPANSION_ENABLED = True
 
