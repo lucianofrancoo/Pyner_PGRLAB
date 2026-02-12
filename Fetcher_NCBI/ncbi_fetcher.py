@@ -50,43 +50,35 @@ def setup_logging(log_file: Optional[str] = None) -> logging.Logger:
 
 class BioProjectCache:
     """
-    Tracks processed BioProjects to avoid duplicates.
+    Tracks processed BioProjects to avoid duplicates WITHIN CURRENT SEARCH ONLY.
+    Does not persist between searches.
     """
     def __init__(self, cache_file: Path = DEDUP_CACHE):
         self.cache_file = cache_file
-        self.seen: Set[str] = self._load_cache()
+        # Start fresh for each search - don't load previous cache
+        self.seen: Set[str] = set()
     
     def _load_cache(self) -> Set[str]:
         """Load existing cache from disk."""
-        if self.cache_file.exists():
-            try:
-                with open(self.cache_file, 'r') as f:
-                    data = json.load(f)
-                    return set(data.get("bioprojects", []))
-            except Exception:
-                return set()
+        # Disabled - only track duplicates in current search
         return set()
     
     def save(self):
-        """Save cache to disk."""
-        with open(self.cache_file, 'w') as f:
-            json.dump({
-                "bioprojects": list(self.seen),
-                "last_updated": datetime.now().isoformat()
-            }, f, indent=2)
+        """Save cache to disk. Disabled for per-search deduplication."""
+        # Don't persist cache between searches
+        pass
     
     def is_seen(self, bioproject: str) -> bool:
-        """Check if BioProject has been processed."""
+        """Check if BioProject has been processed in current search."""
         return bioproject in self.seen
     
     def add(self, bioproject: str):
-        """Mark BioProject as processed."""
+        """Mark BioProject as processed in current search."""
         self.seen.add(bioproject)
     
     def clear(self):
         """Clear the cache."""
         self.seen.clear()
-        self.save()
 
 
 # ============================================
