@@ -76,6 +76,17 @@ class InteractiveQueryGenerator:
         print(f"   Tissues:     {', '.join(result['extracted']['tissues']) or '(none)'}")
         print(f"   Conditions:  {', '.join(result['extracted']['conditions']) or '(none)'}")
         print(f"   Keywords:    {', '.join(result['extracted']['free_terms']) or '(none)'}")
+
+        syn = result.get('synonyms', {})
+        org_syn = ', '.join(syn.get('organism', []) or []) or '(none)'
+        strat_syn = ', '.join(syn.get('strategies', []) or []) or '(none)'
+        tissue_syn = ', '.join(syn.get('tissues', []) or []) or '(none)'
+        cond_syn = ', '.join(syn.get('conditions', []) or []) or '(none)'
+        print(f"\n🔗 Synonyms:")
+        print(f"   Organism:    {org_syn}")
+        print(f"   Strategies:  {strat_syn}")
+        print(f"   Tissues:     {tissue_syn}")
+        print(f"   Conditions:  {cond_syn}")
         
         print(f"\n📊 Generated Query:")
         print(f"   {result['ncbi_query']}")

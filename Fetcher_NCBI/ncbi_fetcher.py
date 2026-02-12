@@ -1,22 +1,23 @@
 """
 NCBI Fetcher Core Module
 =========================
-Handles querying NCBI SRA database using Entrez API.
+Handles querying NCBI databases using Entrez API.
 Includes deduplication, metadata extraction, and result storage.
 """
 
 import time
 import json
 import logging
+import csv
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Set, Optional
 import xml.etree.ElementTree as ET
 from Bio import Entrez
-
 from config import (
     NCBI_EMAIL, NCBI_API_KEY, MAX_RESULTS, DATABASE,
-    RATE_LIMIT, DEFAULT_OUTPUT, DEDUP_CACHE, LOGS_DIR
+    RATE_LIMIT, DEFAULT_OUTPUT, DEDUP_CACHE, LOGS_DIR,
+    MIN_UNIQUE_BIOPROJECTS
 )
 
 
@@ -92,7 +93,7 @@ class BioProjectCache:
 # METADATA EXTRACTION
 # ============================================
 
-def extract_metadata(xml_string: str) -> Optional[Dict]:
+def extract_sra_metadata(xml_string: str) -> Optional[Dict]:
     """
     Extract metadata from SRA XML response.
     
@@ -141,7 +142,7 @@ def extract_metadata(xml_string: str) -> Optional[Dict]:
     library_name = root.findtext(".//LIBRARY_NAME", "")
     biosample = root.findtext(".//Biosample", "")
     
-    metadata = {
+    return {
         "bioproject": bioproject,
         "title": title,
         "study_name": study_name,
@@ -153,8 +154,24 @@ def extract_metadata(xml_string: str) -> Optional[Dict]:
         "library_name": library_name,
         "biosample": biosample
     }
+def extract_bioproject_metadata(summary: Dict) -> Optional[Dict]:
+    """
+    Extract metadata from BioProject summary response.
+    """
+    bioproject = summary.get("Project_Acc", "")
+    title = summary.get("Project_Title", "")
+    description = summary.get("Project_Description", "")
+    organism = summary.get("Project_Organism", "")
     
-    return metadata
+    if not bioproject:
+        return None
+    
+    return {
+        "bioproject": bioproject,
+        "title": title,
+        "description": description,
+        "organism": organism
+    }
 
 
 # ============================================
@@ -163,7 +180,7 @@ def extract_metadata(xml_string: str) -> Optional[Dict]:
 
 class NCBIFetcher:
     """
-    Main class for fetching data from NCBI SRA.
+    Main class for fetching data from NCBI databases.
     """
     
     def __init__(self, email: str = NCBI_EMAIL, api_key: str = NCBI_API_KEY):
@@ -199,37 +216,64 @@ class NCBIFetcher:
             "unique_bioprojects": 0
         }
     
-    def search(self, query: str, max_results: int = MAX_RESULTS) -> List[str]:
+    def search(self, query: str, max_results: Optional[int] = MAX_RESULTS, batch_size: int = 500) -> List[str]:
         """
-        Search NCBI SRA with boolean query.
-        
+        Search NCBI database with boolean query.
+
         Args:
             query: Boolean search query
             max_results: Maximum results to retrieve
-        
+
         Returns:
-            List of study IDs
+            List of record IDs
         """
-        self.logger.info(f"Searching NCBI SRA: {query}")
-        self.logger.info(f"Max results: {max_results}")
+        self.logger.info(f"Searching NCBI {DATABASE}: {query}")
+        if max_results is None:
+            self.logger.info("Max results: all")
+        else:
+            self.logger.info(f"Max results: {max_results}")
         
         try:
+            # First request: get total count
             handle = Entrez.esearch(
                 db=DATABASE,
                 term=query,
-                retmax=max_results
+                retmax=0
             )
             search_results = Entrez.read(handle)
             handle.close()
-            
+
             total_count = int(search_results.get("Count", 0))
-            id_list = search_results.get("IdList", [])
-            
             self.stats["total_found"] = total_count
-            
-            self.logger.info(f"Found {total_count} total studies")
-            self.logger.info(f"Retrieved {len(id_list)} IDs to process")
-            
+
+            if total_count == 0:
+                self.logger.info("No records found")
+                return []
+
+            target_count = total_count if max_results is None else min(max_results, total_count)
+            self.logger.info(f"Found {total_count} total records")
+            self.logger.info(f"Retrieving {target_count} IDs to process")
+
+            id_list: List[str] = []
+            retstart = 0
+            while retstart < target_count:
+                retmax = min(batch_size, target_count - retstart)
+
+                handle = Entrez.esearch(
+                    db=DATABASE,
+                    term=query,
+                    retstart=retstart,
+                    retmax=retmax
+                )
+                page_results = Entrez.read(handle)
+                handle.close()
+
+                id_list.extend(page_results.get("IdList", []))
+                retstart += retmax
+
+                self.logger.info(f"Retrieved {len(id_list)}/{target_count} IDs")
+                time.sleep(RATE_LIMIT)
+
             return id_list
             
         except Exception as e:
@@ -238,10 +282,10 @@ class NCBIFetcher:
     
     def fetch_metadata(self, study_id: str) -> Optional[Dict]:
         """
-        Fetch metadata for a single study.
+        Fetch metadata for a single record.
         
         Args:
-            study_id: NCBI SRA study ID
+                study_id: NCBI record ID
         
         Returns:
             Metadata dictionary or None if failed
@@ -252,16 +296,22 @@ class NCBIFetcher:
             
             # Fetch summary
             handle = Entrez.esummary(db=DATABASE, id=study_id, rettype="docsum")
-            study = Entrez.read(handle)[0]
+            summary = Entrez.read(handle)
             handle.close()
-            
-            # Check for ExpXml field
-            if "ExpXml" not in study:
-                self.logger.warning(f"Study {study_id} has no ExpXml - skipping")
-                return None
-            
-            # Extract metadata from XML
-            metadata = extract_metadata(study["ExpXml"])
+
+            if DATABASE == "bioproject":
+                docset = summary.get("DocumentSummarySet", {})
+                docs = docset.get("DocumentSummary", [])
+                if not docs:
+                    self.logger.warning(f"Record {study_id} has no DocumentSummary - skipping")
+                    return None
+                metadata = extract_bioproject_metadata(docs[0])
+            else:
+                study = summary[0] if isinstance(summary, list) else summary
+                if "ExpXml" not in study:
+                    self.logger.warning(f"Record {study_id} has no ExpXml - skipping")
+                    return None
+                metadata = extract_sra_metadata(study["ExpXml"])
             
             if metadata:
                 # Add study ID
@@ -272,11 +322,11 @@ class NCBIFetcher:
             return metadata
             
         except Exception as e:
-            self.logger.error(f"Failed to fetch study {study_id}: {e}")
+            self.logger.error(f"Failed to fetch record {study_id}: {e}")
             return None
     
-    def fetch_all(self, query: str, max_results: int = MAX_RESULTS, 
-                  deduplicate: bool = True) -> List[Dict]:
+    def fetch_all(self, query: str, max_results: Optional[int] = MAX_RESULTS, 
+                  deduplicate: bool = True, min_unique: int = MIN_UNIQUE_BIOPROJECTS) -> List[Dict]:
         """
         Main method: search and fetch all results with deduplication.
         
@@ -305,33 +355,39 @@ class NCBIFetcher:
             self.logger.warning("No results found or search failed")
             return []
         
-        # Step 2: Process each study
+        # Step 2: Process each record
+        total_ids = len(id_list)
         for idx, study_id in enumerate(id_list, 1):
-            self.logger.info(f"\n[{idx}/{len(id_list)}] Processing study {study_id}")
-            
+            self.logger.info(f"\n[{idx}/{total_ids}] Processing record {study_id}")
+
             metadata = self.fetch_metadata(study_id)
-            
+
             if not metadata:
                 self.stats["skipped_error"] += 1
                 continue
-            
+
             bioproject = metadata.get("bioproject", "")
-            
+
             # Check deduplication
             if deduplicate and self.cache.is_seen(bioproject):
                 self.logger.info(f"BioProject {bioproject} already seen - skipping")
                 self.stats["skipped_duplicate"] += 1
                 continue
-            
+
             # New BioProject - add to results
             self.logger.info(f"✓ New BioProject: {bioproject}")
             self.logger.info(f"  Title: {metadata.get('title', '')[:60]}...")
             self.logger.info(f"  Organism: {metadata.get('organism', '')}")
-            self.logger.info(f"  Strategy: {metadata.get('library_strategy', '')}")
-            
+            if DATABASE == "sra":
+                self.logger.info(f"  Strategy: {metadata.get('library_strategy', '')}")
+
             self.results.append(metadata)
             self.cache.add(bioproject)
             self.stats["processed"] += 1
+
+            if min_unique and len(self.results) >= min_unique:
+                self.logger.info(f"Reached {min_unique} unique BioProjects. Stopping early.")
+                break
         
         self.stats["unique_bioprojects"] = len(self.results)
         
@@ -365,6 +421,52 @@ class NCBIFetcher:
         
         self.logger.info(f"\n✓ Results saved to: {output_file}")
         self.logger.info(f"  Total records: {len(self.results)}")
+
+    def save_results_csv(self, output_file: Path):
+        """
+        Save results to CSV file.
+
+        Args:
+            output_file: Path to output file
+        """
+        output_file = Path(output_file)
+
+        if not self.results:
+            self.logger.warning("No results to save")
+            return
+
+        if DATABASE == "bioproject":
+            columns = [
+                "sra_id",
+                "bioproject",
+                "title",
+                "description",
+                "organism",
+                "fetched_at"
+            ]
+        else:
+            columns = [
+                "sra_id",
+                "bioproject",
+                "title",
+                "study_name",
+                "organism",
+                "library_strategy",
+                "library_source",
+                "library_selection",
+                "library_layout",
+                "library_name",
+                "biosample",
+                "fetched_at"
+            ]
+
+        with open(output_file, 'w', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=columns, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(self.results)
+
+        self.logger.info(f"\n✓ Results saved to: {output_file}")
+        self.logger.info(f"  Total records: {len(self.results)}")
     
     def _print_summary(self):
         """Print summary statistics."""
@@ -384,7 +486,8 @@ class NCBIFetcher:
 # ============================================
 
 def fetch_from_query(query: str, output_file: Optional[Path] = None, 
-                     max_results: int = MAX_RESULTS) -> List[Dict]:
+                     max_results: Optional[int] = MAX_RESULTS,
+                     min_unique: int = MIN_UNIQUE_BIOPROJECTS) -> List[Dict]:
     """
     Convenience function to fetch data with one call.
     
@@ -397,10 +500,13 @@ def fetch_from_query(query: str, output_file: Optional[Path] = None,
         List of metadata dictionaries
     """
     fetcher = NCBIFetcher()
-    results = fetcher.fetch_all(query, max_results=max_results)
+    results = fetcher.fetch_all(query, max_results=max_results, min_unique=min_unique)
     
     if results and output_file:
-        fetcher.save_results(output_file)
+        if Path(output_file).suffix.lower() == ".csv":
+            fetcher.save_results_csv(output_file)
+        else:
+            fetcher.save_results(output_file)
     
     return results
 

@@ -360,6 +360,8 @@ class NCBIQueryBuilder:
         free_terms: List[str] = None,
         tissues: List[str] = None,
         conditions: List[str] = None,
+        tissue_synonyms: List[str] = None,
+        condition_synonyms: List[str] = None,
         use_llm: bool = True
     ) -> str:
         """
@@ -378,6 +380,14 @@ class NCBIQueryBuilder:
         
         # Construir query básica
         query_parts = []
+        free_terms = free_terms or []
+        tissues = tissues or []
+        conditions = conditions or []
+        strategies = strategies or []
+        organism_synonyms = organism_synonyms or []
+        strategy_synonyms = strategy_synonyms or []
+        tissue_synonyms = tissue_synonyms or []
+        condition_synonyms = condition_synonyms or []
         
         # Organismos (priorizar lista de variantes)
         org_clause = None
@@ -396,54 +406,56 @@ class NCBIQueryBuilder:
                 org_clause = f'({org_clause} OR {syn_query})'
             query_parts.append(org_clause)
         
-        # Términos libres
-        transcriptome_terms = {"transcriptome", "transcriptomics"}
-        use_or_group = bool(strategies) and any(term in transcriptome_terms for term in (free_terms or []))
+        # Deduplicar y excluir terminos ya cubiertos por categorias
+        exclude_terms = set()
+        for term in strategies + strategy_synonyms + tissues + tissue_synonyms + conditions + condition_synonyms:
+            if term:
+                exclude_terms.add(term.lower())
 
-        combined_strategy_terms = []
-        if strategies:
-            for term in strategies:
-                if term not in combined_strategy_terms:
-                    combined_strategy_terms.append(term)
-        if strategy_synonyms:
-            for term in strategy_synonyms:
-                if term not in combined_strategy_terms:
-                    combined_strategy_terms.append(term)
+        filtered_free = []
+        for term in free_terms:
+            if term and term.lower() not in exclude_terms and term not in filtered_free:
+                filtered_free.append(term)
 
-        if use_or_group:
-            # Remove transcriptome terms from free_terms to avoid AND duplication
-            free_terms = [t for t in free_terms if t not in transcriptome_terms]
-            or_terms = list(transcriptome_terms)
-            or_terms.extend(combined_strategy_terms)
-            or_query = ' OR '.join([f'"{term}"[All Fields]' for term in or_terms])
-            query_parts.append(f'({or_query})')
-
-        if free_terms and free_terms:  # Deduplicar
-            unique_free = {}
-            for term in free_terms:
-                if term not in unique_free:
-                    unique_free[term] = True
-            for term in unique_free.keys():
-                query_parts.append(f'"{term}"[All Fields]')
-
-        # Tejidos (solo si no están en free_terms)
-        if tissues:
-            for tissue in tissues:
-                if tissue not in free_terms:  # Evitar duplicados
-                    query_parts.append(f'"{tissue}"[All Fields]')
-
-        # Condiciones (solo si no están en free_terms)
-        if conditions:
-            for cond in conditions:
-                if cond not in free_terms:  # Evitar duplicados
-                    query_parts.append(f'"{cond}"[All Fields]')
         # Estrategias (usar All Fields para ampliar match)
-        if strategies and not use_or_group:
+        combined_strategy_terms = []
+        for term in strategies + strategy_synonyms:
+            if term and term not in combined_strategy_terms:
+                combined_strategy_terms.append(term)
+        if combined_strategy_terms:
             if len(combined_strategy_terms) == 1:
                 query_parts.append(f'"{combined_strategy_terms[0]}"[All Fields]')
             else:
                 strat_query = ' OR '.join([f'"{s}"[All Fields]' for s in combined_strategy_terms])
                 query_parts.append(f'({strat_query})')
+
+        # Tejidos
+        combined_tissue_terms = []
+        for term in tissues + tissue_synonyms:
+            if term and term not in combined_tissue_terms:
+                combined_tissue_terms.append(term)
+        if combined_tissue_terms:
+            if len(combined_tissue_terms) == 1:
+                query_parts.append(f'"{combined_tissue_terms[0]}"[All Fields]')
+            else:
+                tissue_query = ' OR '.join([f'"{t}"[All Fields]' for t in combined_tissue_terms])
+                query_parts.append(f'({tissue_query})')
+
+        # Condiciones
+        combined_condition_terms = []
+        for term in conditions + condition_synonyms:
+            if term and term not in combined_condition_terms:
+                combined_condition_terms.append(term)
+        if combined_condition_terms:
+            if len(combined_condition_terms) == 1:
+                query_parts.append(f'"{combined_condition_terms[0]}"[All Fields]')
+            else:
+                cond_query = ' OR '.join([f'"{c}"[All Fields]' for c in combined_condition_terms])
+                query_parts.append(f'({cond_query})')
+
+        # Términos libres
+        for term in filtered_free:
+            query_parts.append(f'"{term}"[All Fields]')
         
         # Unir con AND
         basic_query = ' AND '.join(query_parts)
@@ -527,6 +539,44 @@ class QueryGeneratorService:
                 if term.lower() == strategy.lower():
                     continue
                 if term not in synonyms:
+                    synonyms.append(term)
+        return synonyms
+
+    def _collect_tissue_synonyms(self, tissues: List[str]) -> List[str]:
+        synonyms = []
+        if not tissues:
+            return synonyms
+        for tissue in tissues:
+            for key, canonical in self.tissue_vocab.items():
+                if canonical == tissue and key != tissue:
+                    if key not in synonyms:
+                        synonyms.append(key)
+        return synonyms
+
+    def _collect_condition_synonyms(self, conditions: List[str]) -> List[str]:
+        synonyms = []
+        if not conditions:
+            return synonyms
+        for es, en in SPANISH_TO_EN.items():
+            if en in conditions and es not in synonyms:
+                synonyms.append(es)
+
+        drought_terms = {
+            "drought",
+            "drought stress",
+            "water deficit",
+            "water stress",
+            "water deprivation",
+            "water scarcity",
+            "dehydration",
+            "deficit hidrico",
+            "deficit hídrico",
+            "sequía",
+            "sequia"
+        }
+        if "drought" in conditions:
+            for term in self.validator.process_keywords:
+                if term.lower() in drought_terms and term not in synonyms:
                     synonyms.append(term)
         return synonyms
 
@@ -816,6 +866,8 @@ Example Output: {{"organism": "Arabidopsis thaliana", "tissues": ["root"], "cond
 
         organism_synonyms = self._collect_organism_synonyms(organism)
         strategy_synonyms = self._collect_strategy_synonyms(strategies)
+        tissue_synonyms = self._collect_tissue_synonyms(tissues)
+        condition_synonyms = self._collect_condition_synonyms(conditions)
 
         # Paso 4: Generar query booleana
         ncbi_query = self.query_builder.build_query(
@@ -826,6 +878,8 @@ Example Output: {{"organism": "Arabidopsis thaliana", "tissues": ["root"], "cond
             free_terms=free_terms,
             tissues=tissues,
             conditions=conditions,
+            tissue_synonyms=tissue_synonyms,
+            condition_synonyms=condition_synonyms,
             use_llm=use_llm
         )
 
@@ -840,6 +894,12 @@ Example Output: {{"organism": "Arabidopsis thaliana", "tissues": ["root"], "cond
                 'tissues': tissues,
                 'conditions': conditions,
                 'free_terms': free_terms
+            },
+            'synonyms': {
+                'organism': organism_synonyms,
+                'strategies': strategy_synonyms,
+                'tissues': tissue_synonyms,
+                'conditions': condition_synonyms
             },
             'ncbi_query': ncbi_query,
             'ready_to_use': True,

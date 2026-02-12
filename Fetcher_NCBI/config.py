@@ -18,17 +18,21 @@ NCBI_EMAIL = os.getenv("NCBI_EMAIL", "lucianofranco.a@gmail.com")
 # API Key increases rate limits from 3/sec to 10/sec
 # Get your key at: https://www.ncbi.nlm.nih.gov/account/settings/
 # Override with NCBI_API_KEY environment variable
-NCBI_API_KEY = os.getenv("NCBI_API_KEY", "4579ad4ab4c2144aa84a340b2e4374111308")
+NCBI_API_KEY = os.getenv("NCBI_API_KEY", "8f86973f360600c58b8bb20daf1728a4be08")
 
 # ============================================
 # FETCHER SETTINGS
 # ============================================
 
 # Maximum results to fetch per query
-MAX_RESULTS = 1000
+# None means fetch all results (may take a long time)
+MAX_RESULTS = None
 
-# Database to search (currently only SRA supported)
-DATABASE = "sra"
+# Stop after collecting this many unique BioProjects
+MIN_UNIQUE_BIOPROJECTS = 30
+
+# Database to search (bioproject or sra)
+DATABASE = "bioproject"
 
 # Rate limiting (seconds between requests)
 # With API key: 0.1s (10 req/sec)
@@ -51,7 +55,7 @@ LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
 # Default output file for search results
-DEFAULT_OUTPUT = DATA_DIR / "sra_results.json"
+DEFAULT_OUTPUT = DATA_DIR / "bioproject_results.json"
 
 # Deduplication cache (tracks processed BioProjects)
 DEDUP_CACHE = DATA_DIR / "bioproject_cache.json"

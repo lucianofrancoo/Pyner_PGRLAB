@@ -346,6 +346,17 @@ def generate_query_cli(user_input: str, use_llm: bool = True, interactive: bool 
         print(f"   Tissues:     {', '.join(result['extracted']['tissues']) or 'None'}")
         print(f"   Conditions:  {', '.join(result['extracted']['conditions']) or 'None'}")
         print(f"   Keywords:    {', '.join(result['extracted']['free_terms']) or 'None'}")
+
+        syn = result.get('synonyms', {})
+        org_syn = ', '.join(syn.get('organism', []) or []) or 'None'
+        strat_syn = ', '.join(syn.get('strategies', []) or []) or 'None'
+        tissue_syn = ', '.join(syn.get('tissues', []) or []) or 'None'
+        cond_syn = ', '.join(syn.get('conditions', []) or []) or 'None'
+        print(f"\n🔗 Synonyms:")
+        print(f"   Organism:    {org_syn}")
+        print(f"   Strategies:  {strat_syn}")
+        print(f"   Tissues:     {tissue_syn}")
+        print(f"   Conditions:  {cond_syn}")
         if result.get('clarification_needed'):
             print("\n⚠️ Need more details:")
             print(f"   {result.get('clarification_message', '')}")

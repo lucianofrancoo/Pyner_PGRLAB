@@ -1,18 +1,18 @@
 # Fetcher_NCBI
 
-**Fetch biological sequencing data from NCBI SRA using boolean queries**
+**Fetch BioProjects from NCBI using boolean queries**
 
-Fetcher_NCBI queries the NCBI Sequence Read Archive (SRA) database and retrieves metadata from sequencing studies. It integrates seamlessly with the Query Generator to transform natural language into NCBI queries and fetch relevant datasets.
+Fetcher_NCBI queries the NCBI BioProject database and retrieves project metadata. It integrates seamlessly with the Query Generator to transform natural language into NCBI queries and fetch relevant datasets.
 
 ---
 
 ## Features
 
-✅ **Query NCBI SRA** with boolean search syntax  
+✅ **Query NCBI BioProject** with boolean search syntax  
 ✅ **Automatic deduplication** by BioProject ID  
 ✅ **Rate limiting** respects NCBI API guidelines (3 req/sec without key, 10 req/sec with key)  
-✅ **Metadata extraction** from XML responses (organism, library strategy, tissue, etc.)  
-✅ **JSON output** for easy integration with downstream analysis  
+✅ **Metadata extraction** from BioProject summaries (title, organism, description)  
+✅ **JSON/CSV output** for easy integration with downstream analysis  
 ✅ **CLI and Python API** for flexible usage
 
 ---
@@ -39,8 +39,8 @@ python main.py --query "arabidopsis[Organism] AND drought"
 # From file
 python main.py --query-file query.txt
 
-# Specify output and max results
-python main.py -q "stress response" -m 500 -o results.json
+# Specify output
+python main.py -q "stress response" -o results.json
 ```
 
 ### 3. Integration with Query Generator
@@ -50,11 +50,11 @@ Use the Query Generator to create optimized queries, then fetch results:
 ```bash
 # Step 1: Generate query
 cd ../Query_generator/phases/phase3
-python generate_query.py "arabidopsis drought stress RNA-seq" > query.json
+python api/main.py --quick "arabidopsis drought stress RNA-seq"
 
 # Step 2: Fetch data
 cd ../../../Fetcher_NCBI
-python main.py --query-file ../Query_generator/phases/phase3/query.json
+python main.py --query "PASTE_QUERY_HERE" -o results.json
 ```
 
 ---
@@ -67,7 +67,7 @@ Fetcher_NCBI/
 ├── ncbi_fetcher.py        # Core fetching logic
 ├── main.py                # CLI interface
 ├── data/                  # Output data storage
-│   ├── sra_results.json   # Default output file
+│   ├── bioproject_results.json   # Default output file
 │   └── bioproject_cache.json  # Deduplication cache
 └── logs/                  # Execution logs
 ```
@@ -113,17 +113,21 @@ python main.py -q "arabidopsis[Organism] AND RNA-Seq[Strategy]"
 ### Advanced Options
 
 ```bash
-# Limit results
-python main.py -q "drought stress" --max-results 100
-
 # Custom output location
 python main.py -q "arabidopsis" -o /path/to/output.json
+
+# Save as CSV table
+python main.py -q "arabidopsis" -o /path/to/output.csv
 
 # Disable deduplication (fetch all results)
 python main.py -q "stress" --no-deduplicate
 
+# Stop after collecting N unique BioProjects
+python main.py -q "drought" --min-bioprojects 30
+
 # Clear cache and start fresh
 python main.py -q "drought" --clear-cache
+
 ```
 
 ### Python API
@@ -139,9 +143,8 @@ fetcher = NCBIFetcher(
 
 # Fetch data
 results = fetcher.fetch_all(
-    query="arabidopsis[Organism] AND drought",
-    max_results=1000,
-    deduplicate=True
+  query="arabidopsis[Organism] AND drought",
+  deduplicate=True
 )
 
 # Save results
@@ -151,14 +154,14 @@ fetcher.save_results("output.json")
 for study in results:
     print(f"BioProject: {study['bioproject']}")
     print(f"Organism: {study['organism']}")
-    print(f"Strategy: {study['library_strategy']}")
+  print(f"Title: {study.get('title', '')}")
 ```
 
 ---
 
 ## Output Format
 
-Results are saved as JSON with the following structure:
+Results are saved as JSON or CSV. JSON structure:
 
 ```json
 {
@@ -175,17 +178,11 @@ Results are saved as JSON with the following structure:
   },
   "results": [
     {
-      "sra_id": "SRX123456",
+      "sra_id": "12345678",
       "bioproject": "PRJNA123456",
       "title": "Arabidopsis drought stress RNA-seq",
-      "study_name": "GSE123456",
+      "description": "Study description...",
       "organism": "Arabidopsis thaliana",
-      "library_strategy": "RNA-Seq",
-      "library_source": "TRANSCRIPTOMIC",
-      "library_selection": "cDNA",
-      "library_layout": "PAIRED",
-      "library_name": "leaf tissue",
-      "biosample": "SAMN123456",
       "fetched_at": "2024-01-15T10:30:05"
     }
   ]
@@ -194,12 +191,11 @@ Results are saved as JSON with the following structure:
 
 ### Key Fields
 
-- **`sra_id`**: NCBI SRA accession (e.g., SRX123456)
+- **`sra_id`**: NCBI internal ID from BioProject search
 - **`bioproject`**: Unique study identifier (used for deduplication)
 - **`organism`**: Scientific name (e.g., Arabidopsis thaliana)
-- **`library_strategy`**: Sequencing type (RNA-Seq, WGS, ChIP-Seq, etc.)
-- **`library_layout`**: PAIRED or SINGLE-end
-- **`biosample`**: Sample identifier
+- **`title`**: Project title
+- **`description`**: Project description
 
 ---
 
@@ -262,7 +258,7 @@ export NCBI_API_KEY="your_api_key"
 
 If fetcher returns no results:
 
-1. **Check query syntax**: Use NCBI's search builder to test: https://www.ncbi.nlm.nih.gov/sra/
+1. **Check query syntax**: Use NCBI's search builder to test: https://www.ncbi.nlm.nih.gov/bioproject/
 2. **Try broader terms**: Remove specific filters
 3. **Clear cache**: Old cache might skip all results
    ```bash
@@ -274,8 +270,7 @@ If fetcher returns no results:
 If you hit rate limits:
 
 1. **Add API key**: Increases limit from 3/sec to 10/sec
-2. **Reduce max results**: Fetch fewer results per run
-3. **Wait and retry**: NCBI blocks are temporary
+2. **Wait and retry**: NCBI blocks are temporary
 
 ---
 
@@ -296,6 +291,10 @@ python main.py -q 'arabidopsis[Organism] AND ("drought"[All Fields] OR "water st
 
 # 3. Results ready for analysis
 cat data/drought_data.json
+
+# Or use the interactive integrator at repo root
+cd ../..
+bash test_fetcher_integrator.sh
 ```
 
 ---
@@ -320,7 +319,7 @@ python config.py
 python ncbi_fetcher.py
 
 # Test CLI
-python main.py -q "test[Organism]" -m 5
+python main.py -q "test[Organism]" -o data/test.csv
 ```
 
 ### Logging
@@ -339,7 +338,7 @@ Check logs for:
 
 - [ ] Support for additional NCBI databases (GEO, Nucleotide, Protein)
 - [ ] Parallel fetching for faster retrieval
-- [ ] CSV export in addition to JSON
+- [x] CSV export in addition to JSON
 - [ ] Filter results by date, publication status, etc.
 - [ ] Integration with LLM analysis (port from Pyner_v0.2.py)
 
@@ -350,4 +349,4 @@ Check logs for:
 Based on the original [Pyner_v0.2.py](../scripts_iniciales_beta/Pyner_v0.2.py) script.
 
 **API Documentation**: https://www.ncbi.nlm.nih.gov/books/NBK25501/  
-**SRA Search Guide**: https://www.ncbi.nlm.nih.gov/sra/docs/srasearch/
+**BioProject Search Guide**: https://www.ncbi.nlm.nih.gov/bioproject/

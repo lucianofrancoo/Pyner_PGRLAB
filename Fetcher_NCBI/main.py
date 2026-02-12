@@ -2,7 +2,7 @@
 """
 Fetcher_NCBI - Command Line Interface
 ======================================
-Fetch biological sequencing data from NCBI SRA using boolean queries.
+Fetch BioProjects from NCBI using boolean queries.
 
 Usage:
     # Basic search
@@ -11,8 +11,8 @@ Usage:
     # Use query from file
     python main.py --query-file query.txt
     
-    # Specify max results and output
-    python main.py --query "arabidopsis AND stress" --max-results 500 --output results.json
+    # Specify output
+    python main.py --query "arabidopsis AND stress" --output results.json
     
     # Integration with Query Generator
     python main.py --from-query-generator "../Query_generator output"
@@ -23,7 +23,7 @@ import sys
 import json
 from pathlib import Path
 
-from config import validate_config, MAX_RESULTS, DEFAULT_OUTPUT, get_credentials
+from config import validate_config, DEFAULT_OUTPUT, get_credentials, MIN_UNIQUE_BIOPROJECTS
 from ncbi_fetcher import NCBIFetcher
 
 
@@ -62,8 +62,8 @@ Examples:
   # From file
   python main.py --query-file my_query.txt
   
-  # Specify output and max results
-  python main.py -q "stress response" -m 500 -o results.json
+    # Specify output
+    python main.py -q "stress response" -o results.json
   
   # Integration with Query Generator (use JSON output)
   python main.py --query-file ../Query_generator/output/query.json
@@ -91,18 +91,17 @@ Examples:
         help=f'Output file path (default: {DEFAULT_OUTPUT})'
     )
     
-    # Fetch options
-    parser.add_argument(
-        '-m', '--max-results',
-        type=int,
-        default=MAX_RESULTS,
-        help=f'Maximum results to fetch (default: {MAX_RESULTS})'
-    )
-    
     parser.add_argument(
         '--no-deduplicate',
         action='store_true',
         help='Disable BioProject deduplication (process all results)'
+    )
+
+    parser.add_argument(
+        '--min-bioprojects',
+        type=int,
+        default=MIN_UNIQUE_BIOPROJECTS,
+        help=f'Minimum unique BioProjects to collect before stopping (default: {MIN_UNIQUE_BIOPROJECTS})'
     )
     
     # Cache management
@@ -124,7 +123,7 @@ Examples:
         type=str,
         help='Override NCBI API key from config'
     )
-    
+
     return parser.parse_args()
 
 
@@ -134,7 +133,7 @@ def main():
     
     # Display header
     print("\n" + "=" * 70)
-    print("FETCHER_NCBI - NCBI SRA Data Fetcher")
+    print("FETCHER_NCBI - NCBI BioProject Fetcher")
     print("=" * 70)
     
     # Validate configuration
@@ -162,8 +161,9 @@ def main():
     print(f"\nInitializing fetcher...")
     print(f"  Email: {email}")
     print(f"  API Key: {'✓' if api_key else '✗'}")
-    print(f"  Max Results: {args.max_results}")
+    print("  Max Results: all")
     print(f"  Deduplication: {'✓' if not args.no_deduplicate else '✗'}")
+    print(f"  Min Unique BioProjects: {args.min_bioprojects}")
     
     fetcher = NCBIFetcher(email=email, api_key=api_key)
     
@@ -179,13 +179,17 @@ def main():
     try:
         results = fetcher.fetch_all(
             query=query,
-            max_results=args.max_results,
-            deduplicate=not args.no_deduplicate
+            max_results=None,
+            deduplicate=not args.no_deduplicate,
+            min_unique=args.min_bioprojects
         )
         
         if results:
             # Save results
-            fetcher.save_results(args.output)
+            if args.output.suffix.lower() == ".csv":
+                fetcher.save_results_csv(args.output)
+            else:
+                fetcher.save_results(args.output)
             
             print(f"\n" + "=" * 70)
             print("SUCCESS")
