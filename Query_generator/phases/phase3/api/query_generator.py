@@ -876,8 +876,13 @@ Example Output: {{"organism": "Arabidopsis thaliana", "tissues": ["root"], "cond
                 filtered_keywords.append(kw)
         llm_keywords = set(filtered_keywords)
         
-        # No incluir keywords que el LLM ya extrajo
-        free_terms = [t for t in free_terms if t not in llm_keywords]
+        # Filtrar free_terms contra keywords del LLM y contra el set de exclusión completo
+        filtered_free_terms = []
+        for t in free_terms:
+            if t and t.lower() not in exclude_llm_keywords:
+                if t not in llm_keywords and t.lower() not in {kw.lower() for kw in llm_keywords}:
+                    filtered_free_terms.append(t)
+        free_terms = filtered_free_terms
         
         if organism and free_terms:
             org_lower = organism.lower()
