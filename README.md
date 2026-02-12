@@ -41,7 +41,7 @@ fully cleaned, production-ready **Query Generator** with a 3-phase pipeline.
 - `Fetcher_NCBI/` — NCBI SRA data fetcher (NEW).
   - `Fetcher_NCBI/README.md` — Complete usage documentation.
   - `Fetcher_NCBI/main.py` — CLI interface for fetching data.
-  - `Fetcher_NCBI/test_integration.sh` — Integration test with Query Generator.
+- `test_fetcher_integrator.sh` — Integration test with Query Generator.
 
 - `scripts_iniciales_beta/` — Archived early scripts (kept for reference).
 - `archive_old/` — Archived auxiliary files (kept for reference).
@@ -60,10 +60,11 @@ python api/main.py "arabidopsis drought stress rna-seq"
 
 # 2. Fetch data from NCBI SRA
 cd ../../Fetcher_NCBI
-python main.py -q "GENERATED_QUERY_HERE" -m 1000 -o results.json
+python main.py -q "GENERATED_QUERY_HERE" -o results.json
 
-# Or use the integration test
-bash test_integration.sh
+# Or use the integration test (interactive)
+cd ../..
+bash test_fetcher_integrator.sh
 ```
 
 **Quick Start (Query Generator only)**

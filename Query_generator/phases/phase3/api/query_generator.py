@@ -300,31 +300,59 @@ class KnowledgeBaseValidator:
         organism: str = None,
         strategies: List[str] = None,
         tissues: List[str] = None,
-        conditions: List[str] = None
+        conditions: List[str] = None,
+        organism_synonyms: List[str] = None,
+        strategy_synonyms: List[str] = None,
+        tissue_synonyms: List[str] = None,
+        condition_synonyms: List[str] = None
     ) -> List[str]:
         """Extraer términos libres (no organismos ni estrategias)"""
         terms = []
+        organism_synonyms = organism_synonyms or []
+        strategy_synonyms = strategy_synonyms or []
+        tissue_synonyms = tissue_synonyms or []
+        condition_synonyms = condition_synonyms or []
         
         # Remover organismo del texto
         text_clean = text
         if organism:
             text_clean = text_clean.replace(organism, '')
         
+        # Remover sinónimos del organismo
+        for syn in organism_synonyms:
+            text_clean = text_clean.replace(syn, '')
+            text_clean = text_clean.replace(syn.lower(), '')
+
         # Remover estrategias
         if strategies:
             for strat in strategies:
                 text_clean = text_clean.replace(strat, '')
                 text_clean = text_clean.replace(strat.lower(), '')
 
+        # Remover sinónimos de estrategias
+        for syn in strategy_synonyms:
+            text_clean = text_clean.replace(syn, '')
+            text_clean = text_clean.replace(syn.lower(), '')
+
         if tissues:
             for tissue in tissues:
                 text_clean = text_clean.replace(tissue, '')
                 text_clean = text_clean.replace(tissue.lower(), '')
 
+        # Remover sinónimos de tejidos
+        for syn in tissue_synonyms:
+            text_clean = text_clean.replace(syn, '')
+            text_clean = text_clean.replace(syn.lower(), '')
+
         if conditions:
             for cond in conditions:
                 text_clean = text_clean.replace(cond, '')
                 text_clean = text_clean.replace(cond.lower(), '')
+
+        # Remover sinónimos de condiciones
+        for syn in condition_synonyms:
+            text_clean = text_clean.replace(syn, '')
+            text_clean = text_clean.replace(syn.lower(), '')
         
         # Extraer palabras clave (stopwords eliminadas)
         stopwords = {
@@ -524,10 +552,22 @@ class QueryGeneratorService:
             return []
         org_lower = organism.lower()
         synonyms = []
+        
+        # Buscar aliases exactos primero
         for alias, canonical in self.validator.organism_aliases.items():
             if canonical.lower() == org_lower and alias.lower() != org_lower:
                 if alias not in synonyms:
                     synonyms.append(alias)
+        
+        # Si el organismo es un género (como "Vitis"), también buscar aliases de especies del mismo género
+        # que apunten a miembros de ese género (ej: "Vitis vinifera")
+        if ' ' not in org_lower:  # Es probablemente un género (single word)
+            for alias, canonical in self.validator.organism_aliases.items():
+                # Buscar si el canonical (ej: "Vitis vinifera") empieza con el organismo (ej: "Vitis")
+                if canonical.lower().startswith(org_lower + ' ') or canonical.lower().startswith(org_lower):
+                    if alias.lower() != org_lower and alias not in synonyms:
+                        synonyms.append(alias)
+        
         return synonyms
 
     def _collect_strategy_synonyms(self, strategies: List[str]) -> List[str]:
@@ -769,13 +809,72 @@ Example Output: {{"organism": "Arabidopsis thaliana", "tissues": ["root"], "cond
         logger.info(f"🔍 Tissues found: {tissues or 'None'}")
         logger.info(f"🔍 Conditions found: {conditions or 'None'}")
 
-        # Paso 5: Extraer términos libres
+        # Paso 4.5: Recolectar sinónimos ANTES de extraer términos libres
+        organism_synonyms = self._collect_organism_synonyms(organism)
+        strategy_synonyms = self._collect_strategy_synonyms(strategies)
+        tissue_synonyms = self._collect_tissue_synonyms(tissues)
+        condition_synonyms = self._collect_condition_synonyms(conditions)
+
+        # Paso 5: Extraer términos libres (eliminando también sinónimos)
         free_terms = self.validator.extract_free_terms(
-            user_input, organism, strategies, tissues, conditions
+            user_input, organism, strategies, tissues, conditions,
+            organism_synonyms=organism_synonyms,
+            strategy_synonyms=strategy_synonyms,
+            tissue_synonyms=tissue_synonyms,
+            condition_synonyms=condition_synonyms
         )
         # Traducir y usar el set de keywords del LLM para deduplicar
         free_terms = self._normalize_terms(free_terms)
         llm_keywords = set(llm_data.get('keywords', [])) if use_llm else set()
+        
+        # Crear un conjunto de términos a excluir (organismos y sus sinónimos)
+        exclude_llm_keywords = set()
+        
+        # Excluir organismos y sus sinónimos
+        if organism:
+            exclude_llm_keywords.add(organism.lower())
+        for syn in organism_synonyms:
+            exclude_llm_keywords.add(syn.lower())
+        
+        # Excluir estrategias y sus sinónimos
+        for strat in strategies:
+            exclude_llm_keywords.add(strat.lower())
+        for syn in strategy_synonyms:
+            exclude_llm_keywords.add(syn.lower())
+        
+        # Excluir tejidos identificados y sus sinónimos
+        for tissue in tissues:
+            exclude_llm_keywords.add(tissue.lower())
+        for syn in tissue_synonyms:
+            exclude_llm_keywords.add(syn.lower())
+        
+        # Excluir también TODOS los tejidos conocidos del vocabulario
+        for tissue in self.validator.plant_tissues | self.validator.animal_tissues | self.validator.generic_tissues:
+            if tissue:
+                exclude_llm_keywords.add(tissue.lower())
+        
+        # Excluir condiciones identificadas y sus sinónimos
+        for cond in conditions:
+            exclude_llm_keywords.add(cond.lower())
+        for syn in condition_synonyms:
+            exclude_llm_keywords.add(syn.lower())
+        
+        # Excluir también TODOS los process keywords conocidos (condiciones/procesos)
+        for process in self.validator.process_keywords:
+            if process:
+                exclude_llm_keywords.add(process.lower())
+        
+        # Excluir TODAS las estrategias conocidas (para evitar variaciones)
+        for strat in self.validator.strategies:
+            if strat:
+                exclude_llm_keywords.add(strat.lower())
+        
+        # No incluir keywords que el LLM ya extrajo o que pertenecen a categorias conocidas
+        filtered_keywords = []
+        for kw in llm_keywords:
+            if kw and kw.lower() not in exclude_llm_keywords:
+                filtered_keywords.append(kw)
+        llm_keywords = set(filtered_keywords)
         
         # No incluir keywords que el LLM ya extrajo
         free_terms = [t for t in free_terms if t not in llm_keywords]
@@ -864,12 +963,7 @@ Example Output: {{"organism": "Arabidopsis thaliana", "tissues": ["root"], "cond
                 'clarification_message': clarification
             }
 
-        organism_synonyms = self._collect_organism_synonyms(organism)
-        strategy_synonyms = self._collect_strategy_synonyms(strategies)
-        tissue_synonyms = self._collect_tissue_synonyms(tissues)
-        condition_synonyms = self._collect_condition_synonyms(conditions)
-
-        # Paso 4: Generar query booleana
+        # Paso 6: Generar query booleana
         ncbi_query = self.query_builder.build_query(
             organisms=organism_variants,
             organism_synonyms=organism_synonyms,

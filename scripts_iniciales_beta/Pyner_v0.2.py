@@ -36,7 +36,7 @@ import xml.etree.ElementTree as ET  # Para parsear respuestas XML de NCBI
 # Credenciales para acceso a NCBI (obligatorias)
 Entrez.email = "lucianofranco.a@gmail.com"
 # API key aumenta límites: 10 req/seg sin key, 3 req/sec con key
-Entrez.api_key = "4579ad4ab4c2144aa84a340b2e4374111308"
+Entrez.api_key = "8f86973f360600c58b8bb20daf1728a4be08"
 
 # Cliente para usar modelo local con ollama
 client = ollama.Client()
