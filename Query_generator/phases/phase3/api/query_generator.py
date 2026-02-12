@@ -869,6 +869,11 @@ Example Output: {{"organism": "Arabidopsis thaliana", "tissues": ["root"], "cond
             if strat:
                 exclude_llm_keywords.add(strat.lower())
         
+        # Excluir también TODOS los alias de organismos (términos que apuntan a organismos)
+        for alias in self.validator.organism_aliases.keys():
+            if alias:
+                exclude_llm_keywords.add(alias.lower())
+        
         # No incluir keywords que el LLM ya extrajo o que pertenecen a categorias conocidas
         filtered_keywords = []
         for kw in llm_keywords:
