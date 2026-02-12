@@ -149,60 +149,45 @@ def extract_sra_metadata(xml_string: str) -> Optional[Dict]:
 def extract_bioproject_metadata(summary: Dict) -> Optional[Dict]:
     """
     Extract metadata from BioProject summary response.
+    
+    NOTE: NCBI BioProject esummary has limited metadata available.
+    These fields are populated when available:
+    - Organism fields: Organism_Name, Organism_Label, Organism_Strain
+    - Date: Registration_Date (no Public_Date or Submission_Date available)
+    
+    The following are NOT available in BioProject esummary:
+    - Total_Studies, Total_Runs (need SRA query)
+    - Publications, Experimental_Design (not in API response)
     """
     try:
         bioproject = summary.get("Project_Acc", "")
         title = summary.get("Project_Title", "")
         description = summary.get("Project_Description", "")
         
-        # Organismos
-        organism = summary.get("Project_Organism", "")
-        organism_list = summary.get("Project_OrganismList", [])
-        organisms = organism
+        # Organismos - NCBI BioProject has individual organism fields, not a list
+        organism_name = summary.get("Organism_Name", "")
+        organism_label = summary.get("Organism_Label", "")
+        organisms = organism_name or organism_label or ""
         
-        if organism_list and isinstance(organism_list, (list, dict)):
-            if isinstance(organism_list, list):
-                organisms_found = []
-                for org in organism_list:
-                    if isinstance(org, dict) and org.get("OrganismName"):
-                        organisms_found.append(org.get("OrganismName", ""))
-                if organisms_found:
-                    organisms = "; ".join(organisms_found)
+        # Strain (available per BioProject)
+        strain = summary.get("Organism_Strain", "")
         
-        # Strain y Cultivar
-        strain = ""
+        # Cultivar - NOT available in BioProject esummary
         cultivar = ""
-        if organism_list and isinstance(organism_list, list):
-            for org in organism_list:
-                if isinstance(org, dict):
-                    if org.get("Strain") and not strain:
-                        strain = org.get("Strain", "")
-                    if org.get("Cultivar") and not cultivar:
-                        cultivar = org.get("Cultivar", "")
         
-        # Fechas
-        submission_date = summary.get("Submission_Date", "")
-        public_date = summary.get("Public_Date", "")
+        # Dates - only Registration_Date is available, not Submission/Public dates
+        registration_date = summary.get("Registration_Date", "")
         
-        # Conteos
-        total_studies = summary.get("Total_Studies", "")
-        total_runs = summary.get("Total_Runs", "")
+        # Conteos - NOT available in BioProject esummary (would need SRA query)
+        # These would require separate SRA database query
+        total_studies = ""
+        total_runs = ""
         
-        # Publicaciones - solo PMID sin título que es muy largo
-        publications_list = summary.get("Publications", [])
+        # Publicaciones - NOT available in BioProject esummary
         publications = ""
-        if publications_list and isinstance(publications_list, list):
-            publications_found = []
-            for pub in publications_list:
-                if isinstance(pub, dict):
-                    pmid = pub.get("PMID", "")
-                    if pmid:
-                        publications_found.append(f"PMID:{pmid}")
-            if publications_found:
-                publications = "; ".join(publications_found)
         
-        # Diseño experimental
-        experimental_design = summary.get("Experimental_Design", "")
+        # Diseño experimental - NOT available in BioProject esummary
+        experimental_design = ""
         
         if not bioproject:
             return None
@@ -214,12 +199,12 @@ def extract_bioproject_metadata(summary: Dict) -> Optional[Dict]:
             "organisms": organisms,
             "strain": strain,
             "cultivar": cultivar,
-            "submission_date": submission_date,
-            "public_date": public_date,
-            "total_studies": total_studies,
-            "total_runs": total_runs,
-            "publications": publications,
-            "experimental_design": experimental_design
+            "submission_date": registration_date,  # Only available date from NCBI
+            "public_date": "",  # Not available in BioProject esummary
+            "total_studies": total_studies,  # Empty - not in BioProject esummary
+            "total_runs": total_runs,  # Empty - not in BioProject esummary
+            "publications": publications,  # Empty - not in BioProject esummary
+            "experimental_design": experimental_design  # Empty - not in BioProject esummary
         }
     except Exception as e:
         print(f"Error extracting metadata: {e}")
