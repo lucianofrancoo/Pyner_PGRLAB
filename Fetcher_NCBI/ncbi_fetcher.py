@@ -474,18 +474,9 @@ class NCBIFetcher:
 
         if DATABASE == "bioproject":
             columns = [
-                "sra_id",
                 "bioproject",
                 "title",
-                "organisms",
-                "strain",
-                "cultivar",
                 "submission_date",
-                "public_date",
-                "total_studies",
-                "total_runs",
-                "publications",
-                "experimental_design",
                 "description",
                 "fetched_at"
             ]
