@@ -190,14 +190,16 @@ RESPONSE FORMAT (JSON only, no explanation):
 }}
 
 IMPORTANT RULES:
-- Return ONLY valid JSON (no extra text before or after)
+- YOU MUST RETURN ONLY VALID JSON - NO EXPLANATIONS, NO TEXT BEFORE OR AFTER THE JSON
+- Start your response with the opening brace
+- End your response with the closing brace
 - If information NOT FOUND in paper, use "not described" or empty array []
-- NEVER INVENT data. If you don't find it, say you didn't find it
+- NEVER INVENT data. If you don't find it, write "not described"
 - For arrays: use semicolon separator internally if multiple values found
 - Use exact quotes from Methods/Results when possible
-- For Stage/Age: try to find specific values in Methods section
-- For molecules: list all that were measured (RNA, Protein, DNA, Metabolites, etc)
 - Be precise with units (°C, μmol·m−2·s−1, hours, etc)
+
+CRITICAL: Your entire response must be ONLY the JSON object. Do not add any text before or after the JSON.
 
 JSON:"""
     
@@ -218,7 +220,7 @@ JSON:"""
             "options": {
                 "temperature": 0.1,  # Low temperature for consistent extraction
                 "top_p": 0.9,
-                "num_predict": 500  # Limit response length
+                "num_predict": 2000  # Increased for 45-field JSON response (~1500 tokens needed)
             }
         }
         
@@ -238,6 +240,8 @@ JSON:"""
             
             if start == -1 or end == 0:
                 logger.warning("No JSON found in response")
+                logger.debug(f"Response preview (first 500 chars): {response[:500]}")
+                logger.debug(f"Response preview (last 500 chars): {response[-500:]}")
                 return self._empty_result()
             
             json_str = response[start:end]
