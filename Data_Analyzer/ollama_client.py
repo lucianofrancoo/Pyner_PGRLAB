@@ -219,8 +219,8 @@ JSON:"""
             "stream": False,
             "options": {
                 "temperature": 0.1,  # Low temperature for consistent extraction
-                "top_p": 0.9,
-                "num_predict": 2000  # Increased for 45-field JSON response (~1500 tokens needed)
+                "top_p": 0.9
+                # num_predict removed - no token limit, let LLM generate complete response
             }
         }
         
@@ -229,6 +229,17 @@ JSON:"""
         response.raise_for_status()
         
         result = response.json()
+        
+        # Log token usage statistics
+        if 'prompt_eval_count' in result:
+            prompt_tokens = result.get('prompt_eval_count', 0)
+            response_tokens = result.get('eval_count', 0)
+            total_tokens = prompt_tokens + response_tokens
+            eval_duration_ms = result.get('eval_duration', 0) / 1_000_000  # Convert ns to ms
+            
+            logger.info(f"   📊 Token usage: Prompt={prompt_tokens}, Response={response_tokens}, Total={total_tokens}")
+            logger.info(f"   ⏱️  Generation time: {eval_duration_ms:.0f}ms ({response_tokens / (eval_duration_ms / 1000):.1f} tokens/sec)")
+        
         return result.get('response', '')
     
     def _parse_response(self, response: str) -> Dict:
