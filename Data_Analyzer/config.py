@@ -34,7 +34,13 @@ RELEVANCE_THRESHOLD = 5
 # Maximum abstract length to send to LLM (characters)
 MAX_ABSTRACT_LENGTH = 3000
 
-# Batch size for processing papers
+# Use full text from PMC when available (PMCID)
+USE_PMC_FULL_TEXT = True
+
+# Maximum full text length to send to LLM
+MAX_FULL_TEXT_LENGTH = 15000
+
+#Batch size for processing papers
 BATCH_SIZE = 10
 
 # ============================================

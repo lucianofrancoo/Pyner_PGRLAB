@@ -28,9 +28,10 @@ from typing import Dict, List
 from config import (
     OUTPUT_DIR, LOGS_DIR, LOG_FILE, 
     CSV_COLUMNS, CSV_DELIMITER, MULTIVALUE_SEPARATOR,
-    RELEVANCE_THRESHOLD, MAX_ABSTRACT_LENGTH
+    RELEVANCE_THRESHOLD, MAX_ABSTRACT_LENGTH, USE_PMC_FULL_TEXT
 )
 from ollama_client import OllamaClient
+from pmc_fetcher import PMCFullTextFetcher
 
 # ============================================
 # LOGGING
@@ -51,11 +52,14 @@ class PaperAnalyzer:
     
     def __init__(self, ollama_client: OllamaClient):
         self.ollama = ollama_client
+        self.pmc_fetcher = PMCFullTextFetcher() if USE_PMC_FULL_TEXT else None
         self.stats = {
             'total': 0,
             'analyzed': 0,
             'relevant': 0,
-            'errors': 0
+            'errors': 0,
+            'pmc_full_text': 0,
+            'abstract_only': 0
         }
     
     def load_fetcher_output(self, json_path: Path) -> Dict:
@@ -111,9 +115,25 @@ class PaperAnalyzer:
         """Analyze single paper with Ollama"""
         title = paper.get('title', '')
         abstract = paper.get('abstract', '')[:MAX_ABSTRACT_LENGTH]
+        pmcid = paper.get('pmcid', None)
         
-        # Call Ollama
-        analysis = self.ollama.analyze_paper(title, abstract, user_query)
+        # Try to fetch full text from PMC if PMCID available
+        full_text = None
+        if self.pmc_fetcher and pmcid:
+            logger.info(f"   → Fetching full text from PMC: {pmcid}")
+            sections = self.pmc_fetcher.fetch_full_text(pmcid)
+            if sections and 'full_text_preview' in sections:
+                full_text = sections['full_text_preview']
+                self.stats['pmc_full_text'] += 1
+                logger.info(f"   ✓ Using PMC full text ({len(full_text)} chars)")
+            else:
+                logger.warning(f"   ⚠ PMC fetch failed, using abstract only")
+                self.stats['abstract_only'] += 1
+        else:
+            self.stats['abstract_only'] += 1
+        
+        # Call Ollama (with full text if available)
+        analysis = self.ollama.analyze_paper(title, abstract, user_query, full_text=full_text)
         
         # Build result row
         result = {
@@ -170,6 +190,9 @@ class PaperAnalyzer:
         print(f"Successfully analyzed: {self.stats['analyzed']}")
         print(f"Relevant papers:     {self.stats['relevant']} ({self.stats['relevant']/max(1, self.stats['total'])*100:.1f}%)")
         print(f"Analysis errors:     {self.stats['errors']}")
+        if self.pmc_fetcher:
+            print(f"PMC full text used: {self.stats['pmc_full_text']}")
+            print(f"Abstract only:       {self.stats['abstract_only']}")
         print("=" * 80)
 
 

@@ -29,7 +29,7 @@ class OllamaClient:
         except requests.RequestException:
             return False
     
-    def analyze_paper(self, title: str, abstract: str, user_query: str) -> Dict:
+    def analyze_paper(self, title: str, abstract: str, user_query: str, full_text: Optional[str] = None) -> Dict:
         """
         Analyze a paper and extract structured information
         
@@ -37,11 +37,12 @@ class OllamaClient:
             title: Paper title
             abstract: Paper abstract
             user_query: Original user query for relevance evaluation
+            full_text: Optional full text from PMC (Methods/Results sections)
             
         Returns:
             Dictionary with extracted information
         """
-        prompt = self._build_analysis_prompt(title, abstract, user_query)
+        prompt = self._build_analysis_prompt(title, abstract, user_query, full_text)
         
         try:
             response = self._call_ollama(prompt)
@@ -51,15 +52,33 @@ class OllamaClient:
             logger.error(f"Error analyzing paper: {e}")
             return self._empty_result()
     
-    def _build_analysis_prompt(self, title: str, abstract: str, user_query: str) -> str:
+    def _build_analysis_prompt(self, title: str, abstract: str, user_query: str, full_text: Optional[str] = None) -> str:
         """Build prompt for paper analysis"""
+        
+        # If full text available, use it for better analysis
+        if full_text:
+            content_source = f"""
+PAPER ABSTRACT: {abstract}
+
+PAPER FULL TEXT (Methods & Results sections):
+{full_text}
+
+NOTE: Use both abstract and full text for comprehensive analysis. The full text contains detailed information about organisms, tissues, experimental conditions, and techniques.
+"""
+        else:
+            content_source = f"""
+PAPER ABSTRACT: {abstract}
+
+NOTE: Only abstract available. Extract what you can from the abstract.
+"""
+        
         return f"""You are a scientific paper classifier. Analyze the following paper and extract structured information.
 
 USER QUERY (for relevance): {user_query}
 
 PAPER TITLE: {title}
 
-PAPER ABSTRACT: {abstract}
+{content_source}
 
 YOUR TASK:
 1. Evaluate if this paper is RELEVANT to the user query. Score from 0-10 (0=completely irrelevant, 10=perfectly relevant)
@@ -83,6 +102,7 @@ IMPORTANT:
 - Use scientific names for organisms when possible
 - Be precise and specific
 - Include synonyms if mentioned (e.g., "tomato" and "Solanum lycopersicum")
+- With full text available, you can extract more detailed and accurate information
 
 JSON:"""
     

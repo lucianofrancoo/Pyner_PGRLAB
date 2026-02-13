@@ -36,9 +36,61 @@ ollama pull qwen2.5:14b
 ollama serve
 ```
 
-### 2. Python Dependencies
+### 2. BioPython (for PMC full text fetching)
+
+```bash
+pip3 install biopython
+```
+
+**Note:** BioPython is required for fetching full text from PubMed Central when PMCID is available.
+
+### 3. Python Dependencies
 
 No additional dependencies required beyond standard library (requests is used, should be available).
+
+---
+
+## 🔬 PMC Full Text Enhancement
+
+**NEW FEATURE:** When a paper has a PMCID (PubMed Central ID), the analyzer automatically fetches the **full text** from PubMed Central instead of using only the abstract.
+
+### Why Full Text?
+
+- **Abstracts** typically contain ~200-500 characters of summary information
+- **Full text** (Methods + Results sections) contains ~3,000-6,000 characters with detailed experimental information
+- **Better extraction** of organisms (strains, varieties), tissues, conditions, and techniques
+
+### How it Works
+
+1. Paper has PMCID → Fetch full text from PMC
+2. Extract Methods + Results sections
+3. Send to Ollama for classification (~15x more context than abstract)
+4. Fallback to abstract if PMC fetch fails
+
+### Example Improvement
+
+**Paper: PMID 36904041**
+
+| Source | Organisms Extracted | Tissues Extracted |
+|--------|-------------------|------------------|
+| Abstract only | Solanum lycopersicum | root ; shoot |
+| PMC full text | Solanum lycopersicum ; Micro-Tom | root ; shoot ; leaf |
+
+### Statistics
+
+After analysis, you'll see:
+```
+PMC full text used: 3
+Abstract only:       0
+```
+
+### Configuration
+
+In `config.py`:
+```python
+USE_PMC_FULL_TEXT = True  # Enable/disable PMC fetching
+MAX_FULL_TEXT_LENGTH = 15000  # Max characters to send to LLM
+```
 
 ---
 
