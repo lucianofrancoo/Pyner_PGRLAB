@@ -63,7 +63,7 @@ PAPER ABSTRACT: {abstract}
 PAPER FULL TEXT (Methods & Results sections):
 {full_text}
 
-NOTE: Use both abstract and full text for comprehensive analysis. The full text contains detailed information about organisms, tissues, experimental conditions, and techniques.
+NOTE: Use both abstract and full text for comprehensive analysis. The full text contains detailed information about organisms, tissues, experimental conditions, and techniques. Look especially in Methods section for experimental techniques.
 """
         else:
             content_source = f"""
@@ -85,7 +85,14 @@ YOUR TASK:
 2. Extract ALL organisms mentioned (scientific name preferred, e.g., "Solanum lycopersicum", "Mus musculus")
 3. Extract ALL tissues/organs mentioned (e.g., "root", "leaf", "liver", "brain")
 4. Extract ALL experimental conditions/treatments (e.g., "drought stress", "heat shock", "nitrogen deficiency")
-5. Extract ALL experimental strategies/techniques (e.g., "RNA-Seq", "ChIP-Seq", "qRT-PCR")
+5. Extract ALL experimental strategies/techniques used in the study. Look for:
+   - Molecular techniques: qRT-PCR, RT-PCR, RNA-Seq, DNA microarray, Northern blot, Western blot, ELISA
+   - Imaging: confocal microscopy, fluorescence microscopy, histological staining
+   - Sequencing: sequencing, Next-Gen sequencing
+   - Phenotyping: morphological analysis, gas exchange measurements
+   - Biochemical: enzyme assays, antioxidant assays, chromatography
+   - Other: bioinformatics, statistical analysis, model plants
+   NOTE: If Methods section mentions specific techniques, include them even if not explicitly mentioned in abstract.
 
 RESPONSE FORMAT (JSON only, no explanation):
 {{
@@ -98,11 +105,13 @@ RESPONSE FORMAT (JSON only, no explanation):
 
 IMPORTANT:
 - Return ONLY valid JSON
-- Use empty arrays [] if category not found
+- Use empty arrays [] if category not found (but try harder to find!)
 - Use scientific names for organisms when possible
 - Be precise and specific
 - Include synonyms if mentioned (e.g., "tomato" and "Solanum lycopersicum")
-- With full text available, you can extract more detailed and accurate information
+- For strategies: be comprehensive. Include ALL techniques mentioned in Methods/Results
+- Never return "N/A" for strategies - use empty array [] if truly no techniques found
+- Grammar: "qRT-PCR" (not "qrt-pcr"), "RNA-Seq" (not "RNA-seq")
 
 JSON:"""
     

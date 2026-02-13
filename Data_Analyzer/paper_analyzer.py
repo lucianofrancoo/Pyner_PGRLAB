@@ -20,6 +20,7 @@ import argparse
 import csv
 import json
 import logging
+import re
 import sys
 from pathlib import Path
 from datetime import datetime
@@ -50,6 +51,31 @@ logger = logging.getLogger(__name__)
 class PaperAnalyzer:
     """Main analyzer class"""
     
+    # Common experimental techniques to look for in post-processing
+    TECHNIQUE_KEYWORDS = {
+        'qRT-PCR': [r'\bq(?:rt|uantitative\s+real.?time\s+pcr)\b', r'\bqrt[- ]?pcr\b', r'\bqpcr\b'],
+        'RT-PCR': [r'\brt[- ]?pcr\b', r'\breverse\s+transcription\s+pcr\b'],
+        'RNA-Seq': [r'\brna[- ]?seq(?:uencing)?\b', r'\brnaseq\b'],
+        'Microarray': [r'\bmicroarray\b', r'\bgene\s+chip\b'],
+        'Western blot': [r'\bwestern\s+blot(?:ting)?\b'],
+        'Northern blot': [r'\bnorthern\s+blot(?:ting)?\b'],
+        'PCR': [r'\bpcr\b'],
+        'ChIP-Seq': [r'\bchip[- ]?seq\b', r'\bchip\s+sequencing\b'],
+        'Sequencing': [r'\bsequencing\b', r'\bnext[- ]?gen(?:eration)?\s+sequencing\b', r'\bngs\b'],
+        'Microscopy': [r'\bmicroscop(?:y|ic)\b', r'\bconfocal\b', r'\bfluorescence\b'],
+        'Histological staining': [r'\bhistolog(?:y|ical)\b', r'\bistochemical?\s+staining\b'],
+        'ELISA': [r'\belisa\b', r'\bimmuno[- ]?assay\b'],
+        'Flow cytometry': [r'\bflow\s+cytometr(?:y|ic)\b'],
+        'Bioinformatics': [r'\bbioinformatics\b', r'\bcomputational\s+analysis\b'],
+        'Mass spectrometry': [r'\bmass\s+spectrom(?:etry|etric)\b'],
+        'Proteomics': [r'\bproteomics?\b'],
+        'Metabolomics': [r'\bmetabolomics?\b'],
+        'Phenotyping': [r'\bphenotyping\b', r'\bmorphological\s+analysis\b'],
+        'Gas exchange': [r'\bgas\s+exchange\b'],
+        'Enzyme assay': [r'\benzyme\s+assay\b'],
+        'Antioxidant assay': [r'\bantioxidant\s+assay\b'],
+    }
+    
     def __init__(self, ollama_client: OllamaClient):
         self.ollama = ollama_client
         self.pmc_fetcher = PMCFullTextFetcher() if USE_PMC_FULL_TEXT else None
@@ -59,7 +85,8 @@ class PaperAnalyzer:
             'relevant': 0,
             'errors': 0,
             'pmc_full_text': 0,
-            'abstract_only': 0
+            'abstract_only': 0,
+            'techniques_enhanced': 0  # Papers where we found missing techniques
         }
     
     def load_fetcher_output(self, json_path: Path) -> Dict:
@@ -135,6 +162,25 @@ class PaperAnalyzer:
         # Call Ollama (with full text if available)
         analysis = self.ollama.analyze_paper(title, abstract, user_query, full_text=full_text)
         
+        # Post-process: search for additional techniques in text
+        # Even if LLM found some, we want to make sure we don't miss any
+        text_to_search = full_text if full_text else abstract
+        found_techniques_regex = self._extract_techniques_regex(text_to_search)
+        
+        if found_techniques_regex:
+            # Merge LLM results with regex results
+            llm_strategies = set(analysis['strategies']) if analysis['strategies'] else set()
+            # Remove empty/placeholder values
+            llm_strategies = {s for s in llm_strategies if s and s not in ['N/A', 'n/a', '']}
+            
+            all_strategies = llm_strategies.union(set(found_techniques_regex))
+            
+            if len(all_strategies) > len(llm_strategies):
+                # Found new techniques via regex
+                logger.info(f"   ℹ Enhanced techniques: {found_techniques_regex}")
+                analysis['strategies'] = sorted(list(all_strategies))
+                self.stats['techniques_enhanced'] += 1
+        
         # Build result row
         result = {
             'PMID': paper.get('pmid', 'N/A'),
@@ -170,6 +216,31 @@ class PaperAnalyzer:
             'Abstract_Preview': 'Analysis failed'
         }
     
+    def _extract_techniques_regex(self, text: str) -> List[str]:
+        """
+        Extract experimental techniques from text using regex patterns
+        Used as fallback when LLM doesn't find techniques
+        """
+        found_techniques = set()
+        text_lower = text.lower()
+        
+        try:
+            for technique, patterns in self.TECHNIQUE_KEYWORDS.items():
+                for pattern in patterns:
+                    try:
+                        if re.search(pattern, text_lower, re.IGNORECASE):
+                            found_techniques.add(technique)
+                            break  # Found this technique, move to next
+                    except re.error as e:
+                        logger.warning(f"Regex error in pattern '{pattern}' for '{technique}': {e}")
+                        continue
+        except Exception as e:
+            logger.error(f"Error extracting techniques: {e}")
+            return []
+        
+        # Sort for consistency
+        return sorted(list(found_techniques)) if found_techniques else []
+    
     def save_results(self, results: List[Dict], output_path: Path):
         """Save classified results to CSV"""
         logger.info(f"\nSaving results to: {output_path}")
@@ -193,6 +264,7 @@ class PaperAnalyzer:
         if self.pmc_fetcher:
             print(f"PMC full text used: {self.stats['pmc_full_text']}")
             print(f"Abstract only:       {self.stats['abstract_only']}")
+        print(f"Techniques enhanced: {self.stats['techniques_enhanced']} (found via text search)")
         print("=" * 80)
 
 

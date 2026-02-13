@@ -29,7 +29,8 @@ class PMCFullTextFetcher:
     """Fetches full text from PubMed Central"""
     
     def __init__(self):
-        self.max_text_length = 15000  # Characters to extract (avoid overwhelming LLM)
+        self.max_text_length = 20000  # Characters to extract (avoid overwhelming LLM)
+        self.max_methods_length = 8000  # More space for Methods section (has technique details)
     
     def fetch_full_text(self, pmcid: str) -> Optional[Dict[str, str]]:
         """
@@ -93,19 +94,24 @@ class PMCFullTextFetcher:
                 sections['abstract'] = abstract_text[:2000]  # Limit abstract
             
             # Extract Methods section (contains organisms, tissues, conditions, techniques)
+            # This section is important so we give it more space
             methods_patterns = [
-                r'<sec[^>]*>.*?<title[^>]*>.*?(?:methods?|materials?|experimental|procedures?)[^<]*</title>(.*?)</sec>',
-                r'<sec[^>]*sec-type=["\']methods["\'][^>]*>(.*?)</sec>'
+                r'<sec[^>]*>.*?<title[^>]*>.*?(?:methods?|materials?|experimental|procedures?)[^<]*</title>(.*?)(?=</sec>|<sec)',
+                r'<sec[^>]*sec-type=["\']methods["\'][^>]*>(.*?)(?=</sec>|<sec)',
+                r'<sec[^>]*>.*?<title[^>]*>.*?(?:methods?|materials?)[^<]*</title>(.*?)(?=<sec|</sec>)'
             ]
             
             methods_text = ""
             for pattern in methods_patterns:
-                matches = re.finditer(pattern, xml_content, re.DOTALL | re.IGNORECASE)
-                for match in matches:
+                match = re.search(pattern, xml_content, re.DOTALL | re.IGNORECASE)
+                if match:
                     methods_text += self._clean_xml(match.group(1)) + " "
+                    if len(methods_text) > self.max_methods_length:
+                        break
             
             if methods_text:
-                sections['methods'] = methods_text[:5000]  # Limit methods
+                # Keep full Methods content - it has technique details
+                sections['methods'] = methods_text[:self.max_methods_length]
             
             # Extract Results section (contains experimental details)
             results_patterns = [
@@ -122,12 +128,13 @@ class PMCFullTextFetcher:
             if results_text:
                 sections['results'] = results_text[:5000]  # Limit results
             
-            # Create a preview combining relevant parts
+            # Create a preview: prioritize Methods (has technique details) then Results
             full_text_preview = ""
             if 'methods' in sections:
-                full_text_preview += sections['methods'][:3000] + " ... "
+                # Give Methods more space since it has experimental technique details
+                full_text_preview += sections['methods'][:9000] + " "
             if 'results' in sections:
-                full_text_preview += sections['results'][:3000]
+                full_text_preview += sections['results'][:8000]
             
             if full_text_preview:
                 sections['full_text_preview'] = full_text_preview[:self.max_text_length]
