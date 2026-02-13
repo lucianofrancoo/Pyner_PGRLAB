@@ -50,20 +50,87 @@ BATCH_SIZE = 10
 CSV_DELIMITER = ","
 MULTIVALUE_SEPARATOR = " ; "  # Separator for multiple organisms/tissues/conditions
 
-# CSV columns order
+# CSV columns order - EXPANDED with detailed experimental metadata
 CSV_COLUMNS = [
+    # Identification
     "PMID",
     "PMCID",
     "Title",
-    "Relevance_Score",
-    "Is_Relevant",
-    "Organisms",
-    "Tissues",
-    "Conditions",
-    "Strategies",
     "Year",
     "Journal",
     "DOI",
+    
+    # Relevance
+    "Relevance_Score",
+    "Is_Relevant",
+    
+    # Organism Details
+    "Organisms",
+    "Species",
+    "Strain_Variety",
+    "Genotype",
+    "Tissues_Organs",
+    "Source_Tissue_Origin",
+    "Cell_Type",
+    
+    # Developmental / Temporal Biology
+    "Developmental_Stage",
+    "Organism_Age",
+    "Growth_Phase",
+    
+    # Sample Collection Conditions
+    "Conditions",
+    "Environmental_Stress",
+    "Temperature_Range",
+    "Light_Conditions",
+    "Growth_Medium",
+    "Sample_Collection_Conditions",
+    
+    # Molecular Analysis
+    "Molecules_Extracted",
+    "RNA_Type",
+    "DNA_Type",
+    "Protein_Type",
+    "Other_Molecules",
+    
+    # Experimental Design
+    "Strategies",
+    "Measurement_Tools",
+    "Detection_Method",
+    
+    # Time Course
+    "Time_Course_Design",
+    "Time_Points",
+    "Time_Intervals",
+    "Time_Duration",
+    
+    # Replication
+    "Sample_Size",
+    "Biological_Replicates",
+    "Technical_Replicates",
+    "Replication_Design",
+    
+    # Treatment / Comparisons
+    "Treatment_Groups",
+    "Control_Type",
+    "Dose_Range",
+    
+    # Quality & Contamination
+    "Quality_Metrics",
+    "Contamination_Check",
+    
+    # Biological Context
+    "Pathway_Focus",
+    "Biomarkers_Measured",
+    "Disease_Model",
+    "Differential_Expression_Threshold",
+    
+    # Data Availability
+    "Normalization_Method",
+    "Statistical_Method",
+    "Raw_Data_Available",
+    
+    # Preview
     "Abstract_Preview"
 ]
 

@@ -1,0 +1,210 @@
+═══════════════════════════════════════════════════════════════════════════════
+                        📊 CÁLCULO DE RELEVANCE SCORE
+═══════════════════════════════════════════════════════════════════════════════
+
+El LLM (Qwen 2.5) evalúa la RELEVANCIA del paper comparando con la USER QUERY
+
+═══════════════════════════════════════════════════════════════════════════════
+EJEMPLO 1: Paper 41068586
+═══════════════════════════════════════════════════════════════════════════════
+
+USER QUERY:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ("Solanum lycopersicum"[Organism] OR "tomato") AND ("RNA-Seq")              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+PAPER INFO:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Title: "Transcriptome-based meta-analysis of drought stress regulatory      │
+│        genes in tomato."                                                     │
+│                                                                              │
+│ Abstract: "Plants possess molecular defense systems... The RNA-seq           │
+│          technology assists biologists in quickly identifying genes..."      │
+│                                                                              │
+│ Full Text Methods:                                                           │
+│ "We searched public databases for drought-responsive genes in               │
+│  Solanum lycopersicum, Solanum tuberosum, and Nicotiana species.             │
+│  Expression profiles were analyzed using RNA-seq data from..."              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+LLM ANALYSIS:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ CRITERIO 1: ¿Aparece ORGANISM (Solanum lycopersicum / tomato)?              │
+│ ✓ MATCH en: Title, Abstract, Full Text                                      │
+│   - Title: "...tomato"                                                       │
+│   - Abstract: "...tomato..."                                                 │
+│   - Methods: "Solanum lycopersicum", "Solanum tuberosum"                    │
+│ → Puntuación: 10/10                                                          │
+│                                                                              │
+│ CRITERIO 2: ¿Aparece TÉCNICA (RNA-Seq)?                                    │
+│ ✓ MATCH en: Title, Abstract, Full Text                                      │
+│   - Title: "Transcriptome-based meta-analysis"                              │
+│   - Abstract: "RNA-seq technology"                                           │
+│   - Methods: "Expression profiles were analyzed using RNA-seq"              │
+│ → Puntuación: 10/10                                                          │
+│                                                                              │
+│ CRITERIO 3: ¿Es el paper FUNDAMENTALMENTE sobre esto?                       │
+│ ✓ SÍ - Es un meta-análisis específicamente sobre genes de drougth en tomate │
+│       usando RNA-seq                                                         │
+│ → Puntuación: 10/10                                                          │
+│                                                                              │
+│ SCORE FINAL: (10 + 10 + 10) / 3 = 10/10  ← PERFECTAMENTE RELEVANTE         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+OUTPUT CSV:
+  PMID: 41068586
+  Relevance_Score: 10
+  Is_Relevant: Yes  (porque 10 ≥ 5)
+  Organisms: Solanum lycopersicum ; Solanum tuberosum ; Nicotiana
+  Tissues: root
+  Conditions: drought stress ; water shortage ; heat
+  Strategies: RNA-Seq ; qRT-PCR ; microarray ; statistical analysis
+
+═══════════════════════════════════════════════════════════════════════════════
+EJEMPLO 2: Paper 37176949
+═══════════════════════════════════════════════════════════════════════════════
+
+USER QUERY: (tomato OR Solanum) AND (drought OR RNA-Seq)
+
+PAPER INFO:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Title: "The Tomato Feruloyl Transferase FHT Promoter Is an Accurate         │
+│        Identifier of Early Development and Stress-Induced Suberization."    │
+│ Abstract: "As a wall polymer, suberin has a multifaceted role in plant      │
+│          stress responses. It is deposited in specialized tissues..."       │
+│ Full Text: "Methods: We studied suberization in Solanum lycopersicum        │
+│           and potato (Solanum tuberosum)...using histochemical staining     │
+│           and UV microscopy..."                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+LLM ANALYSIS:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ CRITERIO 1: ¿Aparece ORGANISM (tomato / Solanum)?                           │
+│ ✓ MATCH en: Title, Full Text                                                │
+│ → Puntuación: 10/10                                                          │
+│                                                                              │
+│ CRITERIO 2: ¿Aparece DROUGHT o RNA-Seq?                                    │
+│ ✗ NO RNA-Seq (solo histochemical staining, UV microscopy)                   │
+│ ✓ Menciona "stress" (estrés es similar a drought)                           │
+│ ✓ Menciona "drought" en Full Text implícitamente (stress-induced)           │
+│ → Puntuación: 7/10 (parcial, no es RNA-seq específicamente)                 │
+│                                                                              │
+│ CRITERIO 3: ¿Es relevante al tema?                                          │
+│ ✓ SÍ - es sobre respuesta a estrés en tomato/potato, PERO                   │
+│ ✗ NO - se enfoca en suberización, no en análisis a nivel de genes           │
+│ → Puntuación: 7/10                                                           │
+│                                                                              │
+│ SCORE FINAL: (10 + 7 + 7) / 3 = 8/10  ← MUY RELEVANTE (pero no perfecto)  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+OUTPUT CSV:
+  PMID: 37176949
+  Relevance_Score: 8
+  Is_Relevant: Yes  (porque 8 ≥ 5)
+  Organisms: Solanum lycopersicum ; potato
+  Tissues: root ; leaf ; fruit ; seed coat ; xylem vascular tissue
+  Conditions: drought
+  Strategies: histochemical staining ; UV microscopy
+
+═══════════════════════════════════════════════════════════════════════════════
+CRITERIOS DE SCORING - ESCALA NUMÉRICA
+═══════════════════════════════════════════════════════════════════════════════
+
+ 10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │ PERFECTAMENTE RELEVANTE
+   │ - Cumple con TODOS los criterios de la query
+   │ - Organismos exactos, técnicas y condiciones especificadas
+   │ - Es el paper ideal para responder la pregunta
+   │ Ejemplo: "Tomato drought RNA-Seq" = Paper sobre todo eso
+
+ 9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │ MUY RELEVANTE - EXCELENTE
+   │ - Cumple la mayoría de criterios
+   │ - Puede tener ligeras variaciones de organismos
+   │ - Técnicas muy similares (ej: qRT-PCR en lugar de RNA-Seq)
+   │ Ejemplo: Paper sobre tomato + drought pero con proteomics en lugar de RNA-seq
+
+ 8 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │ RELEVANTE - BUENO
+   │ - Cumple criterios principales
+   │ - Puede faltar algún aspecto menor
+   │ - Técnicas relacionadas pero no idénticas
+   │ Ejemplo: Paper sobre tomato stress response con enzymática, no RNA-seq
+
+ 7 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │ PARCIALMENTE RELEVANTE - ACEPTABLE
+   │ - Cumple 1 de 2 criterios principales
+   │ - Información de valor pero no es específica
+   │ Ejemplo: Paper sobre tomato pero no menciona técnicas de análisis genómico
+
+ 5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │ LIGERAMENTE RELEVANTE - MARGINAL
+   │ - Cumple aspectos tangenciales de la query
+   │ - Información de contexto pero no específica
+   │ - UMBRAL: Papers con ≥5 se marcan como "Is_Relevant: Yes"
+   │ Ejemplo: Paper menciona tomato pero en contexto diferente (plagas, nutrición)
+
+ 3 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │ POCO RELEVANTE - DÉBIL
+   │ - Menciona algunos conceptos pero mayormente irrelevante
+   │ - Información minorly útil
+   │ Ejemplo: Paper sobre análisis de genes pero en arroz, no en tomate
+
+ 0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │ IRRELEVANTE - COMPLETAMENTE FUERA DE TEMA
+   │ - Sin relación apropiada con la query
+   │ Ejemplo: Paper sobre enfermedades en peces, no en plantas
+
+═══════════════════════════════════════════════════════════════════════════════
+VARIABLES QUE AFECTAN AL SCORE
+═══════════════════════════════════════════════════════════════════════════════
+
+1. MATCH CON QUERY
+   ✓ Paper menciona "tomato" → +1.5
+   ✓ Paper menciona "drought" → +1.5
+   ✓ Paper menciona "RNA-Seq" → +2.0
+   ✓ Coincidencia en Title vs. Body → diferente peso
+   
+   Lógica: Si query busca (A AND B), paper debe tener AMBOS
+
+2. ESPECIFICIDAD
+   ✓ Si paper es SOBRE el tema → +3.0
+   ✓ Si paper MENCIONA el tema → +1.5
+   ✓ Si paper es tangencial → +0.5
+   
+   Lógica: Un paper "Tomato Transcriptome Analysis" es mejor que
+           "Plant Stress Responses" aunque mencione tomato
+
+3. COMPLETITUD
+   ✓ Paper cubre todos los criterios → 10/10
+   ✓ Paper cubre 80% de criterios → 8/10
+   ✓ Paper cubre 50% de criterios → 5-6/10
+   ✓ Paper cubre <50% → <5/10
+   
+   Lógica: Cuantos más criterios coincidan, mejor score
+
+4. MÉTODOS UTILIZADOS
+   ✓ Paper usa técnica exacta de query → +2.0
+   ✓ Paper usa técnica similar → +1.5
+   ✓ Paper usa técnica relacionada → +1.0
+   ✓ Paper NO menciona técnica → 0 en esta categoría
+   
+   Lógica: Si query especifica RNA-Seq, pero paper solo tiene microarray,
+           score baja (pero sigue siendo relevante)
+
+═══════════════════════════════════════════════════════════════════════════════
+DECISIÓN DE Is_Relevant (Yes/No)
+═══════════════════════════════════════════════════════════════════════════════
+
+if Relevance_Score >= 5:
+    Is_Relevant = "Yes"
+else:
+    Is_Relevant = "No"
+
+Umbral configurable en: Data_Analyzer/config.py → RELEVANCE_THRESHOLD = 5
+
+Papers con Score 5-6 son "polémicos" (barely relevant)
+Papers con Score 0-4 no se consideran relevantes
+Papers con Score 7-10 son claramente relevantes
+
+═══════════════════════════════════════════════════════════════════════════════

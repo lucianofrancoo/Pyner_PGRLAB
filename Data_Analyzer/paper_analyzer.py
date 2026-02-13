@@ -181,20 +181,104 @@ class PaperAnalyzer:
                 analysis['strategies'] = sorted(list(all_strategies))
                 self.stats['techniques_enhanced'] += 1
         
-        # Build result row
+        # Helper function to format array fields
+        def format_array(items):
+            """Convert list to semicolon-separated string"""
+            if isinstance(items, list):
+                items = [str(i).strip() for i in items if i and str(i).strip() not in ['N/A', 'n/a', '']]
+                return MULTIVALUE_SEPARATOR.join(items) if items else 'not described'
+            return str(items) if items else 'not described'
+        
+        # Helper function to format scalar fields
+        def format_scalar(value):
+            """Convert scalar to string, or 'not described' if empty"""
+            if not value or value == 'N/A' or value == 'n/a':
+                return 'not described'
+            return str(value).strip()
+        
+        # Build result row with EXPANDED METADATA
         result = {
+            # Identification
             'PMID': paper.get('pmid', 'N/A'),
             'PMCID': paper.get('pmcid', 'N/A'),
             'Title': title,
-            'Relevance_Score': analysis['relevance_score'],
-            'Is_Relevant': 'Yes' if analysis['relevance_score'] >= RELEVANCE_THRESHOLD else 'No',
-            'Organisms': MULTIVALUE_SEPARATOR.join(analysis['organisms']) if analysis['organisms'] else 'N/A',
-            'Tissues': MULTIVALUE_SEPARATOR.join(analysis['tissues']) if analysis['tissues'] else 'N/A',
-            'Conditions': MULTIVALUE_SEPARATOR.join(analysis['conditions']) if analysis['conditions'] else 'N/A',
-            'Strategies': MULTIVALUE_SEPARATOR.join(analysis['strategies']) if analysis['strategies'] else 'N/A',
             'Year': paper.get('year', 'N/A'),
             'Journal': paper.get('journal', 'N/A'),
             'DOI': paper.get('doi', 'N/A'),
+            
+            # Relevance
+            'Relevance_Score': analysis['relevance_score'],
+            'Is_Relevant': 'Yes' if analysis['relevance_score'] >= RELEVANCE_THRESHOLD else 'No',
+            
+            # Organism Details (EXPANDED)
+            'Organisms': format_array(analysis.get('organisms', [])),
+            'Species': format_scalar(analysis.get('species', '')),
+            'Strain_Variety': format_scalar(analysis.get('strain_variety', '')),
+            'Genotype': format_scalar(analysis.get('genotype', '')),
+            'Tissues_Organs': format_array(analysis.get('tissues_organs', [])),
+            'Source_Tissue_Origin': format_scalar(analysis.get('source_tissue_origin', '')),
+            'Cell_Type': format_scalar(analysis.get('cell_type', '')),
+            
+            # Developmental Biology (EXPANDED)
+            'Developmental_Stage': format_scalar(analysis.get('developmental_stage', '')),
+            'Organism_Age': format_scalar(analysis.get('organism_age', '')),
+            'Growth_Phase': format_scalar(analysis.get('growth_phase', '')),
+            
+            # Sample Collection (EXPANDED)
+            'Conditions': format_array(analysis.get('conditions', [])),
+            'Environmental_Stress': format_scalar(analysis.get('environmental_stress', '')),
+            'Temperature_Range': format_scalar(analysis.get('temperature_range', '')),
+            'Light_Conditions': format_scalar(analysis.get('light_conditions', '')),
+            'Growth_Medium': format_scalar(analysis.get('growth_medium', '')),
+            'Sample_Collection_Conditions': format_scalar(analysis.get('sample_collection_conditions', '')),
+            
+            # Molecular Analysis (EXPANDED)
+            'Molecules_Extracted': format_array(analysis.get('molecules_extracted', [])),
+            'RNA_Type': format_scalar(analysis.get('rna_type', '')),
+            'DNA_Type': format_scalar(analysis.get('dna_type', '')),
+            'Protein_Type': format_scalar(analysis.get('protein_type', '')),
+            'Other_Molecules': format_scalar(analysis.get('other_molecules', '')),
+            
+            # Experimental Techniques (EXPANDED)
+            'Strategies': format_array(analysis.get('strategies', [])),
+            'Measurement_Tools': format_scalar(analysis.get('measurement_tools', '')),
+            'Detection_Method': format_scalar(analysis.get('detection_method', '')),
+            
+            # Time Course (EXPANDED)
+            'Time_Course_Design': format_scalar(analysis.get('time_course_design', '')),
+            'Time_Points': format_scalar(analysis.get('time_points', '')),
+            'Time_Intervals': format_scalar(analysis.get('time_intervals', '')),
+            'Time_Duration': format_scalar(analysis.get('time_duration', '')),
+            
+            # Replication (EXPANDED)
+            'Sample_Size': format_scalar(analysis.get('sample_size', '')),
+            'Biological_Replicates': format_scalar(analysis.get('biological_replicates', '')),
+            'Technical_Replicates': format_scalar(analysis.get('technical_replicates', '')),
+            'Replication_Design': format_scalar(analysis.get('replication_design', '')),
+            
+            # Treatment / Comparisons (EXPANDED)
+            'Treatment_Groups': format_scalar(analysis.get('treatment_groups', '')),
+            'Control_Type': format_scalar(analysis.get('control_type', '')),
+            'Dose_Range': format_scalar(analysis.get('dose_range', '')),
+            
+            # Quality & Contamination (EXPANDED)
+            'Quality_Metrics': format_scalar(analysis.get('quality_metrics', '')),
+            'Contamination_Check': format_scalar(analysis.get('contamination_check', '')),
+            
+            # Biological Context (EXPANDED)
+            'Pathway_Focus': format_scalar(analysis.get('pathway_focus', '')),
+            'Biomarkers_Measured': format_scalar(analysis.get('biomarkers_measured', '')),
+            'Disease_Model': format_scalar(analysis.get('disease_model', '')),
+            
+            # Data Analysis (EXPANDED)
+            'Normalization_Method': format_scalar(analysis.get('normalization_method', '')),
+            'Statistical_Method': format_scalar(analysis.get('statistical_method', '')),
+            'Differential_Expression_Threshold': format_scalar(analysis.get('differential_expression_threshold', '')),
+            
+            # Data Availability (EXPANDED)
+            'Raw_Data_Available': format_scalar(analysis.get('raw_data_available', '')),
+            
+            # Preview
             'Abstract_Preview': abstract[:200] + '...' if len(abstract) > 200 else abstract
         }
         
@@ -202,21 +286,63 @@ class PaperAnalyzer:
     
     def _create_error_result(self, paper: Dict) -> Dict:
         """Create result for papers that failed analysis"""
-        return {
+        # Create error row with all columns set to error/default values
+        error_dict = {
             'PMID': paper.get('pmid', 'N/A'),
             'PMCID': paper.get('pmcid', 'N/A'),
             'Title': paper.get('title', 'N/A'),
-            'Relevance_Score': 0,
-            'Is_Relevant': 'Error',
-            'Organisms': 'ERROR',
-            'Tissues': 'ERROR',
-            'Conditions': 'ERROR',
-            'Strategies': 'ERROR',
             'Year': paper.get('year', 'N/A'),
             'Journal': paper.get('journal', 'N/A'),
             'DOI': paper.get('doi', 'N/A'),
+            'Relevance_Score': 0,
+            'Is_Relevant': 'Error',
+            'Organisms': 'ERROR',
+            'Species': 'ERROR',
+            'Strain_Variety': 'ERROR',
+            'Genotype': 'ERROR',
+            'Tissues_Organs': 'ERROR',
+            'Source_Tissue_Origin': 'ERROR',
+            'Cell_Type': 'ERROR',
+            'Developmental_Stage': 'ERROR',
+            'Organism_Age': 'ERROR',
+            'Growth_Phase': 'ERROR',
+            'Conditions': 'ERROR',
+            'Environmental_Stress': 'ERROR',
+            'Temperature_Range': 'ERROR',
+            'Light_Conditions': 'ERROR',
+            'Growth_Medium': 'ERROR',
+            'Sample_Collection_Conditions': 'ERROR',
+            'Molecules_Extracted': 'ERROR',
+            'RNA_Type': 'ERROR',
+            'DNA_Type': 'ERROR',
+            'Protein_Type': 'ERROR',
+            'Other_Molecules': 'ERROR',
+            'Strategies': 'ERROR',
+            'Measurement_Tools': 'ERROR',
+            'Detection_Method': 'ERROR',
+            'Time_Course_Design': 'ERROR',
+            'Time_Points': 'ERROR',
+            'Time_Intervals': 'ERROR',
+            'Time_Duration': 'ERROR',
+            'Sample_Size': 'ERROR',
+            'Biological_Replicates': 'ERROR',
+            'Technical_Replicates': 'ERROR',
+            'Replication_Design': 'ERROR',
+            'Treatment_Groups': 'ERROR',
+            'Control_Type': 'ERROR',
+            'Dose_Range': 'ERROR',
+            'Quality_Metrics': 'ERROR',
+            'Contamination_Check': 'ERROR',
+            'Pathway_Focus': 'ERROR',
+            'Biomarkers_Measured': 'ERROR',
+            'Disease_Model': 'ERROR',
+            'Normalization_Method': 'ERROR',
+            'Statistical_Method': 'ERROR',
+            'Differential_Expression_Threshold': 'ERROR',
+            'Raw_Data_Available': 'ERROR',
             'Abstract_Preview': 'Analysis failed'
         }
+        return error_dict
     
     def _extract_techniques_regex(self, text: str) -> List[str]:
         """
