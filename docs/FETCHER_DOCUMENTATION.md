@@ -864,3 +864,769 @@ PGRLAB Internal Use
 **Última actualización:** 2026-02-12  
 **Mantenedor:** PGRLAB Team  
 **Versión:** 1.0.0
+# 🎯 Quick Reference: SRA Hierarchy Refactoring
+
+## What Changed?
+
+### ✅ Before (Wrong):
+- Output field: `sra_accessions` contained **SRX*** codes (experiments)
+- Didn't preserve hierarchy properly
+- Misleading about what data was actually stored
+
+### ✅ After (Correct):  
+- Output field: `sra_runs` contains **SRR*** codes (actual sequence runs)
+- Properly preserves: BioProject → BioSample → Experiment → Run
+- Clear and accurate naming
+
+---
+
+## The Hierarchy Explained
+
+```
+┌─ BioProject (PRJNA*)
+│  └─ BioSample (SAMN*)
+│     └─ Experiment (SRX*)
+│        └─ Run (SRR*)  ← This is the actual sequence data!
+```
+
+**In CSV Output:**
+- `sra_experiments` → SRX* codes (metadata)
+- `biosamples` → SAMN* codes (samples)
+- `sra_runs` → SRR* codes (actual data) ✅
+
+---
+
+## Code Changes Summary
+
+| Component | Old | New | Why |
+|-----------|-----|-----|-----|
+| Return Type | `(exp, bs_set, srx_set)` | `(exp, bs_dict, srr_list)` | Proper hierarchy |
+| Accessions | SRX codes | SRR codes | Real data not metadata |
+| BioSamples | Set | Dict | Can store titles/experiments |
+| CSV Field | `sra_accessions_count` | `sra_runs_count` | Accurate naming |
+| CSV Field | `sra_accessions` | `sra_runs` | Correct codes |
+
+---
+
+## Files Modified
+
+1. **Fetcher_NCBI/boolean_fetcher_integrated.py**
+   - `fetch_sra_for_bioproject()` - Returns new structure
+   - `search_pubmed_publications()` - Accepts new types
+   - `process_bioproject()` - Unpacks and stores new structure
+   - `save_results_csv()` - Uses correct field names
+
+2. **README.md**
+   - Updated CSV format documentation
+   - Added hierarchy explanation
+   - Updated examples with SRR codes
+
+3. **New Documentation**
+   - `REFACTORING_SUMMARY.md` - Full technical details
+   - `HIERARCHICAL_STRUCTURE_CHANGES.txt` - Final report
+   - `test_hierarchical_refactoring.py` - Test suite
+
+---
+
+## Testing
+
+✅ All tests passed:
+```python
+✓ Experiments returned as list
+✓ BioSamples returned as dict with experiment titles
+✓ SRA Runs returned as list of SRR* codes
+✓ Hierarchy preserved end-to-end
+✓ CSV output correct
+✓ process_bioproject() works with new structure
+```
+
+**Run tests:**
+```bash
+python3 test_hierarchical_refactoring.py
+```
+
+---
+
+## Impact on CSV Output
+
+### Example Before (Incorrect):
+```
+PRJNA1381306,12,12,12,"SRX31557547;...","SAMN54118015;...","SRX31557547;..."
+                                                              ↑ Wrong! These are experiments
+```
+
+### Example After (Correct):
+```
+PRJNA1381306,12,12,12,"SRX31557547;...","SAMN54118015;...","SRR36541090;..."
+                                                              ↑ Correct! These are runs with actual sequence data
+```
+
+---
+
+## Key Takeaways
+
+| Concept | Code | What It Is |
+|---------|------|-----------|
+| Project ID | PRJNA* | Umbrella for everything |
+| Sample ID | SAMN* | Biological sample |
+| Experiment ID | SRX* | Sequencing experiment metadata |
+| Run ID | SRR* | **Actual sequence data** ← This is what matters! |
+
+---
+
+## For Next Use
+
+When you run Option 2 (BioProject search) again:
+- ✅ It will fetch the correct SRR run codes
+- ✅ It will store SRX experiment metadata
+- ✅ It will reference SAMN biosample codes
+- ✅ CSV will have accurate, meaningful data
+
+---
+
+## Questions?
+
+See detailed documentation in:
+- `REFACTORING_SUMMARY.md` - Full technical reference
+- `README.md` - User-facing documentation
+- `test_hierarchical_refactoring.py` - Working code examples
+
+✅ **Status: Ready for Production**
+# Hierarchical SRA Data Structure Refactoring - Summary
+
+## Overview
+Successfully refactored the SRA data structure in `boolean_fetcher_integrated.py` to properly model the biological hierarchy: **BioProject → BioSample → Experiment (SRX) → Run (SRR)**
+
+**Status**: ✅ COMPLETED AND TESTED
+
+---
+
+## What Changed
+
+### 1. **Data Structure Changes**
+
+#### Before (Incorrect):
+```python
+def fetch_sra_for_bioproject(self, bioproject_id: str):
+    # Returned separate sets
+    return experiments, biosamples_set, sra_accessions_set
+    # Where sra_accessions was actually SRX (experiment) codes, not SRR (run) codes
+```
+
+#### After (Correct):
+```python
+def fetch_sra_for_bioproject(self, bioproject_id: str):
+    # Returns properly structured data
+    return experiments, biosamples_dict, sra_runs
+    
+    # biosamples_dict = {
+    #     'SAMN54118006': {
+    #         'samples': set(),
+    #         'experiment_titles': ['Experiment Title 1', 'Experiment Title 2']
+    #     },
+    #     ...
+    # }
+    
+    # sra_runs = ['SRR36541090', 'SRR36541091', ...]  (actual run codes)
+```
+
+---
+
+## Biological Hierarchy Clarified
+
+```
+BioProject (e.g., PRJNA1381306)
+  ├── BioSample 1 (e.g., SAMN54118006)
+  │   ├── Experiment 1 (e.g., SRX31557536)
+  │   │   ├── Run 1 (e.g., SRR36541090)
+  │   │   ├── Run 2 (e.g., SRR36541091)
+  │   │   └── ...
+  │   └── Experiment 2 (SRX...)
+  │       └── ...
+  ├── BioSample 2 (SAMN...)
+  │   └── ...
+  └── ...
+```
+
+**Key Relationships:**
+- BioSample (SAMN*) ← links to → Experiment (SRX*) via `exp['biosample']`
+- Experiment (SRX*) ← contains → Runs (SRR*) via `exp['runs']` list
+- Each BioSample can have multiple experiments, each experiment has multiple runs
+
+---
+
+## Files Modified
+
+### 1. `boolean_fetcher_integrated.py`
+
+#### Method `fetch_sra_for_bioproject()` (Lines 154-198)
+**Changes:**
+- ✅ Returns `(experiments, biosamples_dict, sra_runs)` instead of `(experiments, biosamples_set, sra_accessions_set)`
+- ✅ `biosamples_dict` is now a dict with structure: `{biosample_id: {'samples': set(), 'experiment_titles': []}}`
+- ✅ `sra_runs` now contains **SRR codes** (actual sequencing runs) not SRX codes (experiments)
+- ✅ Properly associates experiment titles with their biosamples
+
+#### Method `search_pubmed_publications()` (Lines 201-248)
+**Changes:**
+- ✅ Updated parameters: `biosamples_dict` (dict) instead of `biosamples` (set)
+- ✅ Updated parameters: `sra_runs` (list) instead of `sra_accessions` (set)
+- ✅ Uses `list(biosamples_dict.keys())` to extract biosample IDs for searching
+- ✅ Uses `sra_runs` list directly for searching
+- ✅ Updated log message to reference "SRA runs" instead of "SRA accessions"
+
+#### Method `process_bioproject()` (Lines 280-308)
+**Changes:**
+- ✅ Updated unpacking: `experiments, biosamples_dict, sra_runs = self.fetch_sra_for_bioproject(bioproject_id)`
+- ✅ Updated counts: `biosamples_count` now reflects unique SAMN codes (not sets)
+- ✅ Added `sra_runs_count` with unique SRR codes
+- ✅ Updated result storage: `result['biosamples'] = sorted(list(biosamples_dict.keys()))`
+- ✅ Added `result['sra_runs'] = sorted(list(set(sra_runs)))`
+- ✅ Passes correct data types to `search_pubmed_publications()`
+
+#### Method `save_results_csv()` (Lines 405-420)
+**Changes:**
+- ✅ Updated fieldnames: Changed `sra_accessions_count` → `sra_runs_count`
+- ✅ Updated fieldnames: Changed `sra_accessions` → `sra_runs`
+- ✅ CSV now outputs actual run codes (SRR*) not experiment codes (SRX*)
+
+### 2. `README.md` (Lines 59-77)
+**Changes:**
+- ✅ Updated CSV header to show `sra_runs_count` and `sra_runs` fields
+- ✅ Updated example to show SRR codes instead of SRX codes
+- ✅ Added explanation section "Notas sobre la jerarquía" clarifying:
+  - sra_experiments = SRX* codes
+  - biosamples = SAMN* codes  
+  - sra_runs = SRR* codes (the actual sequencing data)
+- ✅ Documented hierarchy: BioProject → BioSample → Experiment (SRX) → Run (SRR)
+
+---
+
+## Testing & Validation
+
+### Test Created: `test_hierarchical_refactoring.py`
+**Tests:**
+1. ✅ `test_sra_data_structure()` 
+   - Validates return types (list, dict, list)
+   - Confirms experiments have proper structure
+   - Confirms SRR codes (not SRX) in runs
+   - Confirms biosamples have SAMN prefix
+   - Confirms dict structure has `experiment_titles` and `samples` keys
+
+2. ✅ `test_process_bioproject()`
+   - Tests that process_bioproject handles new data structures
+   - Validates all required fields present
+   - Confirms counts are integers
+   - Tests end-to-end workflow
+
+**Test Results:**
+```
+✓ experiments is list: 12 items
+✓ biosamples_dict is dict: 12 items
+✓ sra_runs is list: 12 items (12 unique)
+✓ Runs are SRR codes (not SRX)
+✓ BioSample IDs are SAMN codes
+✓ All runs are SRR codes
+✓ process_bioproject returns correct fields
+✓ All counts are integers
+
+✓✓✓ ALL TESTS PASSED ✓✓✓
+Hierarchical refactoring is working correctly!
+```
+
+---
+
+## Before & After Example
+
+### Input: BioProject PRJNA1381306
+
+#### Before (Incorrect Output):
+```csv
+bioproject,sra_experiments_count,biosamples_count,sra_accessions_count,sra_experiments,biosamples,sra_accessions
+PRJNA1381306,12,12,12,"SRX31557547; SRX31557546; ...","SAMN54118015; SAMN54118016; ...","SRX31557547; SRX31557546; ..."
+```
+❌ `sra_accessions` contains SRX codes (experiments), not actual run data
+
+#### After (Correct Output):
+```csv
+bioproject,sra_experiments_count,biosamples_count,sra_runs_count,sra_experiments,biosamples,sra_runs
+PRJNA1381306,12,12,12,"SRX31557547; SRX31557546; ...","SAMN54118015; SAMN54118016; ...","SRR36541090; SRR36541091; ..."
+```
+✅ `sra_runs` contains SRR codes (actual sequencing runs with real sequence data)
+
+---
+
+## Data Flow
+
+```
+BioProject ID (PRJNA*)
+    ↓
+fetch_sra_for_bioproject()
+    ├─→ Calls SRAFetcher.fetch_all_by_bioproject()
+    ├─→ extract_sra_experiment_metadata() returns:
+    │  {
+    │    'exp_accession': 'SRX31557547',
+    │    'title': 'Experiment title',
+    │    'biosample': 'SAMN54118015',
+    │    'runs': ['SRR36541090', 'SRR36541091']  ← SRR codes!
+    │    ...
+    │  }
+    ├─→ Aggregates into:
+    │  - experiments: [exp1, exp2, ...]
+    │  - biosamples_dict: {SAMN: {titles: [...]}}
+    │  - sra_runs: [SRR, SRR, SRR, ...]
+    ↓
+process_bioproject()
+    ├─→ Counts: experiments, biosamples, runs (all unique)
+    ├─→ Stores lists: sra_experiments (SRX), biosamples (SAMN), sra_runs (SRR)
+    ├─→ Calls search_pubmed_publications()
+    │   ├─→ Extracts SAMN IDs from biosamples_dict
+    │   ├─→ Uses sra_runs directly
+    │   └─→ Searches PubMed cascading from SAMN → SRR
+    ├─→ Enriches with publication metadata
+    ↓
+save_results_csv()
+    └─→ Outputs CSV with rows containing:
+        - sra_experiments_count, biosamples_count, sra_runs_count
+        - sra_experiments, biosamples, sra_runs (all semicolon-separated)
+```
+
+---
+
+## Key Improvements
+
+1. **Correct Hierarchy**: Now properly represents BioProject → BioSample → Experiment → Run structure
+2. **Accurate Run Codes**: Uses SRR codes (actual sequencing runs) not SRX codes (experiments)
+3. **Better Data Organization**: Biosamples and experiments properly associated
+4. **Consistent Naming**: Field names now accurately describe their content
+5. **Experiment Titles**: Associated with their biosamples for traceability
+6. **Tested & Validated**: Comprehensive test suite confirms correct functionality
+
+---
+
+## Backward Compatibility
+
+⚠️ **Breaking Changes:**
+- CSV output field names changed: `sra_accessions` → `sra_runs`
+- CSV output field names changed: `sra_accessions_count` → `sra_runs_count`
+- Data types changed: sets → dict/list
+- Any existing CSV files won't have the new field names
+
+✅ **Action Needed:**
+- Update any dependent tools/scripts that read old CSV format
+- Use new field names for analysis
+
+---
+
+## Next Steps (Optional Enhancements)
+
+Future improvements that could be added:
+1. Extract BioSample titles/names from NCBI (currently only storing IDs)
+2. Add run statistics (e.g., read count, base pairs) to output
+3. Include library strategy/source in output for better filtering
+4. Add hierarchical display option in CSV output
+5. Create nested JSON output option for better structure preservation
+
+---
+
+## Summary
+
+✅ **Hierarchical structure refactored**
+✅ **Correct biological codes (SRR, SAMN, SRX)**
+✅ **All dependent methods updated**
+✅ **Comprehensive tests passed**
+✅ **Documentation updated**
+✅ **Ready for production use**
+
+The system now correctly models and stores the SRA hierarchy, enabling better analysis and linking to publications based on accurate biological sample and run information.
+================================================================================
+   HIERARCHICAL SRA DATA STRUCTURE REFACTORING - FINAL REPORT
+================================================================================
+
+COMPLETION STATUS: ✅ 100% COMPLETE - ALL TESTS PASSED
+
+================================================================================
+WHAT WAS FIXED
+================================================================================
+
+1. DATA STRUCTURE HIERARCHY
+   OLD (Incorrect):
+   - sra_accessions was actually SRX* codes (experiments), not run data
+   - Didn't properly model: BioProject → BioSample → Experiment → Run
+   
+   NEW (Correct):
+   - sra_runs now contains SRR* codes (actual sequencing data)
+   - biosamples_dict properly structures SAMN (sample) codes
+   - Properly models: BioProject → BioSample → Experiment (SRX) → Run (SRR)
+
+2. CODE IDENTIFIERS CLARIFIED
+   SRX* = Experiment/Dataset ID (e.g., SRX31557547)
+   SAMN* = BioSample ID (e.g., SAMN54118015)
+   SRR* = Run ID (actual sequence data) (e.g., SRR36541090)
+
+================================================================================
+FILES MODIFIED
+================================================================================
+
+1. Fetcher_NCBI/boolean_fetcher_integrated.py
+   - fetch_sra_for_bioproject()      ← Changed return structure
+   - search_pubmed_publications()    ← Updated to handle new types
+   - process_bioproject()             ← Updated unpacking & field handling
+   - save_results_csv()               ← Updated field names
+
+2. README.md (Lines 59-77)
+   - Updated CSV header to show sra_runs instead of sra_accessions
+   - Added hierarchy explanation section
+   - Updated examples with SRR codes instead of SRX codes
+
+3. Created: REFACTORING_SUMMARY.md
+   - Comprehensive documentation of all changes
+   - Before/after comparison
+   - Testing results
+
+================================================================================
+TEST RESULTS
+================================================================================
+
+✓ fetch_sra_for_bioproject() returns correct types:
+  - experiments: list (12 items)
+  - biosamples_dict: dict (12 items with SAMN* keys)
+  - sra_runs: list (12 SRR* items, all unique)
+
+✓ SRA codes are correct:
+  - Experiments start with SRX: SRX31557547 ✓
+  - BioSamples start with SAMN: SAMN54118015 ✓
+  - Runs start with SRR: SRR36541090 ✓
+
+✓ process_bioproject() works with new structure:
+  - Returns all required fields
+  - Correctly counts experiments, biosamples, runs
+  - Passes correct data types to search_pubmed_publications()
+
+✓ CSV output uses correct field names:
+  - sra_runs_count (not sra_accessions_count)
+  - sra_runs with SRR codes (not SRX codes)
+
+================================================================================
+BEFORE & AFTER DATA COMPARISON
+================================================================================
+
+BEFORE (Incorrect):
+  CSV contains: sra_accessions = "SRX31557547; SRX31557546; ..."
+  Problem: These are EXPERIMENT codes, not actual sequence data
+
+AFTER (Correct):
+  CSV contains: sra_runs = "SRR36541090; SRR36541091; ..."
+  Correct: These are RUN codes with actual sequence data
+
+HIERARCHY NOW PRESERVED:
+  BioProject (PRJNA1381306)
+    └─ BioSample (SAMN54118015)
+        └─ Experiment (SRX31557547)
+            └─ Run (SRR36541090)  ← Actual sequence data
+
+================================================================================
+VALIDATION CHECKLIST
+================================================================================
+
+✅ Data structure types correct (list, dict, list)
+✅ All SRA codes have correct prefixes (SRX, SAMN, SRR)
+✅ Hierarchy properly preserved and retrievable
+✅ CSV output uses correct fields
+✅ Documentation updated
+✅ All dependent methods updated
+✅ Comprehensive test suite passed
+✅ End-to-end workflow tested
+✅ No Python syntax errors
+✅ All counts are correct integers
+
+================================================================================
+NEXT TIME THE USER RUNS THE SYSTEM
+================================================================================
+
+Option 2 (BioProject search) will now:
+  1. Fetch correct SRA runs (SRR*) not experiments
+  2. Store experiments (SRX*) for reference
+  3. Store biosamples (SAMN*) for linking
+  4. Output CSV with accurate hierarchical structure
+  5. Use SRR codes for PubMed cascade search
+
+CSV output will now correctly show:
+  - sra_experiments: List of SRX* codes
+  - biosamples: List of SAMN* codes
+  - sra_runs: List of SRR* codes (biological sequence data)
+
+================================================================================
+SUMMARY
+================================================================================
+
+The hierarchical structure is now correctly implemented and tested.
+The system properly models: BioProject → BioSample → Experiment → Run
+
+The distinction between SRX (experiments) and SRR (runs) is now clear,
+and the CSV output will contain the actual sequence run data (SRR codes)
+instead of experiment metadata codes (SRX codes).
+
+System is ready for production use.
+
+Generated: 2026-02-12
+Status: ✅ COMPLETE
+# 📋 Titles & Metadata Integration - Implementation Summary
+
+## ✅ What's Now Stored
+
+Your system now captures and stores **complete hierarchical SRA structure** with:
+
+### 1. **Experiment Titles** (Previously Missing)
+```
+✓ "Solanum lycopersicum leaf FsK-treated Drought-stress replicate 1"
+✓ "Solanum lycopersicum leaf FsK-treated no Drought-stress replicate 3"
+```
+
+### 2. **Complete Experiment Metadata**
+```json
+{
+  "library_name": "lib_fsk_drought_rp1",
+  "library_strategy": "RNA-Seq",
+  "library_source": "TRANSCRIPTOMIC",
+  "library_selection": "PolyA",
+  "library_layout": "SINGLE",
+  "instrument": "Illumina NovaSeq 6000"
+}
+```
+
+### 3. **Sample Attributes** (From NCBI XML)
+```json
+{
+  "isolate": "esculentum",
+  "cultivar": "Moneymaker",
+  "age": "29 days",
+  "dev_stage": "Vegetative stage [PO:0009021]",
+  "collection_date": "2021-06",
+  "geographic_location": "Greece:Thessaly,Larissa",
+  "tissue": "leaf",
+  "treatment": "FsK-treated",
+  "stress": "yes",
+  "replicate": "1"
+}
+```
+
+### 4. **Clear Hierarchical Relationships**
+```
+Which experiment is associated with which sample?
+Which runs belong to which experiment?
+→ All clearly documented in sra_hierarchy
+```
+
+---
+
+## 📊 JSON Output Structure
+
+Your JSON now contains a new field: **`sra_hierarchy`**
+
+### Structure:
+```json
+{
+  "bioproject": "PRJNA1381306",
+  "sra_experiments_count": 12,
+  "biosamples_count": 12,
+  "sra_runs_count": 12,
+  "sra_hierarchy": {
+    "SAMN54118015": {
+      "sample_id": "SAMN54118015",
+      "experiments": [
+        {
+          "experiment_id": "SRX31557547",
+          "title": "Solanum lycopersicum leaf FsK-treated...",
+          "metadata": {
+            "library_name": "lib_fsk_drought_rp1",
+            "library_strategy": "RNA-Seq",
+            "library_source": "TRANSCRIPTOMIC",
+            "library_selection": "PolyA",
+            "library_layout": "SINGLE",
+            "instrument": "Illumina NovaSeq 6000"
+          },
+          "sample_attributes": {
+            "isolate": "esculentum",
+            "cultivar": "Moneymaker",
+            "age": "29 days",
+            "dev_stage": "Vegetative stage [PO:0009021]",
+            "collection_date": "2021-06",
+            "tissue": "leaf",
+            "treatment": "FsK-treated"
+          },
+          "runs": ["SRR36541090"]
+        }
+      ]
+    },
+    "SAMN54118014": { ... },
+    ...
+  }
+}
+```
+
+---
+
+## 🔄 Data Flow Changes
+
+### Before:
+```
+Experiment XML → Extract basic info → Store in list
+                                   ✗ No titles
+                                   ✗ No sample details
+                                   ✗ No hierarchy
+```
+
+### After:
+```
+Experiment XML → extract_sra_experiment_metadata()
+                 ├─ Extract exp_title ✓
+                 ├─ Extract instrument ✓
+                 ├─ Extract library_name ✓
+                 ├─ Extract sample_attributes ✓
+                 └─ Now includes all metadata
+                 
+fetch_sra_for_bioproject() → Build structure:
+            {
+              "experiments": [...],
+              "biosamples_dict": {
+                "SAMN*": {
+                  "experiments": [
+                    {
+                      "exp_accession": "SRX*",
+                      "title": "...",  ✓ NEW
+                      "metadata": {...},  ✓ NEW
+                      "sample_attributes": {...},  ✓ NEW
+                      "runs": ["SRR*"]
+                    }
+                  ]
+                }
+              }
+            }
+
+build_hierarchical_sra_structure() → Organize into hierarchy
+                                    → Store in sra_hierarchy field
+                                    → Include in JSON output
+```
+
+---
+
+## 🎯 Files Modified
+
+### 1. `Fetcher_NCBI/ncbi_fetcher_sra_fixed.py`
+**Changes in `extract_sra_experiment_metadata()`:**
+- ✅ Added `exp_title` extraction (was called `title`)
+- ✅ Added `instrument` extraction from XML
+- ✅ Added `sample_attributes` extraction
+- Returns hierarchical dict with all metadata
+
+**New fields extracted:**
+- instrument
+- sample_attributes (dict of all SAMPLE_ATTRIBUTE tags)
+
+### 2. `Fetcher_NCBI/boolean_fetcher_integrated.py`
+
+**Updated `fetch_sra_for_bioproject()`:**
+- ✅ Now builds complete experiment info dicts
+- ✅ Includes titles, metadata, attributes
+- ✅ Returns structured biosamples_dict with full metadata
+
+**New method `build_hierarchical_sra_structure()`:**
+- ✅ Creates clean hierarchy: BioSample → Experiment → metadata/runs
+- ✅ Organizes all information for easy access
+- ✅ Returns well-structured dict
+
+**Updated `process_bioproject()`:**
+- ✅ Calls `build_hierarchical_sra_structure()`
+- ✅ Stores result in `sra_hierarchy` field
+- ✅ Logs hierarchy summary
+
+**Updated `save_results_json()`:**
+- ✅ Now includes sra_hierarchy in JSON output
+- ✅ Preserves all metadata when saving
+
+### 3. Created: `test_titles_metadata.py`
+Comprehensive test that validates:
+- ✅ Experiment titles are extracted
+- ✅ All metadata fields are present
+- ✅ Sample attributes are stored
+- ✅ Hierarchy structure is correct
+- ✅ JSON output includes everything
+
+---
+
+## 📁 What You'll See When You Run It
+
+When you search for a BioProject, the JSON output will now show:
+
+```
+PRJNA1381306
+├─ 12 Experiments (with titles!)
+├─ 12 BioSamples (with attributes!)
+└─ 12 Runs (with clear associations!)
+
+In sra_hierarchy:
+├─ SAMN54118015
+│  ├─ SRX31557547: "Solanum lycopersicum leaf FsK-treated..."
+│  │  ├─ Library: lib_fsk_drought_rp1
+│  │  ├─ Instrument: Illumina NovaSeq 6000
+│  │  ├─ Isolate: esculentum
+│  │  ├─ Treatment: FsK-treated
+│  │  └─ Run: SRR36541090
+│  └─ (more experiments for same sample...)
+└─ SAMN54118014
+   ├─ SRX31557546: "Solanum lycopersicum leaf FsK-treated no Drought..."
+   │  ├─ Library: lib_fsk_nodrought_rp3
+   │  └─ ...
+```
+
+---
+
+## 🧪 Validation
+
+✅ **All tests passed:**
+- Experiment titles correctly extracted
+- Metadata fields populated
+- Sample attributes stored
+- Hierarchical structure correct
+- JSON output includes everything
+- No missing or truncated data
+
+---
+
+## 📝 Next Steps (Optional)
+
+The data is now complete! If you want to further improve it:
+
+1. **Export to CSV with hierarchy** - Create a better CSV format that shows the hierarchy
+2. **Add experiment descriptions** - Extract longer description fields
+3. **Add run statistics** - Include read count, base pairs, etc.
+4. **Create a viewing tool** - Display the hierarchy in a readable format
+5. **Filter by metadata** - Search/filter by treatment, tissue, etc.
+
+---
+
+## Summary
+
+Your system now stores **complete hierarchical SRA data with all titles and metadata**. The JSON output (`sra_hierarchy` field) contains:
+
+- ✅ Experiment titles
+- ✅ Library names and technical details
+- ✅ Sequencing instrument information
+- ✅ Sample attributes (isolate, cultivar, age, tissue, treatment, etc.)
+- ✅ Clear associations between samples, experiments, and runs
+- ✅ All organized in a clean hierarchical structure
+
+Everything is ready for analysis, visualization, or export to other formats!
+
+---
+
+**Test it:**
+```bash
+# Quick test:
+python3 test_titles_metadata.py
+
+# Then check the JSON:
+cat /tmp/test_hierarchy.json | python3 -m json.tool
+```
+
+**Status**: ✅ **COMPLETE** - Ready to use!
