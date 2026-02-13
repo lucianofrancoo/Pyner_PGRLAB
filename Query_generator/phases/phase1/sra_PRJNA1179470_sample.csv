@@ -1,0 +1,11 @@
+sra_id,exp_accession,title,study_accession,organism,library_strategy,library_source,library_selection,biosample,run_count,runs,fetched_at
+36316760,SRX26886995,RNA-Seq of Arabidopsis thaliana: whole shoot nuclear RNA,SRP547762,Arabidopsis thaliana,RNA-Seq,TRANSCRIPTOMIC,other,SAMN44494209,1,SRR31519362,2026-02-12T12:09:55.148070
+36316759,SRX26886994,RNA-Seq of Arabidopsis thaliana: whole shoot nuclear RNA,SRP547762,Arabidopsis thaliana,RNA-Seq,TRANSCRIPTOMIC,other,SAMN44494208,1,SRR31519363,2026-02-12T12:09:55.702664
+36316758,SRX26886993,RNA-Seq of Arabidopsis thaliana: whole shoot nuclear RNA,SRP547762,Arabidopsis thaliana,RNA-Seq,TRANSCRIPTOMIC,other,SAMN44494207,1,SRR31519364,2026-02-12T12:09:56.304834
+36316757,SRX26886992,RNA-Seq of Arabidopsis thaliana: whole shoot nuclear RNA,SRP547762,Arabidopsis thaliana,RNA-Seq,TRANSCRIPTOMIC,other,SAMN44494206,1,SRR31519365,2026-02-12T12:09:56.854820
+36316756,SRX26886991,RNA-Seq of Arabidopsis thaliana: whole shoot nuclear RNA,SRP547762,Arabidopsis thaliana,RNA-Seq,TRANSCRIPTOMIC,other,SAMN44494205,1,SRR31519366,2026-02-12T12:09:57.410835
+36316755,SRX26886990,RNA-Seq of Arabidopsis thaliana: guard cell nuclear RNA,SRP547762,Arabidopsis thaliana,RNA-Seq,TRANSCRIPTOMIC,other,SAMN44494241,1,SRR31519367,2026-02-12T12:09:58.010555
+36316754,SRX26886989,RNA-Seq of Arabidopsis thaliana: guard cell nuclear RNA,SRP547762,Arabidopsis thaliana,RNA-Seq,TRANSCRIPTOMIC,other,SAMN44494240,1,SRR31519368,2026-02-12T12:09:58.620594
+36316753,SRX26886988,RNA-Seq of Arabidopsis thaliana: guard cell nuclear RNA,SRP547762,Arabidopsis thaliana,RNA-Seq,TRANSCRIPTOMIC,other,SAMN44494204,1,SRR31519369,2026-02-12T12:09:59.223163
+36316752,SRX26886987,RNA-Seq of Arabidopsis thaliana: guard cell nuclear RNA,SRP547762,Arabidopsis thaliana,RNA-Seq,TRANSCRIPTOMIC,other,SAMN44494239,1,SRR31519370,2026-02-12T12:09:59.829496
+36316751,SRX26886986,RNA-Seq of Arabidopsis thaliana: guard cell nuclear RNA,SRP547762,Arabidopsis thaliana,RNA-Seq,TRANSCRIPTOMIC,other,SAMN44494238,1,SRR31519371,2026-02-12T12:10:00.431403

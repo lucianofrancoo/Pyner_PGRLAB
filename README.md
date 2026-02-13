@@ -1,79 +1,155 @@
-# Pyner_PGRLAB — Project Overview
+# PYNER - Sistema Integrado de Búsqueda Científica
 
-Pyner is a local-first NCBI SRA query generator. The current deliverable is a
-fully cleaned, production-ready **Query Generator** with a 3-phase pipeline.
-
----
-
-## What Was Completed
-
-### Query Generator ✅
-- **Phase 1:** Knowledge Base extraction from 7.2M+ NCBI SRA XML files.
-- **Phase 2:** Vector database and query cache (FAISS + curated vocabulary).
-- **Phase 3:** FastAPI + CLI query generator with synonym expansion and
-  optional Ollama/Qwen LLM support.
-- **Pre-flight checks:** Validates KB availability, Ollama status, query cache,
-  and technical vocabulary before starting.
-- **Project cleanup:** Obsolete scripts, duplicated docs, logs, and caches were
-  removed; documentation consolidated under `Query_generator/`.
-
-### Fetcher_NCBI ✅
-- **NCBI SRA fetching:** Query NCBI Sequence Read Archive using boolean queries.
-- **Automatic deduplication:** Tracks processed BioProjects to avoid duplicates.
-- **Metadata extraction:** Parses XML responses for organism, library strategy, 
-  biosample, and more.
-- **Rate limiting:** Respects NCBI API guidelines (3 req/sec without key, 10/sec 
-  with key).
-- **Integration:** Seamless pipeline with Query Generator output.
+Sistema completo para buscar y vincular información de proyectos genómicos (BioProject), datos experimentales (SRA) y publicaciones científicas (PubMed) usando lenguaje natural.
 
 ---
 
-## Key Structure
-
-- `Query_generator/` — Main product folder (cleaned and documented).
-  - `Query_generator/README.md` — Main entry point for usage.
-  - `Query_generator/phases/README.md` — Full 3-phase pipeline guide.
-  - `Query_generator/phases/phase1/` — KB artifacts and scripts.
-  - `Query_generator/phases/phase2/` — FAISS + query cache artifacts.
-  - `Query_generator/phases/phase3/` — FastAPI + CLI Query Generator.
-  - `Query_generator/test_api.sh` — API smoke test.
-
-- `Fetcher_NCBI/` — NCBI SRA data fetcher (NEW).
-  - `Fetcher_NCBI/README.md` — Complete usage documentation.
-  - `Fetcher_NCBI/main.py` — CLI interface for fetching data.
-- `test_fetcher_integrator.sh` — Integration test with Query Generator.
-
-- `scripts_iniciales_beta/` — Archived early scripts (kept for reference).
-- `archive_old/` — Archived auxiliary files (kept for reference).
-- `docs/` — Legacy docs outside Query Generator (kept as requested).
-
----
-
-## Complete Workflow
-
-**Query Generator → Fetcher_NCBI**
+## 🚀 Inicio Rápido
 
 ```bash
-# 1. Generate optimized NCBI query from natural language
-cd Query_generator/phases/phase3
-python api/main.py "arabidopsis drought stress rna-seq"
-
-# 2. Fetch data from NCBI SRA
-cd ../../Fetcher_NCBI
-python main.py -q "GENERATED_QUERY_HERE" -o results.json
-
-# Or use the integration test (interactive)
-cd ../..
+cd /home/lahumada/disco1/Pyner_PGRLAB
 bash test_fetcher_integrator.sh
 ```
 
-**Quick Start (Query Generator only)**
-
-```bash
-cd Query_generator/phases/phase3
-python api/main.py "arabidopsis drought rna-seq"
+**Ejemplo de uso:**
+```
+> Arabidopsis under phosphate stress
+→ Elige base de datos: [1] BioProject  [2] PubMed
+→ Genera query booleano con sinónimos
+→ Busca en la base seleccionada
+→ Extrae datos (SRA si es BioProject, metadata si es PubMed)
+→ Exporta CSV + JSON
 ```
 
-For full documentation:
-- Query Generator: `Query_generator/README.md` and `Query_generator/phases/README.md`
-- Fetcher_NCBI: `Fetcher_NCBI/README.md`
+---
+
+## 📚 Documentación
+
+### 📖 **[GUIA_COMPLETA.md](GUIA_COMPLETA.md)** ← Lee esto primero
+
+Documentación completa del sistema con ejemplos, arquitectura y troubleshooting.
+
+---
+
+## ✨ Características
+
+✅ **Lenguaje Natural → Boolean Query** (IA con Ollama)  
+✅ **Búsqueda en BioProject** con query booleano + extracción SRA  
+✅ **Búsqueda directa en PubMed** para revisión bibliográfica rápida  
+✅ **Cascade PubMed Linking** (3 niveles de búsqueda para BioProject)  
+✅ **Marca "NA"** cuando no hay publicaciones  
+✅ **Export CSV + JSON** con metadata completa  
+
+---
+
+## 🏗️ Estructura
+
+```
+Pyner_PGRLAB/
+├── GUIA_COMPLETA.md                    # 📖 Documentación principal
+├── test_fetcher_integrator.sh         # 🚀 Script principal (selección de DB)
+├── Query_generator/phases/phase3/     # 🤖 IA: Natural → Boolean
+└── Fetcher_NCBI/                       # 🔍 Búsqueda y linking
+    ├── boolean_fetcher_integrated.py  # BioProject workflow
+    ├── pubmed_boolean_search.py       # PubMed direct search
+    ├── ncbi_fetcher_sra_fixed.py      # SRA fetcher
+    └── ncbi_linkout.py                # PubMed linking
+```
+
+---
+
+## 📊 Output CSV
+
+### Opción 1: BioProject
+
+```csv
+bioproject,title,organism,sra_experiments_count,biosamples_count,sra_runs_count,
+sra_experiments,biosamples,sra_runs,publications_found,search_method,dois,pmids
+```
+
+**Ejemplo:**
+```csv
+PRJNA123456,"Study Title",Arabidopsis,42,12,156,"SRX123; SRX124; ...","SAMN123; SAMN124; ...","SRR1234567; SRR1234568; ...",2,direct,"10.1234/abc","35123456"
+```
+
+**Notas sobre la jerarquía:**
+- **sra_experiments**: Lista de experimentos (SRX*) del BioProject
+- **biosamples**: Lista de muestras biológicas (SAMN*) asociadas a los experimentos
+- **sra_runs**: Lista de corridas de secuenciación (SRR*) que contienen los datos reales
+- Estructura: `BioProject → BioSample → Experiment (SRX) → Run (SRR)`
+- Todas las listas de IDs están separadas por punto y coma (`;`) para análisis posterior
+
+### Opción 2: PubMed Direct
+
+```csv
+pmid,title,year,journal,publication_type,authors,doi,pmcid,url,abstract,fetched_at
+```
+
+**Ejemplo:**
+```csv
+35099557,"The tomato OST1-VOZ1...",2022,"The Plant cell","Journal Article; Research Support, Non-U.S. Gov't","Chong L; Xu R; Huang P",10.1093/plcell/koac026,PMC9048945,https://...,Abstract...,2026-02-12
+```
+
+---
+
+## 🔧 Configuración
+
+1. **Instalar dependencias:**
+   ```bash
+   cd Fetcher_NCBI
+   pip install -r requirements.txt
+   ```
+
+2. **API Key NCBI** (opcional pero recomendado):
+   - Obtener en: https://www.ncbi.nlm.nih.gov/account/
+   - Editar `Fetcher_NCBI/config.py`:
+     ```python
+     NCBI_API_KEY = "your_api_key_here"
+     ```
+
+---
+
+## 📖 Uso
+
+### Modo Interactivo
+```bash
+bash test_fetcher_integrator.sh
+```
+
+### Modo Directo
+
+**BioProject:**
+```bash
+cd Fetcher_NCBI
+python boolean_fetcher_integrated.py "Arabidopsis phosphate" --max 20 --output-csv results.csv
+```
+
+**PubMed:**
+```bash
+cd Fetcher_NCBI
+python pubmed_boolean_search.py "Arabidopsis phosphate stress" --max 50 --output-csv pubmed.csv
+```
+
+---
+
+## ⚡ Performance
+
+| Operación | 10 BioProjects | 50 BioProjects |
+|-----------|----------------|----------------|
+| Total | ~10 min | ~45 min |
+
+**Recomendaciones:** Testing `--max 5`, Producción `--max 50`
+
+---
+
+## 📚 Más Información
+
+Lee **[GUIA_COMPLETA.md](GUIA_COMPLETA.md)** para:
+- Arquitectura detallada
+- Cascade PubMed search
+- Troubleshooting
+- Ejemplos avanzados
+
+---
+
+**Versión:** 1.0.0 | **Fecha:** 2026-02-12 | **Estado:** ✅ Producción

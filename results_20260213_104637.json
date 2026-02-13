@@ -1,0 +1,514 @@
+{
+  "metadata": {
+    "total_results": 1,
+    "date": "2026-02-13T10:47:08.570772",
+    "with_publications": 0,
+    "without_publications": 1
+  },
+  "results": [
+    {
+      "bioproject": "PRJNA1381306",
+      "title": "RNA-seq profiling of Solanum lycopersicum leaves in response to Fusarium solani endophyte and drought stress",
+      "description": "Fusarium solani strain K (FsK) is a beneficial root-residing fungal endophyte previously shown to enhance tomato resilience to biotic stresses. Here, we evaluated whether FsK also improves drought tolerance and investigated the underlying molecular and metabolic mechanisms. Tomato plants were inoculated with FsK or mock-treated and subjected to either well-watered or reduced-irrigation conditions. Physiological measurements, transcriptome profiling (RNA-seq), targeted hormone quantification, and untargeted metabolomic analyses were performed on leaf tissues to assess systemic plant responses. FsK-colonized plants exhibited enhanced drought tolerance, displaying higher relative water content and biomass accumulation compared with non-inoculated stressed plants. RNA-seq analysis revealed differential regulation of genes associated with abscisic acid (ABA) and jasmonic acid (JA) signaling, WRKY transcription factors, mitogen-activated protein kinase (MAPK) signaling MAPK pathways, and stress-responsive regulators, including several transcripts showing priming-type expression patterns. Metabolomic profiling showed a strong effect of FsK on leaf metabolic composition, with significant increases in ABA, JA, and specific metabolites such as kaempferol derivatives, D-glucosamine, and malic acid. Overall, our findings demonstrate that FsK primes tomato plants for drought tolerance through coordinated modulation of hormonal signaling, transcriptional regulation, and metabolic adjustment, providing insight into systemic mechanisms underlying endophyte-mediated stress resilience..",
+      "submission_date": "",
+      "organism": "Solanum lycopersicum",
+      "project_type": "\n            ",
+      "sra_experiments_count": 12,
+      "biosamples_count": 12,
+      "sra_runs_count": 12,
+      "sra_experiments": [
+        "SRX31557547",
+        "SRX31557546",
+        "SRX31557545",
+        "SRX31557544",
+        "SRX31557543",
+        "SRX31557542",
+        "SRX31557541",
+        "SRX31557540",
+        "SRX31557539",
+        "SRX31557538",
+        "SRX31557537",
+        "SRX31557536"
+      ],
+      "biosamples": [
+        "SAMN54118006",
+        "SAMN54118007",
+        "SAMN54118008",
+        "SAMN54118009",
+        "SAMN54118010",
+        "SAMN54118011",
+        "SAMN54118012",
+        "SAMN54118013",
+        "SAMN54118014",
+        "SAMN54118015",
+        "SAMN54118016",
+        "SAMN54118017"
+      ],
+      "sra_runs": [
+        "SRR36541090",
+        "SRR36541091",
+        "SRR36541092",
+        "SRR36541093",
+        "SRR36541094",
+        "SRR36541095",
+        "SRR36541096",
+        "SRR36541097",
+        "SRR36541098",
+        "SRR36541099",
+        "SRR36541100",
+        "SRR36541101"
+      ],
+      "sra_hierarchy": {
+        "SAMN54118015": {
+          "sample_id": "SAMN54118015",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557547",
+              "title": "Solanum lycopersicum leaf FsK-treated Drought-stress replicate 1",
+              "metadata": {
+                "library_name": "lib_fsk_drought_rp1",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-treated",
+                "stress": "yes",
+                "replicate": "1",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541090",
+                  "spots": 22735387,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118014": {
+          "sample_id": "SAMN54118014",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557546",
+              "title": "Solanum lycopersicum leaf FsK-treated no Drought-stress replicate 3",
+              "metadata": {
+                "library_name": "lib_fsk_nodrought_rp3",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-treated",
+                "stress": "no",
+                "replicate": "3",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541091",
+                  "spots": 29871929,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118013": {
+          "sample_id": "SAMN54118013",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557545",
+              "title": "Solanum lycopersicum leaf FsK-treated no Drought-stress replicate 2",
+              "metadata": {
+                "library_name": "lib_fsk_nodrought_rp2",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-treated",
+                "stress": "no",
+                "replicate": "2",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541092",
+                  "spots": 19160091,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118012": {
+          "sample_id": "SAMN54118012",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557544",
+              "title": "Solanum lycopersicum leaf FsK-treated no Drought-stress replicate 1",
+              "metadata": {
+                "library_name": "lib_fsk_nodrought_rp1",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-treated",
+                "stress": "no",
+                "replicate": "1",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541093",
+                  "spots": 26864994,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118011": {
+          "sample_id": "SAMN54118011",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557543",
+              "title": "Solanum lycopersicum leaf FsK-untreated Drought-stress replicate 3",
+              "metadata": {
+                "library_name": "lib_nofsk_drought_rp3",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-untreated",
+                "stress": "yes",
+                "replicate": "3",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541094",
+                  "spots": 24392771,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118010": {
+          "sample_id": "SAMN54118010",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557542",
+              "title": "Solanum lycopersicum leaf FsK-untreated Drought-stress replicate 2",
+              "metadata": {
+                "library_name": "lib_nofsk_drought_rp2",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-untreated",
+                "stress": "yes",
+                "replicate": "2",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541095",
+                  "spots": 16450790,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118009": {
+          "sample_id": "SAMN54118009",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557541",
+              "title": "Solanum lycopersicum leaf FsK-untreated Drought-stress replicate 1",
+              "metadata": {
+                "library_name": "lib_nofsk_drought_rp1",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-untreated",
+                "stress": "yes",
+                "replicate": "1",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541096",
+                  "spots": 24037523,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118008": {
+          "sample_id": "SAMN54118008",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557540",
+              "title": "Solanum lycopersicum leaf FsK-untreated no Drought-stress replicate 3",
+              "metadata": {
+                "library_name": "lib_nofsk_nodrought_rp3",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-untreated",
+                "stress": "no",
+                "replicate": "3",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541097",
+                  "spots": 27333839,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118017": {
+          "sample_id": "SAMN54118017",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557539",
+              "title": "Solanum lycopersicum leaf FsK-treated Drought-stress replicate 3",
+              "metadata": {
+                "library_name": "lib_fsk_drought_rp3",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-treated",
+                "stress": "yes",
+                "replicate": "3",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541098",
+                  "spots": 23896592,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118016": {
+          "sample_id": "SAMN54118016",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557538",
+              "title": "Solanum lycopersicum leaf FsK-treated Drought-stress replicate 2",
+              "metadata": {
+                "library_name": "lib_fsk_drought_rp2",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-treated",
+                "stress": "yes",
+                "replicate": "2",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541099",
+                  "spots": 22304933,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118007": {
+          "sample_id": "SAMN54118007",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557537",
+              "title": "Solanum lycopersicum leaf FsK-untreated no Drought-stress replicate 2",
+              "metadata": {
+                "library_name": "lib_nofsk_nodrought_rp2",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-untreated",
+                "stress": "no",
+                "replicate": "2",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541100",
+                  "spots": 23265942,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        },
+        "SAMN54118006": {
+          "sample_id": "SAMN54118006",
+          "experiments": [
+            {
+              "experiment_id": "SRX31557536",
+              "title": "Solanum lycopersicum leaf FsK-untreated no Drought-stress replicate 1",
+              "metadata": {
+                "library_name": "lib_nofsk_nodrought_rp1",
+                "library_strategy": "RNA-Seq",
+                "library_source": "TRANSCRIPTOMIC",
+                "library_selection": "PolyA",
+                "library_layout": "SINGLE",
+                "instrument": "Illumina NovaSeq 6000"
+              },
+              "sample_attributes": {
+                "isolate": "esculentum",
+                "cultivar": "Moneymaker",
+                "age": "29 days",
+                "dev_stage": "Vegetative stage [PO:0009021]",
+                "collection_date": "2021-06",
+                "geo_loc_name": "Greece:Thessaly,Larissa",
+                "tissue": "leaf",
+                "treatment": "FsK-untreated",
+                "stress": "no",
+                "replicate": "1",
+                "BioSampleModel": "Plant"
+              },
+              "runs": [
+                {
+                  "accession": "SRR36541101",
+                  "spots": 24865410,
+                  "size": "0 MB"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "publications_found": 0,
+      "search_method": "NA",
+      "dois": "NA",
+      "pmids": "NA",
+      "papers_summary": "NA"
+    }
+  ]
+}
