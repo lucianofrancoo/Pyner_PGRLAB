@@ -52,6 +52,7 @@ MULTIVALUE_SEPARATOR = " ; "  # Separator for multiple organisms/tissues/conditi
 # CSV columns order
 CSV_COLUMNS = [
     "PMID",
+    "PMCID",
     "Title",
     "Relevance_Score",
     "Is_Relevant",

@@ -184,6 +184,7 @@ class PaperAnalyzer:
         # Build result row
         result = {
             'PMID': paper.get('pmid', 'N/A'),
+            'PMCID': paper.get('pmcid', 'N/A'),
             'Title': title,
             'Relevance_Score': analysis['relevance_score'],
             'Is_Relevant': 'Yes' if analysis['relevance_score'] >= RELEVANCE_THRESHOLD else 'No',
@@ -203,6 +204,7 @@ class PaperAnalyzer:
         """Create result for papers that failed analysis"""
         return {
             'PMID': paper.get('pmid', 'N/A'),
+            'PMCID': paper.get('pmcid', 'N/A'),
             'Title': paper.get('title', 'N/A'),
             'Relevance_Score': 0,
             'Is_Relevant': 'Error',
