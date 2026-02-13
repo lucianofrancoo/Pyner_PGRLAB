@@ -29,19 +29,31 @@ pip install biopython
 
 ## 🚀 Inicio Rápido
 
+### Opción 1: Flujo completo con análisis IA (Recomendado)
+
+```bash
+bash test_data_analyzer.sh
+```
+
+**Flujo completo:**
+```
+> tomato roots drought RNA-Seq
+→ Choose database: [1] PubMed  [2] BioProject
+→ Generates boolean query with synonyms
+→ Searches selected database
+→ **AI Analysis:** Scores relevance + extracts organisms/tissues/conditions
+→ Exports: Classified table CSV
+```
+
+**Output:** Tabla clasificada con scores de relevancia, organismos, tejidos y condiciones extraídas automáticamente.
+
+### Opción 2: Solo búsqueda (sin análisis)
+
 ```bash
 bash test_fetcher_integrator.sh
 ```
 
-**Ejemplo de uso:**
-```
-> Arabidopsis under phosphate stress
-→ Choose database: [1] PubMed  [2] BioProject
-→ Generates boolean query with synonyms
-→ Searches selected database
-→ Extracts data (SRA if BioProject, metadata if PubMed)
-→ Exports CSV + JSON
-```
+Solo ejecuta búsqueda sin análisis posterior (más rápido, sin necesidad de Ollama).
 
 ---
 
@@ -85,9 +97,19 @@ ERROR: BioPython not installed
 ✅ **Lenguaje Natural → Boolean Query** (IA con Ollama)  
 ✅ **Búsqueda en BioProject** con query booleano + extracción SRA  
 ✅ **Búsqueda directa en PubMed** para revisión bibliográfica rápida  
-✅ **Cascade PubMed Linking** (3 niveles de búsqueda para BioProject)  
-✅ **Marca "NA"** cuando no hay publicaciones  
-✅ **Export CSV + JSON** con metadata completa  
+✅ **Análisis IA de papers** con scoring de relevancia y extracción estructurada  
+✅ **Extracción automática** de organismos, tejidos, condiciones, estrategias  
+✅ **Export CSV clasificado** con toda la metadata analizada  
+
+### 🆕 **Nuevo: Análisis Inteligente de Papers**
+
+- **Scoring de relevancia** (0-10) basado en tu consulta
+- **Extracción estructurada** automática:
+  - Organismos mencionados (nombres científicos)
+  - Tejidos/órganos estudiados
+  - Condiciones experimentales
+  - Técnicas utilizadas (RNA-Seq, qRT-PCR, etc.)
+- **Tabla clasificada final** lista para análisis downstream  
 
 ---
 
@@ -95,14 +117,25 @@ ERROR: BioPython not installed
 
 ```
 Pyner_PGRLAB/
-├── GUIA_COMPLETA.md                    # 📖 Documentación principal
-├── test_fetcher_integrator.sh         # 🚀 Script principal (selección de DB)
-├── Query_generator/phases/phase3/     # 🤖 IA: Natural → Boolean
-└── Fetcher_NCBI/                       # 🔍 Búsqueda y linking
-    ├── boolean_fetcher_integrated.py  # BioProject workflow
-    ├── pubmed_boolean_search.py       # PubMed direct search
-    ├── ncbi_fetcher_sra_fixed.py      # SRA fetcher
-    └── ncbi_linkout.py                # PubMed linking
+├── test_data_analyzer.sh             # 🚀 Script completo con análisis IA (RECOMENDADO)
+├── test_fetcher_integrator.sh        # 🔍 Script solo búsqueda (sin análisis)
+├── Query_generator/phases/phase3/    # 🤖 IA: Natural → Boolean
+├── Fetcher_NCBI/                      # 🔍 Búsqueda y linking
+│   ├── boolean_fetcher_integrated.py # BioProject workflow
+│   ├── pubmed_boolean_search.py      # PubMed direct search
+│   └── ncbi_fetcher_sra_fixed.py     # SRA fetcher
+└── Data_Analyzer/                     # 📊 Análisis IA de papers
+    ├── paper_analyzer.py              # Clasificación con Ollama
+    └── output/                        # Tablas clasificadas
+```
+
+**Flujo completo:**
+```
+1. Query_generator  → Query booleano con sinónimos
+2. Fetcher_NCBI     → Búsqueda en PubMed/BioProject
+3. Data_Analyzer    → Análisis IA + scoring + extracción
+   ↓
+   Tabla clasificada final
 ```
 
 ---
