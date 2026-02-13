@@ -28,37 +28,37 @@ printf "${BLUE}         PYNER - INTEGRATED BOOLEAN FETCHER${NC}\n"
 printf "${BLUE}================================================================${NC}\n\n"
 
 # Step 1: Get user input
-printf "${GREEN}[1/5] Ingresa tu consulta en lenguaje natural:${NC}\n"
+printf "${GREEN}[1/5] Enter your query in natural language:${NC}\n"
 read -r -p "> " USER_INPUT
 
 if [ -z "$USER_INPUT" ]; then
-    echo -e "${RED}ERROR: Input vacío. Abortando.${NC}"
+    echo -e "${RED}ERROR: Empty input. Aborting.${NC}"
     exit 1
 fi
 
 # Step 2: Ask user what they want to do
-printf "\n${GREEN}[2/5] ¿Qué quieres hacer?${NC}\n"
-printf "  ${YELLOW}1)${NC} Buscar Papers (PubMed) ${BLUE}→${NC} Rápido, lista de publicaciones con PMID\n"
-printf "  ${YELLOW}2)${NC} Buscar BioProjects ${BLUE}→${NC} Lento, busca proyectos ómicos y papers asociados por cascada BioProject --> BioSample --> BioExperiment\n"
-read -r -p "Selección [1-2]: " DB_CHOICE
+printf "\n${GREEN}[2/5] What do you want to do?${NC}\n"
+printf "  ${YELLOW}1)${NC} Search Papers (PubMed) ${BLUE}→${NC} Fast, list of publications with PMID\n"
+printf "  ${YELLOW}2)${NC} Search BioProjects ${BLUE}→${NC} Slow, searches omics projects and associated papers via cascade BioProject → BioSample → BioExperiment\n"
+read -r -p "Selection [1-2]: " DB_CHOICE
 
 case $DB_CHOICE in
     1)
         DATABASE="pubmed"
-        printf "  ✓ Seleccionado: ${BLUE}Búsqueda de Papers (PubMed)${NC}\n"
+        printf "  ✓ Selected: ${BLUE}Papers Search (PubMed)${NC}\n"
         ;;
     2)
         DATABASE="bioproject"
-        printf "  ✓ Seleccionado: ${BLUE}Búsqueda de BioProjects con cascada${NC}\n"
+        printf "  ✓ Selected: ${BLUE}BioProjects Search with cascade${NC}\n"
         ;;
     *)
-        echo -e "${RED}ERROR: Opción inválida. Usando búsqueda de Papers por defecto.${NC}"
+        echo -e "${RED}ERROR: Invalid option. Using Papers search by default.${NC}"
         DATABASE="pubmed"
         ;;
 esac
 
 # Step 3: Generate boolean query with Phase 3
-printf "\n${GREEN}[3/5] Generando query booleano con IA...${NC}\n\n"
+printf "\n${GREEN}[3/5] Generating boolean query with AI...${NC}\n\n"
 
 cd "$ROOT_DIR/Query_generator/phases/phase3"
 GEN_OUTPUT=$(python api/main.py --quick "$USER_INPUT" 2>/dev/null)
@@ -69,30 +69,30 @@ echo "$GEN_OUTPUT"
 QUERY=$(printf "%s\n" "$GEN_OUTPUT" | awk '/NCBI Query:/{getline; gsub(/^ +/, ""); print; exit}')
 
 if [ -z "$QUERY" ]; then
-    echo -e "${RED}ERROR: No se pudo extraer el query.${NC}"
+    echo -e "${RED}ERROR: Could not extract query.${NC}"
     exit 1
 fi
 
 # Step 4: Confirm query
-printf "\n${YELLOW}Query generado: ${BLUE}$QUERY${NC}\n"
-read -r -p "¿Continuar con este query? [S/n]: " CONFIRM
+printf "\n${YELLOW}Generated query: ${BLUE}$QUERY${NC}\n"
+read -r -p "Continue with this query? [Y/n]: " CONFIRM
 CONFIRM=$(echo "$CONFIRM" | tr '[:upper:]' '[:lower:]')
 
 if [ "$CONFIRM" = "n" ] || [ "$CONFIRM" = "no" ]; then
-    echo -e "${RED}Cancelado por el usuario.${NC}"
+    echo -e "${RED}Cancelled by user.${NC}"
     exit 0
 fi
 
 # Step 5a: Ask for max results
 if [ "$DATABASE" = "pubmed" ]; then
-    printf "\n${GREEN}[4/5] ¿Cuántas publicaciones quieres recuperar?${NC}\n"
-    printf "  ${YELLOW}(Presiona Enter para obtener todas las disponibles)${NC}\n"
-    read -r -p "Número máximo [default: sin límite]: " MAX_RESULTS
+    printf "\n${GREEN}[4/5] How many publications do you want to retrieve?${NC}\n"
+    printf "  ${YELLOW}(Press Enter to get all available)${NC}\n"
+    read -r -p "Maximum number [default: unlimited]: " MAX_RESULTS
     MAX_RESULTS=${MAX_RESULTS:-0}
 else
-    printf "\n${GREEN}[4/5] ¿Cuántos BioProjects quieres procesar?${NC}\n"
-    printf "  ${YELLOW}(Presiona Enter para obtener todos los disponibles)${NC}\n"
-    read -r -p "Número máximo [default: sin límite]: " MAX_RESULTS
+    printf "\n${GREEN}[4/5] How many BioProjects do you want to process?${NC}\n"
+    printf "  ${YELLOW}(Press Enter to get all available)${NC}\n"
+    read -r -p "Maximum number [default: unlimited]: " MAX_RESULTS
     MAX_RESULTS=${MAX_RESULTS:-0}
 fi
 
@@ -109,67 +109,34 @@ if [ "$DATABASE" = "pubmed" ]; then
     OUTPUT_CSV="$ROOT_DIR/pubmed_results_${TIMESTAMP}.csv"
     OUTPUT_JSON="$ROOT_DIR/pubmed_results_${TIMESTAMP}.json"
     
-    printf "\n${GREEN}[5/5] Ejecutando búsqueda directa en PubMed...${NC}\n\n"
+    printf "\n${GREEN}[5/5] Executing direct PubMed search...${NC}\n\n"
     
     python pubmed_boolean_search.py "$QUERY" \
         --max "$MAX_RESULTS" \
         --output-csv "$OUTPUT_CSV" \
         --output-json "$OUTPUT_JSON"
     
-    printf "\n${GREEN}✓ BÚSQUEDA COMPLETADA${NC}\n"
-    printf "${BLUE}Resultados guardados en:${NC}\n"
+    printf "\n${GREEN}✓ SEARCH COMPLETED${NC}\n"
+    printf "Results saved in:\n"
     printf "  📄 CSV:  %s\n" "$OUTPUT_CSV"
     printf "  📄 JSON: %s\n" "$OUTPUT_JSON"
-    
-    # Show preview
-    if [ -f "$OUTPUT_CSV" ]; then
-        printf "\n${YELLOW}Vista previa (primeras 3 líneas):${NC}\n"
-        head -3 "$OUTPUT_CSV" | cut -c1-100
-        echo "..."
-        
-        # Statistics
-        total=$(( $(wc -l < "$OUTPUT_CSV") - 1 ))
-        with_doi=$(awk -F',' 'NR>1 && $5 != "NA" && $5 != "" {count++} END {print count+0}' "$OUTPUT_CSV")
-        
-        printf "\n${GREEN}Estadísticas:${NC}\n"
-        printf "  Total publicaciones: ${BLUE}%d${NC}\n" "$total"
-        printf "  Con DOI: ${GREEN}%d${NC}\n" "$with_doi"
-        printf "  Sin DOI: ${YELLOW}%d${NC}\n" "$((total - with_doi))"
-    fi
 
 elif [ "$DATABASE" = "bioproject" ]; then
     # BioProject workflow with full integration (SLOW - with cascade)
     OUTPUT_CSV="$ROOT_DIR/results_${TIMESTAMP}.csv"
     OUTPUT_JSON="$ROOT_DIR/results_${TIMESTAMP}.json"
     
-    printf "\n${GREEN}[5/5] Ejecutando workflow integrado BioProject → SRA → PubMed...${NC}\n\n"
+    printf "\n${GREEN}[5/5] Executing integrated workflow BioProject → SRA → PubMed...${NC}\n\n"
     
     python boolean_fetcher_integrated.py "$QUERY" \
         --max "$MAX_RESULTS" \
         --output-csv "$OUTPUT_CSV" \
         --output-json "$OUTPUT_JSON"
     
-    printf "\n${GREEN}✓ WORKFLOW COMPLETADO${NC}\n"
-    printf "${BLUE}Resultados guardados en:${NC}\n"
+    printf "\n${GREEN}✓ WORKFLOW COMPLETE${NC}\n"
+    printf "Results saved in:\n"
     printf "  📄 CSV:  %s\n" "$OUTPUT_CSV"
     printf "  📄 JSON: %s\n" "$OUTPUT_JSON"
-    
-    # Show preview
-    if [ -f "$OUTPUT_CSV" ]; then
-        printf "\n${YELLOW}Vista previa (primeras 3 líneas):${NC}\n"
-        head -3 "$OUTPUT_CSV" | cut -c1-120
-        echo "..."
-        
-        # Statistics
-        total=$(( $(wc -l < "$OUTPUT_CSV") - 1 ))
-        with_papers=$(awk -F',' 'NR>1 && $10 > 0 {count++} END {print count+0}' "$OUTPUT_CSV")
-        without_papers=$(( total - with_papers ))
-        
-        printf "\n${GREEN}Estadísticas:${NC}\n"
-        printf "  Total BioProjects: ${BLUE}%d${NC}\n" "$total"
-        printf "  Con publicaciones: ${GREEN}%d${NC}\n" "$with_papers"
-        printf "  Sin publicaciones: ${YELLOW}%d${NC}\n" "$without_papers"
-    fi
 fi
 
 printf "\n${BLUE}================================================================${NC}\n"
