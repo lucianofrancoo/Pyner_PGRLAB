@@ -11,8 +11,6 @@
 # 4. CSV/JSON output with publication info
 #
 
-set -e
-
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
@@ -22,6 +20,58 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
+
+# ================================================================
+# ENVIRONMENT VALIDATION
+# ================================================================
+
+validate_environment() {
+    local errors=0
+    
+    # Check Python 3
+    if ! command -v python3 &> /dev/null; then
+        echo -e "${RED}ERROR: python3 not found${NC}"
+        echo -e "  Please install Python 3: ${YELLOW}sudo apt install python3${NC}"
+        ((errors++))
+    fi
+    
+    # Check BioPython
+    if ! python3 -c "import Bio" &> /dev/null; then
+        echo -e "${RED}ERROR: BioPython not installed${NC}"
+        echo -e "  Install with: ${YELLOW}pip install biopython${NC}"
+        echo -e "  Or: ${YELLOW}pip install -r Fetcher_NCBI/requirements.txt${NC}"
+        ((errors++))
+    fi
+    
+    # Check required files
+    local required_files=(
+        "Query_generator/phases/phase3/api/main.py"
+        "Fetcher_NCBI/pubmed_boolean_search.py"
+        "Fetcher_NCBI/boolean_fetcher_integrated.py"
+        "Fetcher_NCBI/config.py"
+    )
+    
+    for file in "${required_files[@]}"; do
+        if [ ! -f "$ROOT_DIR/$file" ]; then
+            echo -e "${RED}ERROR: Missing required file: $file${NC}"
+            ((errors++))
+        fi
+    done
+    
+    if [ $errors -gt 0 ]; then
+        echo -e "\n${RED}❌ Environment validation failed with $errors error(s)${NC}"
+        echo -e "${YELLOW}Please fix the issues above and try again.${NC}\n"
+        exit 1
+    fi
+    
+    return 0
+}
+
+# Run validation
+validate_environment
+
+# Now enable strict error handling after validation
+set -eo pipefail
 
 printf "\n${BLUE}================================================================${NC}\n"
 printf "${BLUE}         PYNER - INTEGRATED BOOLEAN FETCHER${NC}\n"
@@ -61,7 +111,7 @@ esac
 printf "\n${GREEN}[3/5] Generating boolean query with AI...${NC}\n\n"
 
 cd "$ROOT_DIR/Query_generator/phases/phase3"
-GEN_OUTPUT=$(python api/main.py --quick "$USER_INPUT" 2>/dev/null)
+GEN_OUTPUT=$(python3 api/main.py --quick "$USER_INPUT" 2>/dev/null)
 
 echo "$GEN_OUTPUT"
 
@@ -111,7 +161,7 @@ if [ "$DATABASE" = "pubmed" ]; then
     
     printf "\n${GREEN}[5/5] Executing direct PubMed search...${NC}\n\n"
     
-    python pubmed_boolean_search.py "$QUERY" \
+    python3 pubmed_boolean_search.py "$QUERY" \
         --max "$MAX_RESULTS" \
         --output-csv "$OUTPUT_CSV" \
         --output-json "$OUTPUT_JSON"
@@ -128,7 +178,7 @@ elif [ "$DATABASE" = "bioproject" ]; then
     
     printf "\n${GREEN}[5/5] Executing integrated workflow BioProject → SRA → PubMed...${NC}\n\n"
     
-    python boolean_fetcher_integrated.py "$QUERY" \
+    python3 boolean_fetcher_integrated.py "$QUERY" \
         --max "$MAX_RESULTS" \
         --output-csv "$OUTPUT_CSV" \
         --output-json "$OUTPUT_JSON"

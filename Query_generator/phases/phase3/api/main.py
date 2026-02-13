@@ -131,39 +131,38 @@ def check_dependencies() -> Dict[str, bool]:
         return status
 
 # ============================================
-# REQUEST/RESPONSE MODELS
-# ============================================
-class GenerateQueryRequest(BaseModel):
-    query: str
-    use_llm: bool = True
-
-class ExtractedTerms(BaseModel):
-    organism: str = None
-    strategies: List[str] = []
-    tissues: List[str] = []
-    conditions: List[str] = []
-    free_terms: List[str] = []
-
-class GenerateQueryResponse(BaseModel):
-    user_input: str
-    extracted: ExtractedTerms
-    ncbi_query: str
-    ready_to_use: bool
-    clarification_needed: bool = False
-    clarification_message: str = ""
-
-class StatsResponse(BaseModel):
-    status: str
-    kb_loaded: bool
-    organisms_count: int
-    strategies_count: int
-    ollama_available: bool
-    timestamp: str
-
-# ============================================
 # FASTAPI APP
 # ============================================
 if FASTAPI_AVAILABLE:
+    # REQUEST/RESPONSE MODELS (only needed for FastAPI)
+    class GenerateQueryRequest(BaseModel):
+        query: str
+        use_llm: bool = True
+
+    class ExtractedTerms(BaseModel):
+        organism: str = None
+        strategies: List[str] = []
+        tissues: List[str] = []
+        conditions: List[str] = []
+        free_terms: List[str] = []
+
+    class GenerateQueryResponse(BaseModel):
+        user_input: str
+        extracted: ExtractedTerms
+        ncbi_query: str
+        ready_to_use: bool
+        clarification_needed: bool = False
+        clarification_message: str = ""
+
+    class StatsResponse(BaseModel):
+        status: str
+        kb_loaded: bool
+        organisms_count: int
+        strategies_count: int
+        ollama_available: bool
+        timestamp: str
+    
+    # FastAPI application
     app = FastAPI(
         title="Pyner Query Generator",
         description="Generador de queries booleanas NCBI desde lenguaje natural",

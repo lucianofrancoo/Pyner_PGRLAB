@@ -4,30 +4,79 @@ Sistema completo para buscar y vincular información de proyectos genómicos (Bi
 
 ---
 
+## � Instalación
+
+### Opción 1: Script Automático (Recomendado)
+
+```bash
+cd Pyner_PGRLAB
+bash install_dependencies.sh
+```
+
+El script instalará automáticamente BioPython y verificará que todo esté listo.
+
+### Opción 2: Manual
+
+```bash
+pip install biopython
+```
+
+**Nota:** El script principal valida automáticamente todas las dependencias antes de ejecutarse.
+
+📖 **Más detalles:** Ver [INSTALLATION.md](INSTALLATION.md) para guía completa de instalación y troubleshooting.
+
+---
+
 ## 🚀 Inicio Rápido
 
 ```bash
-cd /home/lahumada/disco1/Pyner_PGRLAB
 bash test_fetcher_integrator.sh
 ```
 
 **Ejemplo de uso:**
 ```
 > Arabidopsis under phosphate stress
-→ Elige base de datos: [1] BioProject  [2] PubMed
-→ Genera query booleano con sinónimos
-→ Busca en la base seleccionada
-→ Extrae datos (SRA si es BioProject, metadata si es PubMed)
-→ Exporta CSV + JSON
+→ Choose database: [1] PubMed  [2] BioProject
+→ Generates boolean query with synonyms
+→ Searches selected database
+→ Extracts data (SRA if BioProject, metadata if PubMed)
+→ Exports CSV + JSON
 ```
 
 ---
 
 ## 📚 Documentación
 
-### 📖 **[GUIA_COMPLETA.md](GUIA_COMPLETA.md)** ← Lee esto primero
+### 📖 **[docs/FETCHER_DOCUMENTATION.md](docs/FETCHER_DOCUMENTATION.md)** ← Documentación completa
 
-Documentación completa del sistema con ejemplos, arquitectura y troubleshooting.
+Guía completa del sistema con ejemplos, arquitectura y troubleshooting.
+
+### 🔧 **[INSTALLATION.md](INSTALLATION.md)** ← Guía de instalación
+
+Instrucciones detalladas de instalación y resolución de problemas.
+
+---
+
+## 🛡️ Robustez y Validaciones
+
+El sistema incluye validaciones automáticas para garantizar portabilidad entre entornos:
+
+✅ **Validación de Python 3** - Verifica que `python3` esté disponible  
+✅ **Validación de BioPython** - Verifica instalación antes de ejecutar  
+✅ **Validación de archivos requeridos** - Verifica que todos los módulos existan  
+✅ **Manejo de dependencias opcionales** - FastAPI/Pydantic solo para servidor API  
+✅ **Mensajes de error claros** - Instrucciones específicas para resolver problemas  
+✅ **Uso de `python3` explícito** - Evita problemas con alias de Python 2  
+
+**Ejemplo de validación:**
+```bash
+$ bash test_fetcher_integrator.sh
+ERROR: python3 not found
+  Please install Python 3: sudo apt install python3
+
+ERROR: BioPython not installed
+  Install with: pip install biopython
+```
 
 ---
 
