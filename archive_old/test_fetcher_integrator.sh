@@ -77,8 +77,29 @@ printf "\n${BLUE}===============================================================
 printf "${BLUE}         PYNER - INTEGRATED BOOLEAN FETCHER${NC}\n"
 printf "${BLUE}================================================================${NC}\n\n"
 
-# Step 1: Get user input
-printf "${GREEN}[1/5] Enter your query in natural language:${NC}\n"
+# Step 1: Choose analysis mode
+printf "${GREEN}[1/6] Select analysis mode:${NC}\n"
+printf "  ${YELLOW}1)${NC} Lite ${BLUE}→${NC} Fast, fetch only (basic CSV/JSON output)\n"
+printf "  ${YELLOW}2)${NC} Pro  ${BLUE}→${NC} Full analysis with Data Analyzer (53 metadata columns + AI extraction)\n"
+read -r -p "Selection [1-2]: " ANALYSIS_MODE
+
+case $ANALYSIS_MODE in
+    1)
+        MODE="lite"
+        printf "  ✓ Selected: ${BLUE}Lite mode (fetch only)${NC}\n"
+        ;;
+    2)
+        MODE="pro"
+        printf "  ✓ Selected: ${BLUE}Pro mode (fetch + full analysis)${NC}\n"
+        ;;
+    *)
+        echo -e "${RED}ERROR: Invalid option. Using Lite mode by default.${NC}"
+        MODE="lite"
+        ;;
+esac
+
+# Step 2: Get user input
+printf "\n${GREEN}[2/6] Enter your query in natural language:${NC}\n"
 read -r -p "> " USER_INPUT
 
 if [ -z "$USER_INPUT" ]; then
@@ -86,8 +107,8 @@ if [ -z "$USER_INPUT" ]; then
     exit 1
 fi
 
-# Step 2: Ask user what they want to do
-printf "\n${GREEN}[2/5] What do you want to do?${NC}\n"
+# Step 3: Ask user what they want to do
+printf "\n${GREEN}[3/6] What do you want to do?${NC}\n"
 printf "  ${YELLOW}1)${NC} Search Papers (PubMed) ${BLUE}→${NC} Fast, list of publications with PMID\n"
 printf "  ${YELLOW}2)${NC} Search BioProjects ${BLUE}→${NC} Slow, searches omics projects and associated papers via cascade BioProject → BioSample → BioExperiment\n"
 read -r -p "Selection [1-2]: " DB_CHOICE
@@ -107,8 +128,8 @@ case $DB_CHOICE in
         ;;
 esac
 
-# Step 3: Generate boolean query with Phase 3
-printf "\n${GREEN}[3/5] Generating boolean query with AI...${NC}\n\n"
+# Step 4: Generate boolean query with Phase 3
+printf "\n${GREEN}[4/6] Generating boolean query with AI...${NC}\n\n"
 
 cd "$ROOT_DIR/Query_generator/phases/phase3"
 GEN_OUTPUT=$(python3 api/main.py --quick "$USER_INPUT" 2>/dev/null)

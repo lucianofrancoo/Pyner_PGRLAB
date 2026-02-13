@@ -29,31 +29,38 @@ pip install biopython
 
 ## 🚀 Inicio Rápido
 
-### Opción 1: Flujo completo con análisis IA (Recomendado)
+### Script Principal: PYNER Miner
 
 ```bash
-bash test_data_analyzer.sh
+bash pyner_miner.sh
 ```
 
-**Flujo completo:**
+**Flujo completo integrado:**
 ```
-> tomato roots drought RNA-Seq
-→ Choose database: [1] PubMed  [2] BioProject
-→ Generates boolean query with synonyms
-→ Searches selected database
-→ **AI Analysis:** Scores relevance + extracts organisms/tissues/conditions
-→ Exports: Classified table CSV
+[1] Select Mode:
+    → Lite: Fast fetch only (basic CSV/JSON)
+    → Pro:  Full AI analysis (53 metadata columns + relevance scoring)
+
+[2] Enter natural language query:
+    > "tomato drought stress RNA-Seq"
+
+[3] Choose database:
+    → [1] PubMed - Fast literature search
+    → [2] BioProject - Full omics data with cascade linking
+
+[4] AI generates boolean query with synonyms
+
+[5] Configure max results (unlimited by default)
+
+[6] Execution:
+    → Fetch: Basic publication metadata
+    → Pro mode: AI analysis with Ollama (organisms, tissues, conditions, etc.)
+    → Export: CSV + JSON in output/ directory
 ```
 
-**Output:** Tabla clasificada con scores de relevancia, organismos, tejidos y condiciones extraídas automáticamente.
-
-### Opción 2: Solo búsqueda (sin análisis)
-
-```bash
-bash test_fetcher_integrator.sh
-```
-
-Solo ejecuta búsqueda sin análisis posterior (más rápido, sin necesidad de Ollama).
+**Output:**
+- **Lite mode:** Basic CSV/JSON with PMID, title, abstract, DOI
+- **Pro mode:** Comprehensive CSV with 53 experimental metadata columns + AI-extracted details
 
 ---
 
@@ -94,22 +101,25 @@ ERROR: BioPython not installed
 
 ## ✨ Características
 
+### Lite Mode (Fast)
 ✅ **Lenguaje Natural → Boolean Query** (IA con Ollama)  
-✅ **Búsqueda en BioProject** con query booleano + extracción SRA  
-✅ **Búsqueda directa en PubMed** para revisión bibliográfica rápida  
-✅ **Análisis IA de papers** con scoring de relevancia y extracción estructurada  
-✅ **Extracción automática** de organismos, tejidos, condiciones, estrategias  
-✅ **Export CSV clasificado** con toda la metadata analizada  
+✅ **Búsqueda en PubMed** para revisión bibliográfica rápida  
+✅ **Búsqueda en BioProject** con query booleano + cascade linking (SRA)  
+✅ **Export básico** CSV/JSON con PMID, título, abstract, DOI  
 
-### 🆕 **Nuevo: Análisis Inteligente de Papers**
-
-- **Scoring de relevancia** (0-10) basado en tu consulta
-- **Extracción estructurada** automática:
-  - Organismos mencionados (nombres científicos)
-  - Tejidos/órganos estudiados
-  - Condiciones experimentales
-  - Técnicas utilizadas (RNA-Seq, qRT-PCR, etc.)
-- **Tabla clasificada final** lista para análisis downstream  
+### Pro Mode (Comprehensive)
+✅ Todo lo de Lite mode +  
+✅ **Análisis IA de papers** con Ollama (qwen2.5:14b)  
+✅ **53 columnas de metadata** experimental extraídas automáticamente:
+  - Organismos, especies, genotipos, tejidos, células
+  - Condiciones ambientales, temperatura, luz, medios de cultivo
+  - Moléculas extraídas (RNA/DNA/Protein con tipos específicos)
+  - Diseño temporal, replicación, grupos de tratamiento
+  - Métricas de calidad, umbrales estadísticos, normalización
+✅ **Scoring de relevancia** (0-10) basado en tu consulta  
+✅ **Token usage monitoring** en tiempo real (prompts, respuestas, velocidad)  
+✅ **Full-text PMC integration** cuando disponible  
+✅ **Tabla clasificada completa** lista para análisis downstream  
 
 ---
 
@@ -117,26 +127,34 @@ ERROR: BioPython not installed
 
 ```
 Pyner_PGRLAB/
-├── test_data_analyzer.sh             # 🚀 Script completo con análisis IA (RECOMENDADO)
-├── test_fetcher_integrator.sh        # 🔍 Script solo búsqueda (sin análisis)
-├── Query_generator/phases/phase3/    # 🤖 IA: Natural → Boolean
-├── Fetcher_NCBI/                      # 🔍 Búsqueda y linking
-│   ├── boolean_fetcher_integrated.py # BioProject workflow
+├── pyner_miner.sh                     # 🚀 Script principal (Lite/Pro mode)
+├── output/                            # 📁 All results stored here
+├── Query_generator/phases/phase3/    # 🤖 IA: Natural → Boolean query
+├── Fetcher_NCBI/                      # 🔍 Search and linking
+│   ├── boolean_fetcher_integrated.py # BioProject cascade workflow
 │   ├── pubmed_boolean_search.py      # PubMed direct search
 │   └── ncbi_fetcher_sra_fixed.py     # SRA fetcher
-└── Data_Analyzer/                     # 📊 Análisis IA de papers
-    ├── paper_analyzer.py              # Clasificación con Ollama
-    └── output/                        # Tablas clasificadas
+├── Data_Analyzer/                     # 📊 AI analysis with Ollama (Pro mode)
+│   ├── paper_analyzer.py              # 53-column extraction + scoring
+│   ├── ollama_client.py               # LLM interface (qwen2.5:14b)
+│   └── pmc_fetcher.py                 # Full-text fetcher from PMC
+└── archive_old/                       # 🗄️ Deprecated scripts & data
 ```
 
-**Flujo completo:**
+**Integrated pipeline:**
 ```
-1. Query_generator  → Query booleano con sinónimos
-2. Fetcher_NCBI     → Búsqueda en PubMed/BioProject
-3. Data_Analyzer    → Análisis IA + scoring + extracción
-   ↓
-   Tabla clasificada final
+1. Natural Language Input  →  Query_generator (AI with Ollama)
+                               ↓
+2. Boolean NCBI Query      →  Fetcher_NCBI (PubMed/BioProject)
+                               ↓
+3. Publications Retrieved  →  Data_Analyzer (Pro mode only)
+                               ↓
+4. Final Output            →  output/ directory (CSV + JSON)
 ```
+
+**Modes:**
+- **Lite:** Steps 1-2 only (fast fetch)
+- **Pro:** Steps 1-3 (full AI analysis with 53 metadata columns)
 
 ---
 
@@ -193,23 +211,47 @@ pmid,title,year,journal,publication_type,authors,doi,pmcid,url,abstract,fetched_
 
 ## 📖 Uso
 
-### Modo Interactivo
+### Modo Interactivo (Recomendado)
 ```bash
-bash test_fetcher_integrator.sh
+bash pyner_miner.sh
 ```
 
-### Modo Directo
+Interactive menu guides you through:
+1. Mode selection (Lite/Pro)
+2. Natural language query input
+3. Database selection (PubMed/BioProject)
+4. Query generation and confirmation
+5. Max results configuration
+6. Automated execution
 
-**BioProject:**
+### Modo Directo (Advanced)
+
+**Fetch only (Lite equivalent):**
+
+PubMed:
 ```bash
 cd Fetcher_NCBI
-python boolean_fetcher_integrated.py "Arabidopsis phosphate" --max 20 --output-csv results.csv
+python pubmed_boolean_search.py "Arabidopsis phosphate stress" --max 50 \
+  --output-csv ../output/results.csv --output-json ../output/results.json
 ```
 
-**PubMed:**
+BioProject:
 ```bash
 cd Fetcher_NCBI
-python pubmed_boolean_search.py "Arabidopsis phosphate stress" --max 50 --output-csv pubmed.csv
+python boolean_fetcher_integrated.py "Tomato drought RNA-Seq" --max 20 \
+  --output-csv ../output/results.csv --output-json ../output/results.json
+```
+
+**Full analysis (Pro equivalent):**
+```bash
+# Step 1: Fetch
+cd Fetcher_NCBI
+python pubmed_boolean_search.py "query" --max 50 \
+  --output-json ../output/fetch.json
+
+# Step 2: Analyze
+cd ../Data_Analyzer
+python paper_analyzer.py ../output/fetch.json ../output/classified.csv
 ```
 
 ---
@@ -234,4 +276,5 @@ Lee **[GUIA_COMPLETA.md](GUIA_COMPLETA.md)** para:
 
 ---
 
-**Versión:** 1.0.0 | **Fecha:** 2026-02-12 | **Estado:** ✅ Producción
+**Versión:** 2.0.0 | **Fecha:** 2026-02-13 | **Estado:** ✅ Producción  
+**Script principal:** `pyner_miner.sh` | **Modos:** Lite (fast) / Pro (comprehensive)
