@@ -119,6 +119,12 @@ JSON:"""
         """Call Ollama API"""
         url = f"{self.base_url}/api/generate"
         
+        # Dynamically increase timeout for longer texts
+        # Longer prompts take more time for LLM to process
+        # Estimate: ~1 second per 2000 characters + base timeout
+        timeout = max(self.timeout, int(len(prompt) / 2000 * 60))  # ~1 min per 2000 chars
+        logger.info(f"Prompt length: {len(prompt)} chars, timeout: {timeout}s")
+        
         payload = {
             "model": self.model,
             "prompt": prompt,
@@ -131,7 +137,7 @@ JSON:"""
         }
         
         logger.info(f"Calling Ollama API: {url}")
-        response = requests.post(url, json=payload, timeout=self.timeout)
+        response = requests.post(url, json=payload, timeout=timeout)
         response.raise_for_status()
         
         result = response.json()

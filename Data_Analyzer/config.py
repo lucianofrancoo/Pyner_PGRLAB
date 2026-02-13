@@ -37,10 +37,11 @@ MAX_ABSTRACT_LENGTH = 3000
 # Use full text from PMC when available (PMCID)
 USE_PMC_FULL_TEXT = True
 
-# Maximum full text length to send to LLM
-MAX_FULL_TEXT_LENGTH = 15000
+# Maximum full text length to send to LLM (0 = no limit)
+# Set to 0 to use complete text from PMC
+MAX_FULL_TEXT_LENGTH = 0  # No limit - use complete text
 
-#Batch size for processing papers
+# Batch size for processing papers
 BATCH_SIZE = 10
 
 # ============================================

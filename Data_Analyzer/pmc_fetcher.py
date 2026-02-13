@@ -29,8 +29,10 @@ class PMCFullTextFetcher:
     """Fetches full text from PubMed Central"""
     
     def __init__(self):
-        self.max_text_length = 20000  # Characters to extract (avoid overwhelming LLM)
-        self.max_methods_length = 8000  # More space for Methods section (has technique details)
+        # No limits - extract complete text from PMC
+        self.max_text_length = float('inf')  # Extract all available text
+        self.max_methods_length = float('inf')  # Extract complete Methods section
+        self.max_results_length = float('inf')  # Extract complete Results section
     
     def fetch_full_text(self, pmcid: str) -> Optional[Dict[str, str]]:
         """
@@ -87,11 +89,11 @@ class PMCFullTextFetcher:
             # Simple regex-based extraction (faster than full XML parsing)
             sections = {}
             
-            # Extract abstract
+            # Extract abstract (complete)
             abstract_match = re.search(r'<abstract[^>]*>(.*?)</abstract>', xml_content, re.DOTALL | re.IGNORECASE)
             if abstract_match:
                 abstract_text = self._clean_xml(abstract_match.group(1))
-                sections['abstract'] = abstract_text[:2000]  # Limit abstract
+                sections['abstract'] = abstract_text  # Complete abstract
             
             # Extract Methods section (contains organisms, tissues, conditions, techniques)
             # This section is important so we give it more space
@@ -110,8 +112,8 @@ class PMCFullTextFetcher:
                         break
             
             if methods_text:
-                # Keep full Methods content - it has technique details
-                sections['methods'] = methods_text[:self.max_methods_length]
+                # Keep complete Methods content - it has technique details
+                sections['methods'] = methods_text  # No limit
             
             # Extract Results section (contains experimental details)
             results_patterns = [
@@ -126,18 +128,18 @@ class PMCFullTextFetcher:
                     results_text += self._clean_xml(match.group(1)) + " "
             
             if results_text:
-                sections['results'] = results_text[:5000]  # Limit results
+                sections['results'] = results_text  # No limit - complete Results
             
-            # Create a preview: prioritize Methods (has technique details) then Results
+            # Create preview by combining Methods + Results (complete)
             full_text_preview = ""
             if 'methods' in sections:
-                # Give Methods more space since it has experimental technique details
-                full_text_preview += sections['methods'][:9000] + " "
+                full_text_preview += sections['methods'] + " "
             if 'results' in sections:
-                full_text_preview += sections['results'][:8000]
+                full_text_preview += sections['results']
             
             if full_text_preview:
-                sections['full_text_preview'] = full_text_preview[:self.max_text_length]
+                # No character limit - use complete text
+                sections['full_text_preview'] = full_text_preview
             
             return sections if sections else None
             
