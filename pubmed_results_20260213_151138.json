@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "query": "(\"Solanum lycopersicum\"[Organism] OR \"tomato\"[All Fields] OR \"tomate\"[All Fields] OR \"sollanum\"[All Fields]) AND (\"RNA-Seq\"[All Fields] OR \"rnaseq\"[All Fields] OR \"rna seq\"[All Fields] OR \"rna sequencing\"[All Fields] OR \"transcriptome\"[All Fields] OR \"transcriptomics\"[All Fields] OR \"transcriptomic\"[All Fields] OR \"transcriptome sequencing\"[All Fields] OR \"transcriptome analysis\"[All Fields] OR \"transcriptoma\"[All Fields] OR \"transcriptomico\"[All Fields] OR \"transcriptomica\"[All Fields] OR \"gene expression\"[All Fields] OR \"expresion\"[All Fields] OR \"expresi\u00f3n\"[All Fields] OR \"mrna\"[All Fields] OR \"messenger rna\"[All Fields] OR \"RNAseq\"[All Fields] OR \"RNASeq\"[All Fields] OR \"RNA_seq\"[All Fields] OR \"RNA_Seq\"[All Fields] OR \"Rna seq\"[All Fields] OR \"mRNA-seq\"[All Fields] OR \"mRNA-Seq\"[All Fields] OR \"mRNAseq\"[All Fields] OR \"mRNA sequencing\"[All Fields] OR \"polyA RNA-seq\"[All Fields] OR \"polyA RNA seq\"[All Fields] OR \"poly-A RNA-seq\"[All Fields] OR \"poly(A) RNA-seq\"[All Fields] OR \"total RNA-seq\"[All Fields] OR \"total RNA seq\"[All Fields] OR \"total rna-seq\"[All Fields] OR \"bulk RNA-seq\"[All Fields] OR \"bulk rna seq\"[All Fields] OR \"bulk RNA seq\"[All Fields] OR \"bulk rnaseq\"[All Fields] OR \"3' RNA-seq\"[All Fields] OR \"3 prime RNA-seq\"[All Fields] OR \"3prime RNA-seq\"[All Fields] OR \"tag-seq\"[All Fields] OR \"tagseq\"[All Fields] OR \"TagSeq\"[All Fields] OR \"tag seq\"[All Fields] OR \"Tag-Seq\"[All Fields] OR \"QuantSeq\"[All Fields] OR \"quantseq\"[All Fields] OR \"quant-seq\"[All Fields] OR \"expression profiling\"[All Fields] OR \"gene expression profiling\"[All Fields] OR \"expression analysis\"[All Fields] OR \"gene expression analysis\"[All Fields] OR \"transcriptional profiling\"[All Fields] OR \"transcriptional analysis\"[All Fields] OR \"transcription profiling\"[All Fields] OR \"differential expression\"[All Fields] OR \"DGE\"[All Fields] OR \"differential gene expression\"[All Fields] OR \"trascriptome\"[All Fields] OR \"transcriptom\"[All Fields] OR \"transcrptome\"[All Fields] OR \"transriptome\"[All Fields] OR \"trancriptome\"[All Fields] OR \"transcritpome\"[All Fields] OR \"trnascriptome\"[All Fields] OR \"rnasequecing\"[All Fields] OR \"rna-seqeuncing\"[All Fields] OR \"RNA-se\"[All Fields] OR \"rna-sequ\"[All Fields] OR \"expression profiling by high throughput sequencing\"[All Fields] OR \"global gene expression\"[All Fields] OR \"genome-wide expression\"[All Fields] OR \"whole transcriptome\"[All Fields] OR \"whole-transcriptome\"[All Fields]) AND (\"roots\"[All Fields] OR \"root\"[All Fields] OR \"ra\u00edz\"[All Fields] OR \"raices\"[All Fields] OR \"ra\u00edces\"[All Fields]) AND (\"drought\"[All Fields] OR \"sequ\u00eda\"[All Fields] OR \"sequia\"[All Fields] OR \"water deprivation\"[All Fields] OR \"water deficit\"[All Fields] OR \"drought stress\"[All Fields] OR \"water stress\"[All Fields] OR \"deficit hidrico\"[All Fields] OR \"dehydration\"[All Fields] OR \"water scarcity\"[All Fields])",
+    "total_results": 3,
+    "date": "2026-02-13T15:12:28.408641",
+    "with_doi": 3
+  },
+  "publications": [
+    {
+      "pmid": "41068586",
+      "title": "Transcriptome-based meta-analysis of drought stress regulatory genes in tomato.",
+      "abstract": "Plants possess various molecular defense systems to ward off biotic and abiotic stresses and adjust to environmental changes. The RNA-seq technology assists biologists in quickly identifying genes responding to abiotic stresses. Thereby, using meta-transcriptomic data from the GEO NCBI public database, we have attempted to reach a consensus on gene variations. This approach identified a global set of 18 drought-responsive genes by Bonferroni-adjusted proportional test on one sample, p\u2009<\u20090.05, and extensive meta-transcriptome analytics. The annotation of these differentially expressed genes identified the biological process, molecular function, cellular component, KEGG, and plant ontology terms. The terms that were found to be top-enriched (with P and Q adjusted to be <\u20090.05) were intracellular signal transduction (Solyc04g076810 and Solyc10g076710), ribonuclease P activity (Solyc05g054420), nucleolar ribonuclease P complex (Solyc05g054420), Glycosphingolipid biosynthesis and lateral root apical meristem (Solyc03g005227), respectively. These meta-DEGs description include CBL-interacting protein kinase 8 (biological process), phospholipase C2 (biological process), XH/XS domain-containing protein (molecular function & cellular component), alpha 1,4-glycosyltransferase family protein (KEGG) and Histone superfamily protein (plant ontology). qRT-PCR-based gene expression analyses elaborated the similar trends in gene expression in both local genotypes under drought stress conditions covering the ratio of six to four as per down and upregulated meta-genes, respectively. This could indicate that these genes are part of a putative set of stress-responsive genes that are crucial for survival and adaptation under drought conditions thereby, they may serve as potential targets for future functional studies and breeding applications that will be helpful to enhance tomato production in the future.",
+      "authors": [
+        "Murtaza M",
+        "Aqeel M",
+        "Waheeb SA"
+      ],
+      "year": "2025",
+      "journal": "BMC plant biology",
+      "publication_type": "Journal Article; Meta-Analysis",
+      "doi": "10.1186/s12870-025-07348-2",
+      "pmcid": "PMC12513158",
+      "url": "https://www.ncbi.nlm.nih.gov/pubmed/41068586",
+      "fetched_at": "2026-02-13T15:12:26.994682"
+    },
+    {
+      "pmid": "35204192",
+      "title": "Melatonin Improves Drought Stress Tolerance of Tomato by Modulating Plant Growth, Root Architecture, Photosynthesis, and Antioxidant Defense System.",
+      "abstract": "Tomato is an important vegetable that is highly sensitive to drought (DR) stress which impairs the development of tomato seedlings. Recently, melatonin (ME) has emerged as a nontoxic, regulatory biomolecule that regulates plant growth and enhances the DR tolerance mechanism in plants. The present study was conducted to examine the defensive role of ME in photosynthesis, root architecture, and the antioxidant enzymes' activities of tomato seedlings subjected to DR stress. Our results indicated that DR stress strongly suppressed growth and biomass production, inhibited photosynthesis, negatively affected root morphology, and reduced photosynthetic pigments in tomato seedlings. Per contra, soluble sugars, proline, and ROS (reactive oxygen species) were suggested to be improved in seedlings under DR stress. Conversely, ME (100 \u00b5M) pretreatment improved the detrimental-effect of DR by restoring chlorophyll content, root architecture, gas exchange parameters and plant growth attributes compared with DR-group only. Moreover, ME supplementation also mitigated the antioxidant enzymes [APX (ascorbate peroxidase), CAT (catalase), DHAR (dehydroascorbate reductase), GST (glutathione S-transferase), GR (glutathione reductase), MDHAR (monodehydroascorbate reductase), POD (peroxidase), and SOD (superoxide dismutase)], non-enzymatic antioxidant [AsA (ascorbate), DHA (dehydroascorbic acid), GSH (glutathione), and GSSG, (oxidized glutathione)] activities, reduced oxidative damage [EL (electrolyte leakage), H2O2 (hydrogen peroxide), MDA (malondialdehyde), and O2\u2022- (superoxide ion)] and osmoregulation (soluble sugars and proline) of tomato seedlings, by regulating gene expression for SOD, CAT, APX, GR, POD, GST, DHAR, and MDHAR. These findings determine that ME pretreatment could efficiently improve the seedlings growth, root characteristics, leaf photosynthesis and antioxidant machinery under DR stress and thereby increasing the seedlings' adaptability to DR stress.",
+      "authors": [
+        "Altaf MA",
+        "Shahid R",
+        "Ren MX"
+      ],
+      "year": "2022",
+      "journal": "Antioxidants (Basel, Switzerland)",
+      "publication_type": "Journal Article",
+      "doi": "10.3390/antiox11020309",
+      "pmcid": "PMC8868175",
+      "url": "https://www.ncbi.nlm.nih.gov/pubmed/35204192",
+      "fetched_at": "2026-02-13T15:12:27.681426"
+    },
+    {
+      "pmid": "36904041",
+      "title": "Young Tomato Plants Respond Differently under Single or Combined Mild Nitrogen and Water Deficit: An Insight into Morphophysiological Responses and Primary Metabolism.",
+      "abstract": "This study aimed to understand the morphophysiological responses and primary metabolism of tomato seedlings subjected to mild levels of nitrogen and/or water deficit (50% N and/or 50% W). After 16 days of exposure, plants grown under the combined deficit showed similar behavior to the one found upon exposure to single N deficit. Both N deficit treatments resulted in a significantly lower dry weight, leaf area, chlorophyll content, and N accumulation but in a higher N use efficiency when compared to control (CTR) plants. Moreover, concerning plant metabolism, at the shoot level, these two treatments also responded in a similar way, inducing higher C/N ratio, nitrate reductase (NR) and glutamine synthetase (GS) activity, expression of RuBisCO encoding genes as well as a downregulation of GS2.1 and GS2.2 transcripts. Interestingly, plant metabolic responses at the root level did not follow the same pattern, with plants under combined deficit behaving similarly to W deficit plants, resulting in enhanced nitrate and proline concentrations, NR activity, and an upregulation of GS1 and NR genes than in CTR plants. Overall, our data suggest that the N remobilization and osmoregulation strategies play a relevant role in plant acclimation to these abiotic stresses and highlight the complexity of plant responses under a combined N+W deficit.",
+      "authors": [
+        "Machado J",
+        "Vasconcelos MW",
+        "Soares C"
+      ],
+      "year": "2023",
+      "journal": "Plants (Basel, Switzerland)",
+      "publication_type": "Journal Article",
+      "doi": "10.3390/plants12051181",
+      "pmcid": "PMC10005627",
+      "url": "https://www.ncbi.nlm.nih.gov/pubmed/36904041",
+      "fetched_at": "2026-02-13T15:12:28.407673"
+    }
+  ]
+}

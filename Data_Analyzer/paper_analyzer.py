@@ -124,17 +124,22 @@ class PaperAnalyzer:
                 
                 if classified['Is_Relevant'] == 'Yes':
                     self.stats['relevant'] += 1
-                
-                logger.info(f"   ✓ Relevance: {classified['Relevance_Score']}/10")
-                logger.info(f"   ✓ Organisms: {classified['Organisms'][:60]}")
-                logger.info(f"   ✓ Tissues: {classified['Tissues'][:60]}")
-                logger.info(f"   ✓ Conditions: {classified['Conditions'][:60]}")
-                
+                    
             except Exception as e:
                 logger.error(f"   ✗ Error analyzing paper: {e}")
                 self.stats['errors'] += 1
-                # Add empty result
+                # Create and append error result when analysis fails
                 results.append(self._create_error_result(paper))
+                continue  # Skip logging below for error rows
+            
+            # Log successful results (outside try/except to avoid duplicates)
+            try:
+                logger.info(f"   ✓ Relevance: {classified['Relevance_Score']}/10")
+                logger.info(f"   ✓ Organisms: {classified['Organisms'][:60]}")
+                logger.info(f"   ✓ Tissues_Organs: {classified['Tissues_Organs'][:60]}")
+                logger.info(f"   ✓ Conditions: {classified['Conditions'][:60]}")
+            except Exception as log_err:
+                logger.warning(f"   ⚠ Could not log all fields: {log_err}")
         
         return results
     
