@@ -29,8 +29,10 @@ Install Ollama and pull the model:
 # Install Ollama (if not already installed)
 curl -fsSL https://ollama.com/install.sh | sh
 
-# Pull Qwen model
-ollama pull qwen3.5:9b
+# Pull a Qwen model (4b is recommended for balance, 9b for precision)
+ollama pull qwen2.5:14b
+# Or: ollama pull qwen3.5:9b
+# Or: ollama pull qwen3.5:2b
 
 # Start Ollama server
 ollama serve

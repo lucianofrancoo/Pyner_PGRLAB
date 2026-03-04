@@ -68,7 +68,7 @@ Automatic extraction of 53 metadata columns:
 - **BioPython**: `pip install biopython`
 - **Ollama** (for Pro/Query Gen modes): 
   1. Install Ollama: `curl -fsSL https://ollama.com/install.sh | sh`
-  2. Pull the model: `ollama pull qwen3.5:9b`
+  2. Pull a model (e.g., 4b, 9b, 2b, or 0.8b): `ollama pull qwen2.5:14b`
   3. Verify: `ollama list`
 
 

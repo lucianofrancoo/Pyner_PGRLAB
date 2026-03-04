@@ -533,7 +533,7 @@ Examples:
     if not ollama.is_available():
         print("ERROR: Ollama is not available")
         print("Make sure Ollama is running: ollama serve")
-        print("And that the model is pulled: ollama pull qwen3.5:9b")
+        print(f"And that the model is pulled: ollama pull {ollama.model}")
         sys.exit(1)
     
     print(f"✓ Ollama connected")

@@ -115,7 +115,7 @@ printf "  ${YELLOW}2)${NC} ${BLUE}Pro${NC}  - Full analysis with AI extraction\n
 printf "     ${CYAN}→${NC} 53 metadata columns with comprehensive experimental details\n"
 printf "     ${CYAN}→${NC} AI-powered extraction: organisms, conditions, molecules, time courses, etc.\n"
 printf "     ${CYAN}→${NC} Relevance scoring and quality metrics\n"
-printf "     ${CYAN}→${NC} Requires Ollama with qwen3.5:9b model\n\n"
+printf "     ${CYAN}→${NC} Requires Ollama (Select any local model: 0.8b, 2b, 4b, 9b, etc.)\n\n"
 
 read -r -p "Selection [1-2]: " ANALYSIS_MODE
 
@@ -128,22 +128,10 @@ case $ANALYSIS_MODE in
         MODE="pro"
         printf "\n  ✓ Selected: ${BLUE}Pro mode${NC} (fetch + full analysis)\n"
         
-        # Validate Data Analyzer availability
         if [ ! -f "$ROOT_DIR/Data_Analyzer/paper_analyzer.py" ]; then
             echo -e "${RED}ERROR: Data Analyzer not found${NC}"
             echo -e "Pro mode requires Data_Analyzer/paper_analyzer.py"
             exit 1
-        fi
-        
-        # Check Ollama connection for Pro mode
-        if ! python3 -c "import sys; sys.path.insert(0, '$ROOT_DIR/Data_Analyzer'); from config import OLLAMA_BASE_URL; import requests; requests.get(OLLAMA_BASE_URL, timeout=2)" 2>/dev/null; then
-            echo -e "${YELLOW}WARNING: Cannot connect to Ollama${NC}"
-            read -r -p "Continue anyway? [y/N]: " CONTINUE
-            CONTINUE=$(echo "$CONTINUE" | tr '[:upper:]' '[:lower:]')
-            if [ "$CONTINUE" != "y" ] && [ "$CONTINUE" != "yes" ]; then
-                echo -e "${RED}Cancelled by user.${NC}"
-                exit 0
-            fi
         fi
         ;;
     *)
@@ -151,6 +139,70 @@ case $ANALYSIS_MODE in
         MODE="lite"
         ;;
 esac
+
+# ================================================================
+# STEP 1.5: OLLAMA MODEL SELECTION (Required for Query Generation)
+# ================================================================
+        # Select Ollama Model
+        printf "\n${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+        printf "${GREEN}[1.5] Select Ollama model${NC}\n"
+        printf "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n\n"
+        
+        DEFAULT_MODEL="qwen2.5:14b"
+        
+        # Check if Ollama is available to list models
+        if command -v ollama &> /dev/null; then
+            printf "  Fetching available local models...\n"
+            
+            # Custom sorting: qwen3.5 sorted by size, then others, then qwen2.5 at the end
+            MODELS_35=($(ollama list | awk 'NR>1 {print $1}' | grep "qwen3.5" | grep -v "cloud" | sort -V || true))
+            MODELS_25=($(ollama list | awk 'NR>1 {print $1}' | grep "qwen2.5" | grep -v "cloud" | sort -V || true))
+            MODELS_OTHERS=($(ollama list | awk 'NR>1 {print $1}' | grep -v "qwen3.5" | grep -v "qwen2.5" | grep -v "cloud" || true))
+            
+            # Combine sorted list
+            MAPFILE_MODELS=(${MODELS_35[@]} ${MODELS_OTHERS[@]} ${MODELS_25[@]})
+            
+            if [ ${#MAPFILE_MODELS[@]} -eq 0 ]; then
+                echo -e "${YELLOW}  WARNING: No local models found in 'ollama list'.${NC}"
+                OLLAMA_MODEL="$DEFAULT_MODEL"
+                printf "  Using default: ${BLUE}$OLLAMA_MODEL${NC}\n"
+            else
+                for i in "${!MAPFILE_MODELS[@]}"; do
+                    LABEL="${MAPFILE_MODELS[$i]}"
+                    if [ "$LABEL" = "$DEFAULT_MODEL" ]; then
+                        printf "  ${YELLOW}$((i+1)))${NC} ${BLUE}${LABEL}${NC} ${GREEN}(default)${NC}\n"
+                    else
+                        printf "  ${YELLOW}$((i+1)))${NC} ${BLUE}${LABEL}${NC}\n"
+                    fi
+                done
+                
+                printf "\n  ${YELLOW}(Press Enter for $DEFAULT_MODEL)${NC}\n"
+                read -r -p "Selection [1-${#MAPFILE_MODELS[@]}]: " MODEL_SELECTION
+                
+                if [ -z "$MODEL_SELECTION" ]; then
+                    OLLAMA_MODEL="$DEFAULT_MODEL"
+                elif [[ "$MODEL_SELECTION" =~ ^[0-9]+$ ]] && [ "$MODEL_SELECTION" -ge 1 ] && [ "$MODEL_SELECTION" -le "${#MAPFILE_MODELS[@]}" ]; then
+                    OLLAMA_MODEL="${MAPFILE_MODELS[$((MODEL_SELECTION-1))]}"
+                else
+                    OLLAMA_MODEL="$DEFAULT_MODEL"
+                    printf "  Invalid selection. Using default: ${BLUE}$OLLAMA_MODEL${NC}\n"
+                fi
+            fi
+        else
+            echo -e "${YELLOW}  WARNING: 'ollama' command not found. Cannot list models.${NC}"
+            OLLAMA_MODEL="$DEFAULT_MODEL"
+            printf "  Using default: ${BLUE}$OLLAMA_MODEL${NC}\n"
+        fi
+
+# Export the model for sub-scripts (Query_generator & Data_Analyzer)
+export OLLAMA_MODEL
+printf "\n  ✓ Model: ${BLUE}$OLLAMA_MODEL${NC}\n"
+
+# Verify Ollama connection
+if ! python3 -c "import os; import requests; requests.get(os.getenv('OLLAMA_HOST', 'http://localhost:11434'), timeout=2)" 2>/dev/null; then
+    echo -e "${YELLOW}WARNING: Cannot connect to Ollama server${NC}"
+    printf "  Make sure it is running (ollama serve). Continuing with fallback logic...\n"
+fi
 
 # ================================================================
 # STEP 2: NATURAL LANGUAGE QUERY INPUT

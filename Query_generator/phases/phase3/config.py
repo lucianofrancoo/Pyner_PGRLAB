@@ -19,8 +19,9 @@ API_WORKERS = 4
 API_RELOAD = True
 
 # Ollama LLM
-OLLAMA_HOST = "http://localhost:11434"
-OLLAMA_MODEL = "qwen3.5:9b"
+import os
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:14b")
 OLLAMA_TIMEOUT = 30
 QUERY_EXPANSION_ENABLED = True
 
