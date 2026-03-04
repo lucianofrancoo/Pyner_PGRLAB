@@ -78,7 +78,7 @@ select {
 }
 
 select option {
-  background: #ffffff;
+  background: var(--bg-soft);
   color: var(--text-main);
 }
 
@@ -652,7 +652,7 @@ button.ghost:hover {
 .repo-panel {
   display: grid;
   gap: 14px;
-  background: linear-gradient(180deg, #ffffff, #f7f9fd);
+  background: var(--card);
   border-color: var(--line);
 }
 
@@ -669,12 +669,12 @@ button.ghost:hover {
   font-size: 2rem;
   line-height: 0.95;
   letter-spacing: -0.03em;
-  color: #1f2e49;
+  color: var(--text-main);
 }
 
 .repo-title-block p {
   margin: 6px 0 0;
-  color: #71819a;
+  color: var(--accent);
   letter-spacing: 0.24em;
   text-transform: uppercase;
   font-size: 0.67rem;
@@ -777,37 +777,37 @@ button.ghost:hover {
 
 .repo-title {
   max-width: 360px;
-  color: #22324c;
+  color: var(--text-main);
   font-weight: 600;
 }
 
 .repo-organism {
   max-width: 220px;
-  color: #5d7090;
+  color: var(--text-soft);
   font-style: italic;
 }
 
 .repo-authors {
   max-width: 260px;
-  color: #4a5f7e;
+  color: var(--text-muted);
 }
 
 .repo-doi {
   max-width: 200px;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 0.76rem;
-  color: #315395;
+  color: var(--blue);
 }
 
 .repo-chip {
   display: inline-block;
   padding: 4px 9px;
   border-radius: 8px;
-  border: 1px solid #ead48f;
-  background: #fff6dc;
+  border: 1px solid rgba(212, 160, 23, 0.4);
+  background: rgba(212, 160, 23, 0.1);
   font-size: 0.68rem;
   font-weight: 700;
-  color: #3b4a63;
+  color: var(--accent-light);
 }
 
 .repo-true {
@@ -828,7 +828,7 @@ button.ghost:hover {
 .repo-metadata-stream {
   border-radius: 22px;
   border: 1px solid var(--line);
-  background: #fbfcff;
+  background: rgba(255, 255, 255, 0.02);
   display: grid;
   grid-template-columns: 0.9fr 1.2fr 0.8fr;
   gap: 10px;
@@ -840,12 +840,12 @@ button.ghost:hover {
 }
 
 .stream-column:not(:last-child) {
-  border-right: 1px solid #e9eef7;
+  border-right: 1px solid var(--line);
 }
 
 .stream-column p {
   margin: 0 0 10px;
-  color: #7588a4;
+  color: var(--text-soft);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-size: 0.62rem;
@@ -860,8 +860,8 @@ button.ghost:hover {
 .stream-bars article,
 .stream-kpis article {
   border-radius: 10px;
-  border: 1px solid #e2e8f2;
-  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .stream-bars article {
@@ -875,13 +875,13 @@ button.ghost:hover {
 
 .stream-bars strong,
 .stream-kpis strong {
-  color: #22324c;
+  color: var(--text-main);
   font-size: 1.05rem;
 }
 
 .stream-bars span,
 .stream-kpis span {
-  color: #8090a8;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.11em;
   font-size: 0.58rem;
@@ -937,8 +937,8 @@ button.ghost:hover {
   position: absolute;
   inset: 15px;
   border-radius: 999px;
-  background: #ffffff;
-  border: 1px solid #dce3ef;
+  background: var(--bg-soft);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .tissue-donut-wrap {
@@ -960,8 +960,8 @@ button.ghost:hover {
   position: absolute;
   inset: 16px;
   border-radius: 999px;
-  background: #ffffff;
-  border: 1px solid #dce3ef;
+  background: var(--bg-soft);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .tissue-legend {
@@ -984,14 +984,14 @@ button.ghost:hover {
 
 .tissue-legend small {
   font-size: 0.68rem;
-  color: #6f7f97;
+  color: var(--text-soft);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .tissue-legend strong {
   font-size: 0.72rem;
-  color: #253550;
+  color: var(--text-main);
 }
 
 .results-grid {
@@ -1016,7 +1016,7 @@ button.ghost:hover {
 .results-table th,
 .results-table td {
   padding: 11px 12px;
-  border-bottom: 1px solid #e6edf7;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   text-align: left;
   vertical-align: top;
 }
