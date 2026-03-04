@@ -6,7 +6,6 @@ import { ProAnalysisView } from './components/ProAnalysisView';
 import { AnalysisView } from './components/AnalysisView';
 import { HelpView } from './components/HelpView';
 import { StatusBanner } from './components/StatusBanner';
-import { QuerySummary } from './components/QuerySummary';
 import { analyzePapers, checkHealth, generateQuery, runSearchWithQuery } from './lib/api';
 import type { AppStatus, AppView, MineroResponse, ProAnalysisResponse, QueryGeneration, SearchPayload } from './types';
 
@@ -230,10 +229,6 @@ export default function App() {
           <StatusBanner status={status} message={message} metadata={response?.metadata ?? null} />
 
           <section className="workspace">
-            {view === 'buscar' ? (
-              <QuerySummary query={pendingRun?.query_generation ?? null} />
-            ) : null}
-
             {view === 'buscar' ? (
               <SearchView
                 loading={status === 'loading'}
