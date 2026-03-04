@@ -13,9 +13,12 @@ from pydantic import BaseModel, Field
 ROOT_DIR = Path(__file__).resolve().parents[2]
 FETCHER_DIR = ROOT_DIR / "Fetcher_NCBI"
 PHASES_DIR = ROOT_DIR / "Query_generator" / "phases"
+DATA_ANALYZER_DIR = ROOT_DIR / "Data_Analyzer"
 
 sys.path.insert(0, str(FETCHER_DIR))
 sys.path.insert(0, str(PHASES_DIR))
+# DATA_ANALYZER_DIR se agrega al final para no interferir con Fetcher_NCBI/config.py
+sys.path.append(str(DATA_ANALYZER_DIR))
 
 from boolean_fetcher_integrated import BooleanFetcherIntegrated
 from ncbi_linkout import LinkoutFetcher
@@ -37,8 +40,8 @@ LLM_CLASSIFICATION_LIMITS = {
 
 class SearchRequest(BaseModel):
     natural_query: str = Field(min_length=3, description="Consulta biologica en lenguaje natural")
-    source: Literal["pubmed", "bioproject"] = "pubmed"
-    max_results: int = Field(default=20, ge=1, le=200)
+    source: Literal["pubmed", "pmc", "bioproject"] = "pubmed"
+    max_results: int = Field(default=20, ge=1, le=10000)
     use_llm: bool = True
 
 
@@ -48,8 +51,8 @@ class GenerateQueryRequest(BaseModel):
 
 
 class RunSearchRequest(BaseModel):
-    source: Literal["pubmed", "bioproject"] = "pubmed"
-    max_results: int = Field(default=20, ge=1, le=200)
+    source: Literal["pubmed", "pmc", "bioproject"] = "pubmed"
+    max_results: int = Field(default=20, ge=1, le=10000)
     use_llm: bool = True
     ncbi_query: str = Field(min_length=3, description="Query booleana NCBI generada")
     query_generation: Dict[str, Any] = Field(default_factory=dict)
@@ -72,7 +75,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[],
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1):\d+",
+    allow_origin_regex=".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -139,7 +142,7 @@ def _generate_query_payload(natural_query: str, use_llm_requested: bool) -> Dict
 
 
 def _execute_search(
-    source: Literal["pubmed", "bioproject"],
+    source: Literal["pubmed", "pmc", "bioproject"],
     max_results: int,
     use_llm_requested: bool,
     ncbi_query: str,
@@ -147,7 +150,10 @@ def _execute_search(
 ) -> Dict[str, Any]:
     _, classifier = _ensure_services()
     use_llm = use_llm_requested and classifier.llm_available
-    llm_limit = LLM_CLASSIFICATION_LIMITS[source]
+
+    # PMC se trata igual que pubmed para efectos de límites LLM
+    llm_source_key = "pubmed" if source in ("pubmed", "pmc") else "bioproject"
+    llm_limit = LLM_CLASSIFICATION_LIMITS[llm_source_key]
     use_llm_classification = use_llm and max_results <= llm_limit
 
     if use_llm and not use_llm_classification:
@@ -165,9 +171,13 @@ def _execute_search(
     raw_results: List[Dict[str, Any]] = []
     results: List[Dict[str, Any]] = []
 
-    if source == "pubmed":
+    if source in ("pubmed", "pmc"):
+        # PMC usa la misma interfaz pero busca en full-text (db='pmc')
+        db = "pmc" if source == "pmc" else "pubmed"
         fetcher = LinkoutFetcher()
-        raw_results = fetcher.search_publications_by_boolean_query(ncbi_query, max_results=max_results)
+        raw_results = fetcher.search_publications_by_boolean_query(
+            ncbi_query, max_results=max_results, db=db
+        )
         results = [
             classifier.classify_pubmed(
                 record=item,
@@ -223,11 +233,18 @@ def generate_query(request: GenerateQueryRequest) -> Dict[str, Any]:
 def run_search(request: RunSearchRequest) -> Dict[str, Any]:
     query_payload = request.query_generation or {}
     query_payload["ncbi_query"] = request.ncbi_query
+    # Si la fuente es PMC, normalizar field tags para PMC antes de buscar
+    ncbi_query = request.ncbi_query
+    if request.source == "pmc":
+        import re as _re
+        ncbi_query = _re.sub(r"\[Organism\]", "[all]", ncbi_query)
+        ncbi_query = _re.sub(r"\[All Fields\]", "[all]", ncbi_query)
+        query_payload["ncbi_query"] = ncbi_query
     return _execute_search(
         source=request.source,
         max_results=request.max_results,
         use_llm_requested=request.use_llm,
-        ncbi_query=request.ncbi_query,
+        ncbi_query=ncbi_query,
         query_payload=query_payload,
     )
 
@@ -235,13 +252,104 @@ def run_search(request: RunSearchRequest) -> Dict[str, Any]:
 @app.post("/api/minero/search")
 def search(request: SearchRequest) -> Dict[str, Any]:
     query_payload = _generate_query_payload(request.natural_query, request.use_llm)
+    ncbi_query = query_payload.get("ncbi_query", "")
+    if request.source == "pmc":
+        import re as _re
+        ncbi_query = _re.sub(r"\[Organism\]", "[all]", ncbi_query)
+        ncbi_query = _re.sub(r"\[All Fields\]", "[all]", ncbi_query)
+        query_payload["ncbi_query"] = ncbi_query
     return _execute_search(
         source=request.source,
         max_results=request.max_results,
         use_llm_requested=request.use_llm,
-        ncbi_query=query_payload.get("ncbi_query", ""),
+        ncbi_query=ncbi_query,
         query_payload=query_payload,
     )
+
+
+# ================================================================
+# ENDPOINT: MODO PRO — ANÁLISIS PROFUNDO CON PAPER_ANALYZER
+# ================================================================
+
+class AnalyzePapersRequest(BaseModel):
+    """Recibe la lista de publicaciones PubMed ya obtenidas y una query de contexto."""
+    publications: List[Dict[str, Any]] = Field(
+        description="Lista de registros PubMed (tal como los devuelve el endpoint de búsqueda)"
+    )
+    query: str = Field(default="", description="Query original del usuario (para contexto del LLM)")
+
+
+@app.post("/api/minero/analyze-papers")
+def analyze_papers(request: AnalyzePapersRequest) -> Dict[str, Any]:
+    """
+    Modo Pro: ejecuta PaperAnalyzer sobre una lista de publicaciones PubMed.
+    Requiere Ollama con el modelo configurado en Data_Analyzer/config.py.
+    Devuelve la lista de resultados con las 53 columnas de metadatos experimentales.
+    """
+    try:
+        # Import dinámico para no bloquear arranque si Data_Analyzer tiene dependencias opcionales
+        from paper_analyzer import PaperAnalyzer
+        import ollama_client as da_ollama_module
+    except ImportError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Data_Analyzer no disponible: {exc}"
+        )
+
+    # Verificar que Ollama está disponible
+    try:
+        pro_ollama = da_ollama_module.OllamaClient()
+        if not pro_ollama.is_available():
+            raise HTTPException(
+                status_code=503,
+                detail="Ollama no está disponible. Verifica que está corriendo y que el modelo está descargado."
+            )
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail=f"Error conectando a Ollama: {exc}")
+
+    if not request.publications:
+        raise HTTPException(status_code=400, detail="La lista de publicaciones está vacía.")
+
+    logger.info("[Pro] Iniciando análisis Pro de %d publicaciones...", len(request.publications))
+
+    # Construir el objeto fetcher_data en el formato que espera PaperAnalyzer
+    fetcher_data = {
+        "metadata": {
+            "query": request.query or "(web analysis)",
+            "total_results": len(request.publications),
+        },
+        "publications": request.publications,
+    }
+
+    analyzer = PaperAnalyzer(pro_ollama)
+
+    try:
+        results = analyzer.analyze_papers(fetcher_data)
+    except Exception as exc:
+        logger.exception("[Pro] Error durante análisis: %s", exc)
+        raise HTTPException(status_code=500, detail=f"Error durante el análisis Pro: {exc}")
+
+    stats = analyzer.stats
+    logger.info(
+        "[Pro] Análisis completo: %d analizados, %d relevantes, %d errores",
+        stats.get("analyzed", 0),
+        stats.get("relevant", 0),
+        stats.get("errors", 0),
+    )
+
+    return {
+        "metadata": {
+            "total_analyzed": stats.get("analyzed", 0),
+            "total_relevant": stats.get("relevant", 0),
+            "total_errors": stats.get("errors", 0),
+            "pmc_full_text_used": stats.get("pmc_full_text", 0),
+            "abstract_only": stats.get("abstract_only", 0),
+            "techniques_enhanced": stats.get("techniques_enhanced", 0),
+            "model": pro_ollama.model,
+            "analyzed_at": datetime.now(timezone.utc).isoformat(),
+        },
+        "results": results,
+    }
 
 
 if __name__ == "__main__":

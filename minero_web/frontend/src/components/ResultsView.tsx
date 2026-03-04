@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Download, Search as SearchIcon } from 'lucide-react';
+import { Download, FlaskConical, Search as SearchIcon } from 'lucide-react';
 import type { BioprojectResult, MineroResponse, MineroResult, PubmedResult } from '../types';
 import { exportCsv, exportJson } from '../lib/exporters';
 
 interface ResultsViewProps {
   response: MineroResponse | null;
+  onRunPro?: (publications: Record<string, unknown>[], query: string) => void;
+  proLoading?: boolean;
 }
 
 function isPubmed(source: string, item: MineroResult): item is PubmedResult {
@@ -73,7 +75,7 @@ function inferTissue(text: string): TissueLabel {
   return 'unknown';
 }
 
-export function ResultsView({ response }: ResultsViewProps) {
+export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps) {
   const [searchText, setSearchText] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -90,7 +92,10 @@ export function ResultsView({ response }: ResultsViewProps) {
   }, [response, searchText]);
 
   const selected = filteredResults[selectedIndex] ?? null;
-  const isPubmedSource = response.metadata.source === 'pubmed';
+  const isPubmedSource =
+    response != null &&
+    (response.metadata.source === 'pubmed' || response.metadata.source === 'pmc');
+
 
   const streamStats = useMemo(() => {
     if (!response) {
@@ -110,7 +115,7 @@ export function ResultsView({ response }: ResultsViewProps) {
       };
     }
 
-    if (response.metadata.source !== 'pubmed') {
+    if (response.metadata.source !== 'pubmed' && response.metadata.source !== 'pmc') {
       const rows = response.results.filter((item): item is BioprojectResult => 'bioproject' in item);
       const tissueCounts: Record<TissueLabel, number> = {
         root: 0,
@@ -249,12 +254,28 @@ export function ResultsView({ response }: ResultsViewProps) {
           <button className="ghost repo-export-secondary" type="button" onClick={() => exportJson(response)}>
             <Download size={14} /> JSON
           </button>
+          {/* Botón Pro — solo para PubMed / PMC */}
+          {onRunPro && isPubmedSource && (
+            <button
+              className="ghost repo-export-secondary"
+              type="button"
+              disabled={proLoading}
+              onClick={() => {
+                const pubs = (response?.results ?? []) as unknown as Record<string, unknown>[];
+                const query = response?.query_generation?.user_input ?? '';
+                onRunPro(pubs, query);
+              }}
+            >
+              <FlaskConical size={14} />
+              {proLoading ? 'Analyzing…' : 'Run Pro Analysis'}
+            </button>
+          )}
         </div>
       </header>
 
       <section className="repo-metadata-stream">
         <div className="stream-column">
-          <p>{isPubmedSource ? 'PUBMED SNAPSHOT' : 'BIOPROJECT SNAPSHOT'}</p>
+          <p>{isPubmedSource ? 'PUBMED / PMC SNAPSHOT' : 'BIOPROJECT SNAPSHOT'}</p>
           <div className="stream-kpis">
             <article>
               <strong>{streamStats.total}</strong>

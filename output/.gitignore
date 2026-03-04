@@ -1,6 +1,0 @@
-# Ignore all CSV and JSON outputs
-*.csv
-*.json
-
-# Keep this directory
-!.gitignore

@@ -26,7 +26,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, List
 
-from config import (
+from da_config import (
     OUTPUT_DIR, LOGS_DIR, LOG_FILE, 
     CSV_COLUMNS, CSV_DELIMITER, MULTIVALUE_SEPARATOR,
     RELEVANCE_THRESHOLD, MAX_ABSTRACT_LENGTH, USE_PMC_FULL_TEXT

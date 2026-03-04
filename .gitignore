@@ -1,2 +1,37 @@
 # Local test outputs
 /test_fetcher_results.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.bgrm/
+output/
+
+# Node
+node_modules/
+dist/
+.env
+*.tsbuildinfo
+
+# Build artifacts
+*.log
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data outputs (large files generated at runtime)
+pubmed_results_*.csv
+pubmed_results_*.json
+bioproject_fetch_*.csv
+sra_results_*.csv

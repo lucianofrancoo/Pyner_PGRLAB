@@ -552,10 +552,13 @@ def main():
     parser.add_argument("--output-json", type=Path, help="Output JSON file")
     
     args = parser.parse_args()
-    
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     # Create output files if not specified
+    if not args.output_tsv:
         args.output_tsv = Path(f"boolean_results_{timestamp}.tsv")
-    
+
     # Run workflow
     fetcher = BooleanFetcherIntegrated()
     results = fetcher.run_workflow(args.query, max_bioproject=args.max)

@@ -1,7 +1,7 @@
-import type { MineroResponse, QueryGeneration, SearchPayload } from '../types';
+import type { MineroResponse, ProAnalysisResponse, QueryGeneration, SearchPayload } from '../types';
 
-const API_BASE = import.meta.env.VITE_MINERO_API_URL ?? 'http://127.0.0.1:8010';
-const DEFAULT_TIMEOUT_MS = 30000;
+const API_BASE = import.meta.env.VITE_MINERO_API_URL ?? '';
+const DEFAULT_TIMEOUT_MS = 180000;
 const PUBMED_SEARCH_TIMEOUT_MS = 180000;
 const BIOPROJECT_SEARCH_TIMEOUT_MS = 600000;
 
@@ -106,3 +106,35 @@ export async function checkHealth(): Promise<{ llm_runtime_available: boolean }>
   }
   return response.json();
 }
+
+// Modo Pro — timeout generoso: LLM procesa cada paper individualmente
+const PRO_ANALYSIS_TIMEOUT_MS = 30 * 60 * 1000; // 30 min
+
+export async function analyzePapers(
+  publications: Record<string, unknown>[],
+  query: string
+): Promise<ProAnalysisResponse> {
+  const response = await fetchWithTimeout(
+    `${API_BASE}/api/minero/analyze-papers`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ publications, query }),
+    },
+    PRO_ANALYSIS_TIMEOUT_MS
+  );
+
+  if (!response.ok) {
+    let detail = 'Pro analysis failed';
+    try {
+      const data = await response.json();
+      detail = data.detail ?? detail;
+    } catch {
+      // ignore
+    }
+    throw new Error(detail);
+  }
+
+  return response.json();
+}
+
