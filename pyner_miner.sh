@@ -57,6 +57,11 @@ validate_environment() {
         "Fetcher_NCBI/config.py"
     )
     
+    if [ ! -d "$ROOT_DIR/Data_visualization" ]; then
+        echo -e "${RED}ERROR: Missing Data_visualization directory${NC}"
+        ((errors++))
+    fi
+    
     for file in "${required_files[@]}"; do
         if [ ! -f "$ROOT_DIR/$file" ]; then
             echo -e "${RED}ERROR: Missing required file: $file${NC}"
@@ -110,7 +115,7 @@ printf "  ${YELLOW}2)${NC} ${BLUE}Pro${NC}  - Full analysis with AI extraction\n
 printf "     ${CYAN}→${NC} 53 metadata columns with comprehensive experimental details\n"
 printf "     ${CYAN}→${NC} AI-powered extraction: organisms, conditions, molecules, time courses, etc.\n"
 printf "     ${CYAN}→${NC} Relevance scoring and quality metrics\n"
-printf "     ${CYAN}→${NC} Requires Ollama with qwen2.5:14b model\n\n"
+printf "     ${CYAN}→${NC} Requires Ollama with qwen3.5:9b model\n\n"
 
 read -r -p "Selection [1-2]: " ANALYSIS_MODE
 
@@ -364,6 +369,23 @@ elif [ "$DATABASE" = "bioproject" ]; then
 fi
 
 # ================================================================
+# STEP 7: DATA VISUALIZATION (Interactive HTML)
+# ================================================================
+
+printf "\n${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+printf "${GREEN}[7/7] Generating interactive visualization...${NC}\n"
+printf "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n\n"
+
+cd "$ROOT_DIR"
+python3 Data_visualization/paper_visualizer.py "$FETCH_JSON"
+
+VISUALIZATION_HTML="$OUTPUT_DIR/paper_network_${TIMESTAMP}.html"
+if [ ! -f "$VISUALIZATION_HTML" ]; then
+    # Fallback if timestamp doesn't match perfectly (unlikely but safe)
+    VISUALIZATION_HTML=$(ls -t "$OUTPUT_DIR"/paper_network_*.html 2>/dev/null | head -n 1 || echo "")
+fi
+
+# ================================================================
 # FINAL SUMMARY
 # ================================================================
 
@@ -386,6 +408,10 @@ else
     printf "  📄 Fetch TSV:       $(basename "$FETCH_TSV")\n"
     printf "  📄 Fetch JSON:      $(basename "$FETCH_JSON")\n"
     printf "  📊 Classified TSV:  $(basename "$ANALYSIS_TSV")\n"
+fi
+
+if [ -f "$VISUALIZATION_HTML" ]; then
+    printf "  ✨ Interactive HTML: $(basename "$VISUALIZATION_HTML")\n"
 fi
 
 printf "\n${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n\n"

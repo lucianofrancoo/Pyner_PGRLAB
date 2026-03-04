@@ -1423,3 +1423,169 @@
 [2026-03-03 11:13:40,277] INFO     | phase3.api.query_generator | 🔍 Genes found: ['solyc03g116890', 'wrky transcription factor 39', 'slwrky39']
 [2026-03-03 11:13:40,278] INFO     | phase3.api.query_generator | 🔍 Free terms: None
 [2026-03-03 11:13:40,278] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("SlWRKY39"[All Fields] OR "Solyc03g116890"[All Fields] OR "WRKY transcription factor 39"[All Fields])
+[2026-03-03 11:53:28,762] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 11:53:28,764] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 11:53:28,765] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-03 11:53:28,774] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-03 11:53:28,907] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-03 11:53:28,913] INFO     | phase3.api.query_generator | 📝 Processing user input: MYB60 arabidopsis
+[2026-03-03 11:53:32,094] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': 'Arabidopsis thaliana', 'genes': ['MYB60'], 'tissues': [], 'conditions': [], 'strategies': [], 'keywords': []}
+[2026-03-03 11:53:32,102] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Arabidopsis thaliana']
+[2026-03-03 11:53:32,102] INFO     | phase3.api.query_generator | 🔍 Strategies found: None
+[2026-03-03 11:53:32,106] INFO     | phase3.api.query_generator | 🔍 Tissues found: None
+[2026-03-03 11:53:32,106] INFO     | phase3.api.query_generator | 🔍 Conditions found: None
+[2026-03-03 11:53:32,183] INFO     | phase3.api.query_generator | 🔍 Genes found: ['myb60']
+[2026-03-03 11:53:32,183] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-03 11:53:32,183] INFO     | phase3.api.query_generator | ✅ Generated query: ("Arabidopsis thaliana"[Organism] OR "arabidopsis"[All Fields] OR "a. thaliana"[All Fields] OR "a thaliana"[All Fields] OR "thale cress"[All Fields] OR "thale-cress"[All Fields] OR "arabadopsis"[All Fields] OR "arabidopisis"[All Fields] OR "aradibopsis"[All Fields] OR "arabidopsis thalina"[All Fields]) AND ("myb60"[All Fields] OR "MYB60"[All Fields] OR "AtMYB60"[All Fields] OR "ATMYB60"[All Fields] OR "F22O13.30"[All Fields] OR "F22O13_30"[All Fields])
+[2026-03-03 11:59:38,010] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 11:59:38,012] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 11:59:38,013] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-03 11:59:38,024] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-03 11:59:38,168] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-03 11:59:38,174] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato SlWRKY52
+[2026-03-03 11:59:41,232] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': None, 'genes': ['SlWRKY52'], 'tissues': [], 'conditions': [], 'strategies': [], 'keywords': []}
+[2026-03-03 11:59:41,241] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-03 11:59:41,241] INFO     | phase3.api.query_generator | 🔍 Strategies found: None
+[2026-03-03 11:59:41,244] INFO     | phase3.api.query_generator | 🔍 Tissues found: None
+[2026-03-03 11:59:41,244] INFO     | phase3.api.query_generator | 🔍 Conditions found: None
+[2026-03-03 11:59:41,319] INFO     | phase3.api.query_generator | 🔍 Genes found: ['solyc03g007380', 'slwrky52', 'wrky transcription factor 52']
+[2026-03-03 11:59:41,320] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-03 11:59:41,320] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("SlWRKY52"[All Fields] OR "Solyc03g007380"[All Fields] OR "WRKY transcription factor 52"[All Fields])
+[2026-03-03 12:39:09,338] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 12:39:09,341] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 12:39:09,341] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-03 12:39:09,353] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-03 12:39:09,496] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-03 12:39:09,502] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato SlWRKY52
+[2026-03-03 12:39:12,593] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': 'null', 'genes': ['SlWRKY52'], 'tissues': [], 'conditions': [], 'strategies': [], 'keywords': []}
+[2026-03-03 12:39:12,601] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-03 12:39:12,601] INFO     | phase3.api.query_generator | 🔍 Strategies found: None
+[2026-03-03 12:39:12,604] INFO     | phase3.api.query_generator | 🔍 Tissues found: None
+[2026-03-03 12:39:12,604] INFO     | phase3.api.query_generator | 🔍 Conditions found: None
+[2026-03-03 12:39:12,686] INFO     | phase3.api.query_generator | 🔍 Genes found: ['solyc03g007380', 'wrky transcription factor 52', 'slwrky52']
+[2026-03-03 12:39:12,687] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-03 12:39:12,687] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("SlWRKY52"[All Fields] OR "Solyc03g007380"[All Fields] OR "WRKY transcription factor 52"[All Fields])
+[2026-03-03 12:52:16,449] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 12:52:16,451] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 12:52:16,452] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-03 12:52:16,461] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-03 12:52:16,590] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-03 12:52:16,596] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato SlWRKY52
+[2026-03-03 12:52:18,107] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': None, 'genes': ['SlWRKY52'], 'tissues': [], 'conditions': [], 'strategies': [], 'keywords': []}
+[2026-03-03 12:52:18,115] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-03 12:52:18,116] INFO     | phase3.api.query_generator | 🔍 Strategies found: None
+[2026-03-03 12:52:18,119] INFO     | phase3.api.query_generator | 🔍 Tissues found: None
+[2026-03-03 12:52:18,119] INFO     | phase3.api.query_generator | 🔍 Conditions found: None
+[2026-03-03 12:52:18,197] INFO     | phase3.api.query_generator | 🔍 Genes found: ['slwrky52', 'wrky transcription factor 52', 'solyc03g007380']
+[2026-03-03 12:52:18,198] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-03 12:52:18,198] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("SlWRKY52"[All Fields] OR "Solyc03g007380"[All Fields] OR "WRKY transcription factor 52"[All Fields])
+[2026-03-03 14:24:14,842] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 14:24:14,845] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 14:24:14,845] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-03 14:24:14,857] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-03 14:24:15,009] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-03 14:24:15,015] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato SlWRKY39
+[2026-03-03 14:24:18,098] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': None, 'genes': ['SlWRKY39'], 'tissues': [], 'conditions': [], 'strategies': [], 'keywords': []}
+[2026-03-03 14:24:18,106] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-03 14:24:18,106] INFO     | phase3.api.query_generator | 🔍 Strategies found: None
+[2026-03-03 14:24:18,110] INFO     | phase3.api.query_generator | 🔍 Tissues found: None
+[2026-03-03 14:24:18,110] INFO     | phase3.api.query_generator | 🔍 Conditions found: None
+[2026-03-03 14:24:18,188] INFO     | phase3.api.query_generator | 🔍 Genes found: ['solyc03g116890', 'slwrky39', 'wrky transcription factor 39']
+[2026-03-03 14:24:18,188] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-03 14:24:18,188] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("SlWRKY39"[All Fields] OR "Solyc03g116890"[All Fields] OR "WRKY transcription factor 39"[All Fields])
+[2026-03-03 14:51:01,187] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 14:51:01,190] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 14:51:01,190] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-03 14:51:01,201] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-03 14:51:01,345] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-03 14:51:01,351] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato SlWRKY52
+[2026-03-03 14:51:02,923] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': None, 'genes': ['SlWRKY52'], 'tissues': [], 'conditions': [], 'strategies': [], 'keywords': []}
+[2026-03-03 14:51:02,931] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-03 14:51:02,932] INFO     | phase3.api.query_generator | 🔍 Strategies found: None
+[2026-03-03 14:51:02,935] INFO     | phase3.api.query_generator | 🔍 Tissues found: None
+[2026-03-03 14:51:02,935] INFO     | phase3.api.query_generator | 🔍 Conditions found: None
+[2026-03-03 14:51:03,019] INFO     | phase3.api.query_generator | 🔍 Genes found: ['wrky transcription factor 52', 'slwrky52', 'solyc03g007380']
+[2026-03-03 14:51:03,019] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-03 14:51:03,019] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("SlWRKY52"[All Fields] OR "Solyc03g007380"[All Fields] OR "WRKY transcription factor 52"[All Fields])
+[2026-03-03 14:57:54,125] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 14:57:54,128] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 14:57:54,129] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-03 14:57:54,140] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-03 14:57:54,298] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-03 14:57:54,304] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato SlWRKY78
+[2026-03-03 14:57:55,852] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': None, 'genes': ['SlWRKY78'], 'tissues': [], 'conditions': [], 'strategies': [], 'keywords': []}
+[2026-03-03 14:57:55,861] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-03 14:57:55,862] INFO     | phase3.api.query_generator | 🔍 Strategies found: None
+[2026-03-03 14:57:55,865] INFO     | phase3.api.query_generator | 🔍 Tissues found: None
+[2026-03-03 14:57:55,865] INFO     | phase3.api.query_generator | 🔍 Conditions found: None
+[2026-03-03 14:57:55,953] INFO     | phase3.api.query_generator | 🔍 Genes found: ['slwrky78', 'solyc07g055280', 'wrky transcription factor 78']
+[2026-03-03 14:57:55,953] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-03 14:57:55,953] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("SlWRKY78"[All Fields] OR "Solyc07g055280"[All Fields] OR "WRKY transcription factor 78"[All Fields])
+[2026-03-03 15:04:47,543] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 15:04:47,546] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 15:04:47,546] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-03 15:04:47,556] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-03 15:04:47,703] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-03 15:04:47,708] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato SlWRKY50
+[2026-03-03 15:04:49,247] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': None, 'genes': ['SlWRKY50'], 'tissues': [], 'conditions': [], 'strategies': [], 'keywords': []}
+[2026-03-03 15:04:49,255] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-03 15:04:49,255] INFO     | phase3.api.query_generator | 🔍 Strategies found: None
+[2026-03-03 15:04:49,258] INFO     | phase3.api.query_generator | 🔍 Tissues found: None
+[2026-03-03 15:04:49,258] INFO     | phase3.api.query_generator | 🔍 Conditions found: None
+[2026-03-03 15:04:49,339] INFO     | phase3.api.query_generator | 🔍 Genes found: ['wrky transcription factor 50', 'slwrky50', 'solyc08g062490']
+[2026-03-03 15:04:49,339] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-03 15:04:49,339] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("SlWRKY50"[All Fields] OR "Solyc08g062490"[All Fields] OR "WRKY transcription factor 50"[All Fields])
+[2026-03-03 15:28:33,686] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 15:28:33,689] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-03 15:28:33,690] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-03 15:28:33,701] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-03 15:28:33,839] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-03 15:28:33,844] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato SlWRKY37
+[2026-03-03 15:28:35,394] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': None, 'genes': ['SlWRKY37'], 'tissues': [], 'conditions': [], 'strategies': [], 'keywords': []}
+[2026-03-03 15:28:35,403] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-03 15:28:35,403] INFO     | phase3.api.query_generator | 🔍 Strategies found: None
+[2026-03-03 15:28:35,406] INFO     | phase3.api.query_generator | 🔍 Tissues found: None
+[2026-03-03 15:28:35,406] INFO     | phase3.api.query_generator | 🔍 Conditions found: None
+[2026-03-03 15:28:35,491] INFO     | phase3.api.query_generator | 🔍 Genes found: ['solyc01g079360', 'wrky transcription factor 37', 'slwrky37']
+[2026-03-03 15:28:35,491] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-03 15:28:35,491] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("SlWRKY37"[All Fields] OR "Solyc01g079360"[All Fields] OR "WRKY transcription factor 37"[All Fields])
+[2026-03-04 12:32:08,427] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-04 12:32:08,432] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-04 12:32:08,432] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-04 12:32:08,444] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-04 12:32:08,628] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-04 12:32:08,634] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato drought rnaseq roots
+[2026-03-04 12:32:19,022] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': 'Solanum lycopersicum', 'genes': [], 'tissues': ['root'], 'conditions': ['drought'], 'strategies': ['rnaseq'], 'keywords': []}
+[2026-03-04 12:32:19,032] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-04 12:32:19,032] INFO     | phase3.api.query_generator | 🔍 Strategies found: ['RNA-Seq']
+[2026-03-04 12:32:19,548] INFO     | phase3.api.query_generator | 🔍 Tissues found: ['roots', 'root']
+[2026-03-04 12:32:19,549] INFO     | phase3.api.query_generator | 🔍 Conditions found: ['drought']
+[2026-03-04 12:32:19,631] INFO     | phase3.api.query_generator | 🔍 Genes found: None
+[2026-03-04 12:32:19,631] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-04 12:32:19,794] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("RNA-Seq"[All Fields] OR "rnaseq"[All Fields] OR "rna seq"[All Fields] OR "rna sequencing"[All Fields] OR "transcriptome"[All Fields] OR "transcriptomics"[All Fields] OR "transcriptomic"[All Fields] OR "transcriptome sequencing"[All Fields] OR "transcriptome analysis"[All Fields] OR "transcriptoma"[All Fields] OR "transcriptomico"[All Fields] OR "transcriptomica"[All Fields] OR "gene expression"[All Fields] OR "expresion"[All Fields] OR "expresión"[All Fields] OR "mrna"[All Fields] OR "messenger rna"[All Fields] OR "RNAseq"[All Fields] OR "RNASeq"[All Fields] OR "RNA_seq"[All Fields] OR "RNA_Seq"[All Fields] OR "Rna seq"[All Fields] OR "mRNA-seq"[All Fields] OR "mRNA-Seq"[All Fields] OR "mRNAseq"[All Fields] OR "mRNA sequencing"[All Fields] OR "polyA RNA-seq"[All Fields] OR "polyA RNA seq"[All Fields] OR "poly-A RNA-seq"[All Fields] OR "poly(A) RNA-seq"[All Fields] OR "total RNA-seq"[All Fields] OR "total RNA seq"[All Fields] OR "total rna-seq"[All Fields] OR "bulk RNA-seq"[All Fields] OR "bulk rna seq"[All Fields] OR "bulk RNA seq"[All Fields] OR "bulk rnaseq"[All Fields] OR "3' RNA-seq"[All Fields] OR "3 prime RNA-seq"[All Fields] OR "3prime RNA-seq"[All Fields] OR "tag-seq"[All Fields] OR "tagseq"[All Fields] OR "TagSeq"[All Fields] OR "tag seq"[All Fields] OR "Tag-Seq"[All Fields] OR "QuantSeq"[All Fields] OR "quantseq"[All Fields] OR "quant-seq"[All Fields] OR "expression profiling"[All Fields] OR "gene expression profiling"[All Fields] OR "expression analysis"[All Fields] OR "gene expression analysis"[All Fields] OR "transcriptional profiling"[All Fields] OR "transcriptional analysis"[All Fields] OR "transcription profiling"[All Fields] OR "differential expression"[All Fields] OR "DGE"[All Fields] OR "differential gene expression"[All Fields] OR "trascriptome"[All Fields] OR "transcriptom"[All Fields] OR "transcrptome"[All Fields] OR "transriptome"[All Fields] OR "trancriptome"[All Fields] OR "transcritpome"[All Fields] OR "trnascriptome"[All Fields] OR "rnasequecing"[All Fields] OR "rna-seqeuncing"[All Fields] OR "RNA-se"[All Fields] OR "rna-sequ"[All Fields] OR "expression profiling by high throughput sequencing"[All Fields] OR "global gene expression"[All Fields] OR "genome-wide expression"[All Fields] OR "whole transcriptome"[All Fields] OR "whole-transcriptome"[All Fields]) AND ("roots"[All Fields] OR "root"[All Fields] OR "raíz"[All Fields] OR "raices"[All Fields] OR "raíces"[All Fields]) AND ("drought"[All Fields] OR "sequía"[All Fields] OR "sequia"[All Fields] OR "water stress"[All Fields] OR "deficit hidrico"[All Fields] OR "water scarcity"[All Fields] OR "water deficit"[All Fields] OR "drought stress"[All Fields] OR "dehydration"[All Fields] OR "water deprivation"[All Fields])
+[2026-03-04 12:33:27,200] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-04 12:33:27,203] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen2.5:14b
+[2026-03-04 12:33:27,204] INFO     | phase3.api.query_generator | 📖 Loading gene aliases from: gene_aliases_tomato.tab
+[2026-03-04 12:33:27,214] INFO     | phase3.api.query_generator |    ✓ Loaded 5012 gene alias entries
+[2026-03-04 12:33:27,363] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-04 12:33:27,369] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato drought roots rnaseq
+[2026-03-04 12:33:29,147] INFO     | phase3.api.query_generator | ✅ LLM extraction: {'organism': 'Solanum lycopersicum', 'genes': [], 'tissues': ['root'], 'conditions': ['drought'], 'strategies': ['rnaseq'], 'keywords': []}
+[2026-03-04 12:33:29,156] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-04 12:33:29,156] INFO     | phase3.api.query_generator | 🔍 Strategies found: ['RNA-Seq']
+[2026-03-04 12:33:29,643] INFO     | phase3.api.query_generator | 🔍 Tissues found: ['roots', 'root']
+[2026-03-04 12:33:29,643] INFO     | phase3.api.query_generator | 🔍 Conditions found: ['drought']
+[2026-03-04 12:33:29,721] INFO     | phase3.api.query_generator | 🔍 Genes found: None
+[2026-03-04 12:33:29,721] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-04 12:33:29,884] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("RNA-Seq"[All Fields] OR "rnaseq"[All Fields] OR "rna seq"[All Fields] OR "rna sequencing"[All Fields] OR "transcriptome"[All Fields] OR "transcriptomics"[All Fields] OR "transcriptomic"[All Fields] OR "transcriptome sequencing"[All Fields] OR "transcriptome analysis"[All Fields] OR "transcriptoma"[All Fields] OR "transcriptomico"[All Fields] OR "transcriptomica"[All Fields] OR "gene expression"[All Fields] OR "expresion"[All Fields] OR "expresión"[All Fields] OR "mrna"[All Fields] OR "messenger rna"[All Fields] OR "RNAseq"[All Fields] OR "RNASeq"[All Fields] OR "RNA_seq"[All Fields] OR "RNA_Seq"[All Fields] OR "Rna seq"[All Fields] OR "mRNA-seq"[All Fields] OR "mRNA-Seq"[All Fields] OR "mRNAseq"[All Fields] OR "mRNA sequencing"[All Fields] OR "polyA RNA-seq"[All Fields] OR "polyA RNA seq"[All Fields] OR "poly-A RNA-seq"[All Fields] OR "poly(A) RNA-seq"[All Fields] OR "total RNA-seq"[All Fields] OR "total RNA seq"[All Fields] OR "total rna-seq"[All Fields] OR "bulk RNA-seq"[All Fields] OR "bulk rna seq"[All Fields] OR "bulk RNA seq"[All Fields] OR "bulk rnaseq"[All Fields] OR "3' RNA-seq"[All Fields] OR "3 prime RNA-seq"[All Fields] OR "3prime RNA-seq"[All Fields] OR "tag-seq"[All Fields] OR "tagseq"[All Fields] OR "TagSeq"[All Fields] OR "tag seq"[All Fields] OR "Tag-Seq"[All Fields] OR "QuantSeq"[All Fields] OR "quantseq"[All Fields] OR "quant-seq"[All Fields] OR "expression profiling"[All Fields] OR "gene expression profiling"[All Fields] OR "expression analysis"[All Fields] OR "gene expression analysis"[All Fields] OR "transcriptional profiling"[All Fields] OR "transcriptional analysis"[All Fields] OR "transcription profiling"[All Fields] OR "differential expression"[All Fields] OR "DGE"[All Fields] OR "differential gene expression"[All Fields] OR "trascriptome"[All Fields] OR "transcriptom"[All Fields] OR "transcrptome"[All Fields] OR "transriptome"[All Fields] OR "trancriptome"[All Fields] OR "transcritpome"[All Fields] OR "trnascriptome"[All Fields] OR "rnasequecing"[All Fields] OR "rna-seqeuncing"[All Fields] OR "RNA-se"[All Fields] OR "rna-sequ"[All Fields] OR "expression profiling by high throughput sequencing"[All Fields] OR "global gene expression"[All Fields] OR "genome-wide expression"[All Fields] OR "whole transcriptome"[All Fields] OR "whole-transcriptome"[All Fields]) AND ("roots"[All Fields] OR "root"[All Fields] OR "raíz"[All Fields] OR "raices"[All Fields] OR "raíces"[All Fields]) AND ("drought"[All Fields] OR "sequía"[All Fields] OR "sequia"[All Fields] OR "water deprivation"[All Fields] OR "dehydration"[All Fields] OR "drought stress"[All Fields] OR "deficit hidrico"[All Fields] OR "water deficit"[All Fields] OR "water scarcity"[All Fields] OR "water stress"[All Fields])
+[2026-03-04 12:49:41,915] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen3.5:9b
+[2026-03-04 12:49:41,918] INFO     | phase3.api.ollama_integration | 🤖 OllamaClient initialized: http://localhost:11434/qwen3.5:9b
+[2026-03-04 12:49:42,095] INFO     | phase3.api.query_generator | ✅ KB loaded: 186518 organisms, 44 strategies
+[2026-03-04 12:49:42,101] INFO     | phase3.api.query_generator | 📝 Processing user input: tomato drought rnaseq
+[2026-03-04 12:50:12,116] WARNING  | phase3.api.query_generator | ⚠️ LLM extraction error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)
+[2026-03-04 12:50:12,126] INFO     | phase3.api.query_generator | 🔍 Organism variants found: ['Solanum lycopersicum']
+[2026-03-04 12:50:12,126] INFO     | phase3.api.query_generator | 🔍 Strategies found: ['RNA-Seq']
+[2026-03-04 12:50:20,459] INFO     | phase3.api.query_generator | 🔍 Tissues found: None
+[2026-03-04 12:50:20,459] INFO     | phase3.api.query_generator | 🔍 Conditions found: ['drought']
+[2026-03-04 12:50:20,460] INFO     | phase3.api.query_generator | 🔍 Genes found: None
+[2026-03-04 12:50:20,460] INFO     | phase3.api.query_generator | 🔍 Free terms: None
+[2026-03-04 12:50:20,460] INFO     | phase3.api.query_generator | ✅ Generated query: ("Solanum lycopersicum"[Organism] OR "tomato"[All Fields] OR "tomate"[All Fields] OR "sollanum"[All Fields]) AND ("RNA-Seq"[All Fields] OR "rnaseq"[All Fields] OR "rna seq"[All Fields] OR "rna sequencing"[All Fields] OR "transcriptome"[All Fields] OR "transcriptomics"[All Fields] OR "transcriptomic"[All Fields] OR "transcriptome sequencing"[All Fields] OR "transcriptome analysis"[All Fields] OR "transcriptoma"[All Fields] OR "transcriptomico"[All Fields] OR "transcriptomica"[All Fields] OR "gene expression"[All Fields] OR "expresion"[All Fields] OR "expresión"[All Fields] OR "mrna"[All Fields] OR "messenger rna"[All Fields] OR "RNAseq"[All Fields] OR "RNASeq"[All Fields] OR "RNA_seq"[All Fields] OR "RNA_Seq"[All Fields] OR "Rna seq"[All Fields] OR "mRNA-seq"[All Fields] OR "mRNA-Seq"[All Fields] OR "mRNAseq"[All Fields] OR "mRNA sequencing"[All Fields] OR "polyA RNA-seq"[All Fields] OR "polyA RNA seq"[All Fields] OR "poly-A RNA-seq"[All Fields] OR "poly(A) RNA-seq"[All Fields] OR "total RNA-seq"[All Fields] OR "total RNA seq"[All Fields] OR "total rna-seq"[All Fields] OR "bulk RNA-seq"[All Fields] OR "bulk rna seq"[All Fields] OR "bulk RNA seq"[All Fields] OR "bulk rnaseq"[All Fields] OR "3' RNA-seq"[All Fields] OR "3 prime RNA-seq"[All Fields] OR "3prime RNA-seq"[All Fields] OR "tag-seq"[All Fields] OR "tagseq"[All Fields] OR "TagSeq"[All Fields] OR "tag seq"[All Fields] OR "Tag-Seq"[All Fields] OR "QuantSeq"[All Fields] OR "quantseq"[All Fields] OR "quant-seq"[All Fields] OR "expression profiling"[All Fields] OR "gene expression profiling"[All Fields] OR "expression analysis"[All Fields] OR "gene expression analysis"[All Fields] OR "transcriptional profiling"[All Fields] OR "transcriptional analysis"[All Fields] OR "transcription profiling"[All Fields] OR "differential expression"[All Fields] OR "DGE"[All Fields] OR "differential gene expression"[All Fields] OR "trascriptome"[All Fields] OR "transcriptom"[All Fields] OR "transcrptome"[All Fields] OR "transriptome"[All Fields] OR "trancriptome"[All Fields] OR "transcritpome"[All Fields] OR "trnascriptome"[All Fields] OR "rnasequecing"[All Fields] OR "rna-seqeuncing"[All Fields] OR "RNA-se"[All Fields] OR "rna-sequ"[All Fields] OR "expression profiling by high throughput sequencing"[All Fields] OR "global gene expression"[All Fields] OR "genome-wide expression"[All Fields] OR "whole transcriptome"[All Fields] OR "whole-transcriptome"[All Fields]) AND ("drought"[All Fields] OR "sequía"[All Fields] OR "sequia"[All Fields] OR "water deprivation"[All Fields] OR "deficit hidrico"[All Fields] OR "drought stress"[All Fields] OR "water scarcity"[All Fields] OR "water deficit"[All Fields] OR "dehydration"[All Fields] OR "water stress"[All Fields])

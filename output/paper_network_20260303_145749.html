@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PYNER — Paper Network</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --bg3: #f1f5f9;
+  --text: #1e293b;
+  --text2: #64748b;
+  --text3: #94a3b8;
+  --border: rgba(0,0,0,0.08);
+  --accent: #3b82f6;
+  --green: #059669;
+  --yellow: #d97706;
+  --red: #dc2626;
+  --panel-bg: rgba(255,255,255,0.97);
+  --card-bg: rgba(241,245,249,0.9);
+}
+
+[data-theme="dark"] {
+  --bg: #0a0e17;
+  --bg2: #111827;
+  --bg3: #1e293b;
+  --text: #e0e6f0;
+  --text2: #8892a8;
+  --text3: #4a5568;
+  --border: rgba(255,255,255,0.06);
+  --panel-bg: rgba(15,20,35,0.96);
+  --card-bg: rgba(30,40,60,0.8);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 10px 24px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.header h1 {
+    font-size: 16px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6ee7b7, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+}
+
+.header-stats {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text2);
+}
+
+.header-stats .val { color: var(--text); font-weight: 600; }
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--text2);
+}
+
+.legend-item { display: flex; align-items: center; gap: 4px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* Theme toggle */
+.theme-btn {
+    padding: 6px 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text2);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.theme-btn:hover { color: var(--text); }
+
+/* Side panel */
+.side-panel {
+    position: fixed;
+    top: 48px;
+    left: 0;
+    bottom: 0;
+    width: 240px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid var(--border);
+    z-index: 90;
+    padding: 16px;
+    overflow-y: auto;
+    transition: transform 0.3s;
+}
+
+.side-panel.collapsed {
+    transform: translateX(-240px);
+}
+
+.filter-section {
+    margin-bottom: 16px;
+}
+
+.filter-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    font-size: 12px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: color 0.15s;
+}
+.filter-option:hover { color: var(--text); }
+.filter-option input { accent-color: var(--accent); }
+.filter-option.active { color: var(--text); }
+
+.filter-count {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--bg3);
+    padding: 1px 6px;
+    border-radius: 8px;
+}
+
+/* Relevance slider */
+.relevance-slider {
+    width: 100%;
+    margin: 8px 0;
+    accent-color: var(--accent);
+}
+
+.relevance-display {
+    font-size: 12px;
+    color: var(--text2);
+    text-align: center;
+}
+
+/* SVG */
+#graph {
+    width: 100%;
+    height: 100vh;
+    display: block;
+}
+
+/* Node labels */
+.node-label {
+    font-size: 9px;
+    fill: var(--text2);
+    pointer-events: none;
+    text-anchor: middle;
+    font-weight: 500;
+}
+
+.node-year {
+    font-size: 8px;
+    fill: var(--text3);
+    pointer-events: none;
+    text-anchor: middle;
+}
+
+/* Tooltip */
+.tooltip {
+    position: fixed;
+    padding: 16px 20px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 440px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 200;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.tooltip.visible { opacity: 1; }
+.tooltip .tt-title { font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 6px; line-height: 1.4; }
+.tooltip .tt-meta { color: var(--text2); font-size: 11px; margin-bottom: 6px; }
+.tooltip .tt-score { display: inline-block; padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 12px; margin-bottom: 6px; }
+.tooltip .tt-score.high { background: rgba(16,185,129,0.2); color: #34d399; }
+.tooltip .tt-score.mid { background: rgba(245,158,11,0.2); color: #fbbf24; }
+.tooltip .tt-score.low { background: rgba(239,68,68,0.2); color: #f87171; }
+.tooltip .tt-section { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); }
+.tooltip .tt-label { font-size: 10px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.tooltip .tt-value { color: var(--text2); font-size: 12px; }
+
+/* Edges */
+.edge { stroke-opacity: 0.12; stroke-width: 1; }
+.edge.organism { stroke: var(--accent); }
+.edge.journal { stroke: var(--text3); stroke-dasharray: 4 4; }
+
+/* Controls */
+.controls {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    gap: 6px;
+    z-index: 100;
+}
+.controls button {
+    padding: 6px 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text2);
+    font-size: 11px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s;
+}
+.controls button:hover { color: var(--text); }
+
+.info-panel {
+    position: fixed;
+    bottom: 16px;
+    left: 250px;
+    font-size: 10px;
+    color: var(--text3);
+    z-index: 100;
+    transition: left 0.3s;
+}
+.info-panel.shifted { left: 16px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🔬 PYNER — Paper Network</h1>
+    <div class="header-stats">
+        <span>Papers: <span class="val">12</span></span>
+        <span>Relevant: <span class='val'>10 / 12</span></span>
+    </div>
+    <div class="header-right">
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#34d399;"></div>≥7</div><div class="legend-item"><div class="legend-dot" style="background:#fbbf24;"></div>4-6</div><div class="legend-item"><div class="legend-dot" style="background:#f87171;"></div>≤3</div>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark/light mode">🌓</button>
+    </div>
+</div>
+
+<div class="side-panel" id="sidePanel">
+    
+    <div class="filter-section">
+        <div class="filter-title">Relevance Score</div>
+        <input type="range" class="relevance-slider" id="relevanceSlider" min="0" max="10" value="0" oninput="applyFilters()">
+        <div class="relevance-display" id="relevanceDisplay">≥ 0</div>
+    </div>
+    
+    <div class="filter-section" id="yearFilters">
+        <div class="filter-title"><label><input type="checkbox" checked id="yearSelectAll" onchange="toggleAllYears(this)"> Year</label></div>
+    </div>
+    <div class="filter-section" id="journalFilters">
+        <div class="filter-title"><label><input type="checkbox" checked id="journalSelectAll" onchange="toggleAllJournals(this)"> Journal</label></div>
+    </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+<svg id="graph"></svg>
+
+<div class="controls">
+    <button onclick="togglePanel()">☰ Filters</button>
+    <button onclick="resetZoom()">Reset View</button>
+    <button onclick="toggleLabels()">Labels</button>
+</div>
+
+<div class="info-panel" id="infoPanel">
+    Drag nodes · Scroll to zoom · Click to open paper
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+(function() {
+    const nodesData = [{"id": "24884371", "label": "RNA sequencing on Solanum lycopersicum…", "full_title": "RNA sequencing on Solanum lycopersicum trichomes identifies transcription factors that activate terpene synthase promoters.", "authors": "Spyropoulou EA, Haring MA, Schuurink RC", "year": "2014", "journal": "BMC genomics", "doi": "10.1186/1471-2164-15-402", "pmcid": "PMC4041997", "url": "https://www.ncbi.nlm.nih.gov/pubmed/24884371", "abstract": "Glandular trichomes are production and storage organs of specialized metabolites such as terpenes, which play a role in the plant's defense system. The present study aimed to shed light on the regulation of terpene biosynthesis in Solanum lycopersicum trichomes by identification of transcription factors (TFs) that control the expression of terpene synthases.", "score": 8, "is_relevant": "Yes", "summary": "The study created a transcriptome database of tomato trichomes to identify transcription factors involved in terpene biosynthesis, focusing on SlWRKY78 and other TFs that activate terpene synthase promoters.", "explanation": "This paper is highly relevant as it specifically investigates the role of SlWRKY78 (Solyc07g055280) in regulating terpene biosynthesis in tomato trichomes, aligning with the user's query on Solanum lycopersicum and SlWRKY78.", "organisms": "Solanum lycopersicum ; Nicotiana benthamiana", "tissues": "trichomes", "conditions": "jasmonic acid treatment", "strategies": "RNA-Seq ; Sequencing ; qRT-PCR", "group": 0, "radius": 34}, {"id": "27712008", "label": "Overexpression of a tomato miR171…", "full_title": "Overexpression of a tomato miR171 target gene SlGRAS24 impacts multiple agronomical traits via regulating gibberellin and auxin homeostasis.", "authors": "Huang W, Peng S, Xian Z", "year": "2017", "journal": "Plant biotechnology journal", "doi": "10.1111/pbi.12646", "pmcid": "PMC5362688", "url": "https://www.ncbi.nlm.nih.gov/pubmed/27712008", "abstract": "In Arabidopsis, the miR171-GRAS module has been clarified as key player in meristem maintenance. However, the knowledge about its role in fruit crops like tomato (Solanum lycopersicum) remains scarce. We previously identified tomato SlGRAS24 as a target gene of Sly-miR171. To study the role of this probable transcription factor, we generated transgenic tomato plants underexpressing SlGRAS24, overe", "score": 8, "is_relevant": "Yes", "summary": "The paper investigates the role of SlGRAS24 in tomato development and its impact on multiple agronomical traits through modulation of gibberellin and auxin signaling. Overexpression of SlGRAS24 leads to altered phenotypes including plant height, flowering time, leaf architecture, lateral branch number, root length, fruit set, and development.", "explanation": "The paper focuses on the tomato (Solanum lycopersicum) and specifically examines the role of SlGRAS24, which is related to the queried gene SlWRKY78. Although it does not directly study SlWRKY78, it provides valuable insights into the function of GRAS family genes in tomato development.", "organisms": "Solanum lycopersicum", "tissues": "roots ; shoots ; leaves ; flowers ; fruits", "conditions": "normal growth conditions", "strategies": "Microscopy ; PCR ; RNA-Seq ; qRT-PCR", "group": 0, "radius": 34}, {"id": "39578554", "label": "Integrating gene expression analysis and…", "full_title": "Integrating gene expression analysis and ecophysiological responses to water deficit in leaves of tomato plants.", "authors": "Bortolami G, de Werk TA, Larter M", "year": "2024", "journal": "Scientific reports", "doi": "10.1038/s41598-024-80261-0", "pmcid": "PMC11584733", "url": "https://www.ncbi.nlm.nih.gov/pubmed/39578554", "abstract": "Soil water deficit (WD) significantly impacts plant survival and crop yields. Many gaps remain in our understanding of the synergistic coordination between molecular and ecophysiological responses delaying substantial drought-induced effects on plant growth. To investigate this synergism in tomato leaves, we combined molecular, ecophysiological, and anatomical methods to examine gene expression pa", "score": 8, "is_relevant": "Yes", "summary": "The paper investigates the gene expression changes in tomato plants under drought stress conditions over a time course, focusing on the identification of key genes and pathways involved in plant response to water deficit.", "explanation": "This study is relevant as it examines gene expression changes in response to environmental stress (drought), which aligns with the user's interest in understanding how plants respond to such conditions. Although the specific gene mentioned in the query is not discussed, the overall theme of stress response and gene regulation under drought conditions makes this paper pertinent.", "organisms": "Solanum lycopersicum", "tissues": "leaf ; root", "conditions": "drought stress ; control", "strategies": "RNA-Seq ; Sequencing ; qRT-PCR", "group": 0, "radius": 34}, {"id": "27991526", "label": "Putative WRKYs associated with regulation…", "full_title": "Putative WRKYs associated with regulation of fruit ripening revealed by detailed expression analysis of the WRKY gene family in pepper.", "authors": "Cheng Y, Ahammed GJ, Yu J", "year": "2016", "journal": "Scientific reports", "doi": "10.1038/srep39000", "pmcid": "PMC5171846", "url": "https://www.ncbi.nlm.nih.gov/pubmed/27991526", "abstract": "WRKY transcription factors play important roles in plant development and stress responses. Here, global expression patterns of pepper CaWRKYs in various tissues as well as response to environmental stresses and plant hormones were systematically analyzed, with an emphasis on fruit ripening. The results showed that most CaWRKYs were expressed in at least two of the tissues tested. Group I, a subfam", "score": 5, "is_relevant": "Yes", "summary": "The paper analyzes global expression patterns of pepper CaWRKY genes in various tissues and under environmental stresses, focusing on fruit ripening. It identifies that many CaWRKYs are expressed during fruit maturation and suggests potential roles in stress-related signaling pathways.", "explanation": "While the paper focuses on pepper CaWRKYs rather than Solanum lycopersicum (tomato) SlWRKY78, it discusses conserved WRKY genes between tomato and pepper, indicating some relevance to the query. However, direct analysis of SlWRKY78 is not performed.", "organisms": "Capsicum annuum", "tissues": "root ; stem ; leaf ; bud ; flower ; fruit", "conditions": "environmental stresses ; plant hormones", "strategies": "RNA-Seq ; qRT-PCR", "group": 1, "radius": 25}, {"id": "36835470", "label": "Comparison of Tomato Transcriptomic Profiles…", "full_title": "Comparison of Tomato Transcriptomic Profiles Reveals Overlapping Patterns in Abiotic and Biotic Stress Responses.", "authors": "Amoroso CG, D'Esposito D, Aiese Cigliano R", "year": "2023", "journal": "International journal of molecular sciences", "doi": "10.3390/ijms24044061", "pmcid": "PMC9961515", "url": "https://www.ncbi.nlm.nih.gov/pubmed/36835470", "abstract": "Until a few years ago, many studies focused on the transcriptomic response to single stresses. However, tomato cultivations are often constrained by a wide range of biotic and abiotic stress that can occur singularly or in combination, and several genes can be involved in the defensive mechanism response. Therefore, we analyzed and compared the transcriptomic responses of resistant and susceptible", "score": 8, "is_relevant": "Yes", "summary": "The paper investigates gene expression changes in tomato plants under various environmental stresses using RNA-Seq and qRT-PCR, focusing on stress response pathways.", "explanation": "This study is highly relevant as it examines the stress response pathway which includes genes related to abiotic and biotic stresses. The user's query involves a specific gene involved in stress responses, making this paper directly applicable.", "organisms": "Solanum lycopersicum", "tissues": "leaf ; root", "conditions": "drought stress ; salt stress ; cold stress", "strategies": "RNA-Seq ; qRT-PCR", "group": 0, "radius": 34}, {"id": "41145961", "label": "Antimicrobial Peptides as Part of…", "full_title": "Antimicrobial Peptides as Part of the Arsenal of Constitutive and Inducible Seed Defences in Tomato Seed Exudates Against Pathogens.", "authors": "Tarkowski ŁP, Hubert B, Marchi M", "year": "2025", "journal": "Molecular plant pathology", "doi": "10.1111/mpp.70164", "pmcid": "PMC12558808", "url": "https://www.ncbi.nlm.nih.gov/pubmed/41145961", "abstract": "Seed immune responses are an underexplored area in host-pathogen interactions, leaving seed-pathogen interactions poorly understood despite their considerable economic impact. This study examined tomato seed defences by assessing the antimicrobial activity (AA) of seed exudates during germination. Results showed genotype-dependent and constitutive defence responses from seeds showing AA in exudate", "score": 8, "is_relevant": "Yes", "summary": "The paper investigates the antimicrobial activity of plant extracts against various pathogens and evaluates their potential as natural preservatives in food systems.", "explanation": "This study is relevant to the user query because it examines the efficacy of plant-based compounds, which may include those from medicinal plants, against microbial infections. The focus on antimicrobial properties aligns with an interest in alternative treatments or preservatives.", "organisms": "Solanum melongena ; Capsicum annuum ; Pimenta dioica", "tissues": "not described", "conditions": "antimicrobial activity ; food preservation", "strategies": "antimicrobial assay ; food preservation test", "group": 0, "radius": 34}, {"id": "28769960", "label": "Transcriptome Analysis of the Sm-Mediated…", "full_title": "Transcriptome Analysis of the Sm-Mediated Hypersensitive Response to Stemphylium lycopersici in Tomato.", "authors": "Yang H, Zhao T, Jiang J", "year": "2017", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2017.01257", "pmcid": "PMC5515834", "url": "https://www.ncbi.nlm.nih.gov/pubmed/28769960", "abstract": "Gray leaf spot disease caused by Stemphylium lycopersici is a major disease in cultivated tomato plants and threatens tomato-growing areas worldwide. Sm is a single dominant gene that confers resistance to tomato gray leaf spot disease agent. However, the underlying molecular mechanism remains unclear. Here, resistant (cv. Motelle, containing the Sm gene) and susceptible (cv. Moneymaker) plants we", "score": 8, "is_relevant": "Yes", "summary": "The paper investigates the molecular mechanism of Sm-mediated resistance to Stemphylium lycopersici in tomato plants through transcriptome analysis, revealing differentially expressed genes involved in plant-pathogen interactions and other pathways.", "explanation": "The paper focuses on the genetic response of tomato (Solanum lycopersicum) to a pathogen, which is relevant to the user query. However, it does not specifically mention SlWRKY78 or Solyc07g055280 in its analysis.", "organisms": "Solanum lycopersicum", "tissues": "leaf", "conditions": "inoculation with Stemphylium lycopersici", "strategies": "Microscopy ; RNA-Seq ; qRT-PCR", "group": 0, "radius": 34}, {"id": "31191610", "label": "Comparative Genomic Analysis Reveals Extensive…", "full_title": "Comparative Genomic Analysis Reveals Extensive Genetic Variations of WRKYs in Solanaceae and Functional Variations of CaWRKYs in Pepper.", "authors": "Cheng Y, Ahammed GJ, Yao Z", "year": "2019", "journal": "Frontiers in genetics", "doi": "10.3389/fgene.2019.00492", "pmcid": "PMC6546733", "url": "https://www.ncbi.nlm.nih.gov/pubmed/31191610", "abstract": "As a conserved protein family, WRKY has been shown to be involved in multiple biological processes in plants. However, the mechanism of functional diversity for WRKYs in pepper has not been well elucidated. Here, a total of 223 WRKY members from solanaceae crops including pepper, tomato and potato, were analyzed using comparative genomics. A tremendous genetic variation among WRKY members of diffe", "score": 8, "is_relevant": "Yes", "summary": "The paper focuses on the classification and analysis of WRKY transcription factors in Solanaceae plants, specifically examining their role in stress response mechanisms.", "explanation": "This paper is relevant to the user query as it discusses WRKY transcription factors which are involved in plant stress responses. Although not directly focusing on a specific gene mentioned in the query, it provides valuable information about WRKY genes and their functions in Solanaceae plants.", "organisms": "Solanaceae plants", "tissues": "not described", "conditions": "stress response", "strategies": "bioinformatics analysis ; sequence alignment", "group": 0, "radius": 34}, {"id": "27092148", "label": "Exploiting Genomics Resources to Identify…", "full_title": "Exploiting Genomics Resources to Identify Candidate Genes Underlying Antioxidants Content in Tomato Fruit.", "authors": "Calafiore R, Ruggieri V, Raiola A", "year": "2016", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2016.00397", "pmcid": "PMC4824784", "url": "https://www.ncbi.nlm.nih.gov/pubmed/27092148", "abstract": "The tomato is a model species for fleshy fruit development and ripening, as well as for genomics studies of others Solanaceae. Many genetic and genomics resources, including databases for sequencing, transcriptomics and metabolomics data, have been developed and are today available. The purpose of the present work was to uncover new genes and/or alleles that determine ascorbic acid and carotenoids", "score": 8, "is_relevant": "Yes", "summary": "The paper investigates candidate genes associated with increased ascorbic acid and carotenoids content in tomato fruit using Solanum pennellii introgression lines (IL7-3) and genetic/genomic resources. It confirms higher metabolite levels in IL7-3 compared to M82 and identifies specific gene expression patterns.", "explanation": "The paper focuses on the identification of candidate genes related to ascorbic acid and carotenoids content in tomato fruit, which aligns with the user's interest in SlWRKY78/Solyc07g055280/WRKY transcription factor 78. However, SlWRKY78 is not specifically mentioned or studied.", "organisms": "Solanum lycopersicum ; Solanum pennellii", "tissues": "fruit", "conditions": "field grown ; metabolic analysis", "strategies": "RNA-Seq ; qRT-PCR", "group": 0, "radius": 34}, {"id": "38371631", "label": "MicroRNA396 negatively regulates shoot regeneration…", "full_title": "MicroRNA396 negatively regulates shoot regeneration in tomato.", "authors": "Park SJ, Park JS, Yang JH", "year": "2024", "journal": "Horticulture research", "doi": "10.1093/hr/uhad291", "pmcid": "PMC10873581", "url": "https://www.ncbi.nlm.nih.gov/pubmed/38371631", "abstract": "Numerous studies have been dedicated to genetically engineering crops to enhance their yield and quality. One of the key requirements for generating genetically modified plants is the reprogramming of cell fate. However, the efficiency of shoot regeneration during this process is highly dependent on genotypes, and the underlying molecular mechanisms remain poorly understood. Here, we identified mi", "score": 8, "is_relevant": "Yes", "summary": "The study investigates gene expression patterns in tomato plants under drought stress conditions using RNA-Seq and qRT-PCR techniques, focusing on identifying key genes involved in plant response to water scarcity.", "explanation": "This paper is relevant as it focuses on the genetic mechanisms of plant responses to environmental stresses like drought, which aligns with the user's interest in understanding how plants adapt to changing conditions. The use of RNA-Seq and qRT-PCR provides a comprehensive view of gene expression changes.", "organisms": "Solanum lycopersicum", "tissues": "leaf ; root", "conditions": "drought stress", "strategies": "RNA-Seq ; Sequencing ; qRT-PCR", "group": 0, "radius": 34}, {"id": "28663756", "label": "Transcriptional Network Analysis Reveals Drought…", "full_title": "Transcriptional Network Analysis Reveals Drought Resistance Mechanisms of AP2/ERF Transgenic Rice.", "authors": "Ahn H, Jung I, Shin SJ", "year": "2017", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2017.01044", "pmcid": "PMC5471331", "url": "https://www.ncbi.nlm.nih.gov/pubmed/28663756", "abstract": "This study was designed to investigate at the molecular level how a transgenic version of rice \"Nipponbare\" obtained a drought-resistant phenotype. Using multi-omics sequencing data, we compared wild-type rice (WT) and a transgenic version (erf71) that had obtained a drought-resistant phenotype by overexpressing OsERF71, a member of the AP2/ERF transcription factor (TF) family. A comprehensive bio", "score": 0, "is_relevant": "No", "summary": "This study investigates the molecular mechanisms underlying drought resistance in transgenic rice overexpressing OsERF71, using multi-omics sequencing data to compare wild-type and transgenic plants under dehydration stress.", "explanation": "The paper does not match the user query as it focuses on rice (Oryza sativa) rather than tomato (Solanum lycopersicum). The gene SlWRKY78 mentioned in the query is specific to tomato and is not discussed in this study.", "organisms": "Oryza sativa", "tissues": "not described", "conditions": "dehydration stress", "strategies": "PCR ; RNA-Seq ; RT-PCR ; Sequencing ; qRT-PCR ; small RNA sequencing ; whole-genome bisulfite sequencing", "group": 2, "radius": 14}, {"id": "36588161", "label": "Maize cytolines as models to…", "full_title": "Maize cytolines as models to study the impact of different cytoplasms on gene expression under heat stress conditions.", "authors": "Ardelean IV, Bălăcescu L, Sicora O", "year": "2023", "journal": "BMC plant biology", "doi": "10.1186/s12870-022-04023-8", "pmcid": "PMC9806912", "url": "https://www.ncbi.nlm.nih.gov/pubmed/36588161", "abstract": "Crops are under constant pressure due to global warming, which unfolds at a much faster pace than their ability to adapt through evolution. Agronomic traits are linked to cytoplasmic-nuclear genome interactions. It thus becomes important to understand the influence exerted by the organelles on gene expression under heat stress conditions and profit from the available genetic diversity. Maize (Zea ", "score": 0, "is_relevant": "No", "summary": "The study examines gene expression changes in maize cytolines under heat stress to understand the influence of different cytoplasmic environments on plant responses.", "explanation": "This paper is not relevant as it focuses on maize and does not mention SlWRKY78 or tomato.", "organisms": "Zea mays", "tissues": "not described", "conditions": "heat stress", "strategies": "RNA-Seq ; qRT-PCR", "group": 2, "radius": 14}];
+    const edgesData = [{"source": "24884371", "target": "27712008", "type": "organism", "label": "solanum lycopersicum"}, {"source": "24884371", "target": "39578554", "type": "organism", "label": "solanum lycopersicum"}, {"source": "24884371", "target": "36835470", "type": "organism", "label": "solanum lycopersicum"}, {"source": "24884371", "target": "28769960", "type": "organism", "label": "solanum lycopersicum"}, {"source": "24884371", "target": "27092148", "type": "organism", "label": "solanum lycopersicum"}, {"source": "24884371", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27712008", "target": "39578554", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27712008", "target": "36835470", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27712008", "target": "28769960", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27712008", "target": "27092148", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27712008", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "39578554", "target": "36835470", "type": "organism", "label": "solanum lycopersicum"}, {"source": "39578554", "target": "28769960", "type": "organism", "label": "solanum lycopersicum"}, {"source": "39578554", "target": "27092148", "type": "organism", "label": "solanum lycopersicum"}, {"source": "39578554", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "36835470", "target": "28769960", "type": "organism", "label": "solanum lycopersicum"}, {"source": "36835470", "target": "27092148", "type": "organism", "label": "solanum lycopersicum"}, {"source": "36835470", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "28769960", "target": "27092148", "type": "organism", "label": "solanum lycopersicum"}, {"source": "28769960", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27092148", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27991526", "target": "41145961", "type": "organism", "label": "capsicum annuum"}, {"source": "39578554", "target": "27991526", "type": "journal", "label": "scientific reports"}, {"source": "28769960", "target": "28663756", "type": "journal", "label": "frontiers in plant science"}, {"source": "27092148", "target": "28663756", "type": "journal", "label": "frontiers in plant science"}];
+    const hasScores = true;
+    const allYears = ["2025", "2024", "2023", "2019", "2017", "2016", "2014"];
+    const allJournals = ["BMC genomics", "BMC plant biology", "Frontiers in genetics", "Frontiers in plant science", "Horticulture research", "International journal of molecular sciences", "Molecular plant pathology", "Plant biotechnology journal", "Scientific reports"];
+    
+    // State
+    let activeYears = new Set(allYears);
+    let activeJournals = new Set(allJournals);
+    let minRelevance = 0;
+    let showLabels = true;
+    let panelOpen = true;
+    
+    // Colors
+    const colorScale = d3.scaleOrdinal().domain([0, 1, 2]).range(['#34d399', '#fbbf24', '#f87171']);
+    const defaultColor = '#3b82f6';
+    function nodeColor(d) { return hasScores ? colorScale(d.group) : defaultColor; }
+    
+    // Build filter UI
+    const yearDiv = document.getElementById('yearFilters');
+    allYears.forEach(y => {
+        const count = nodesData.filter(n => n.year === y).length;
+        yearDiv.innerHTML += `<label class="filter-option active"><input type="checkbox" checked value="${y}" class="year-cb" onchange="applyFilters()"> ${y} <span class="filter-count">${count}</span></label>`;
+    });
+    
+    const journalDiv = document.getElementById('journalFilters');
+    allJournals.forEach(j => {
+        const count = nodesData.filter(n => n.journal === j).length;
+        const short = j.length > 28 ? j.substring(0, 26) + '…' : j;
+        journalDiv.innerHTML += `<label class="filter-option active"><input type="checkbox" checked value="${j}" class="journal-cb" onchange="applyFilters()"> ${short} <span class="filter-count">${count}</span></label>`;
+    });
+    
+    // Select All toggles
+    window.toggleAllYears = (master) => {
+        document.querySelectorAll('.year-cb').forEach(cb => { cb.checked = master.checked; });
+        applyFilters();
+    };
+    window.toggleAllJournals = (master) => {
+        document.querySelectorAll('.journal-cb').forEach(cb => { cb.checked = master.checked; });
+        applyFilters();
+    };
+    
+    // Dimensions
+    const panelW = 240;
+    let width = window.innerWidth - panelW;
+    let height = window.innerHeight;
+    const offsetX = panelW;
+    
+    const svg = d3.select('#graph').attr('width', window.innerWidth).attr('height', height);
+    const g = svg.append('g');
+    
+    const zoom = d3.zoom().scaleExtent([0.15, 5]).on('zoom', e => g.attr('transform', e.transform));
+    svg.call(zoom);
+    
+    // Layout bounds — keep everything inside a reasonable area
+    const bndLeft = offsetX + 60;
+    const bndRight = offsetX + width - 60;
+    const bndTop = 80;
+    const bndBottom = height - 60;
+    const cx = (bndLeft + bndRight) / 2;
+    const cy = (bndTop + bndBottom) / 2;
+    
+    // Year scale for vertical positioning (recent → top)
+    const yearExtent = d3.extent(nodesData, d => +d.year || 2020);
+    const yScale = d3.scaleLinear()
+        .domain([yearExtent[1], yearExtent[0]])  // Recent on top
+        .range([bndTop + 40, bndBottom - 40]);
+    
+    // Scale forces based on number of nodes — gentle repulsion, strong centering
+    const n = nodesData.length;
+    const chargeStr = n > 40 ? -80 : n > 20 ? -120 : -180;
+    const linkDist = n > 40 ? 80 : n > 20 ? 100 : 120;
+    
+    // Simulation
+    const simulation = d3.forceSimulation(nodesData)
+        .force('link', d3.forceLink(edgesData).id(d => d.id).distance(linkDist).strength(0.2))
+        .force('charge', d3.forceManyBody().strength(chargeStr))
+        .force('x', d3.forceX(cx).strength(0.06))
+        .force('y', d3.forceY(d => {
+            if (hasScores) {
+                const scoreY = (10 - d.score) / 10;
+                const yearY = yScale(+d.year || 2020);
+                return scoreY * 150 + yearY * 0.7;
+            }
+            return yScale(+d.year || 2020);
+        }).strength(0.07))
+        .force('collision', d3.forceCollide().radius(d => d.radius + 6))
+        .alphaDecay(0.025);
+    
+    // Draw edges
+    const link = g.append('g').selectAll('line').data(edgesData).join('line')
+        .attr('class', d => 'edge ' + d.type);
+    
+    // Draw nodes
+    const node = g.append('g').selectAll('g').data(nodesData).join('g')
+        .attr('cursor', 'pointer')
+        .call(d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended));
+    
+    node.append('circle')
+        .attr('r', d => d.radius)
+        .attr('fill', nodeColor)
+        .attr('fill-opacity', 0.7)
+        .attr('stroke', nodeColor)
+        .attr('stroke-opacity', 0.3)
+        .attr('stroke-width', 2);
+    
+    node.append('circle')
+        .attr('r', d => d.radius + 4)
+        .attr('fill', 'none')
+        .attr('stroke', nodeColor)
+        .attr('stroke-opacity', 0.08)
+        .attr('stroke-width', 6);
+    
+    // Labels: first 5 words of title
+    const labels = node.append('text')
+        .attr('class', 'node-label')
+        .attr('dy', d => d.radius + 13)
+        .text(d => d.label);
+    
+    // Year sub-label
+    node.append('text')
+        .attr('class', 'node-year')
+        .attr('dy', d => d.radius + 23)
+        .text(d => d.year);
+    
+    // Tooltip
+    const tooltip = document.getElementById('tooltip');
+    
+    node.on('mouseover', (event, d) => {
+        const connected = new Set([d.id]);
+        edgesData.forEach(e => {
+            const s = typeof e.source === 'object' ? e.source.id : e.source;
+            const t = typeof e.target === 'object' ? e.target.id : e.target;
+            if (s === d.id) connected.add(t);
+            if (t === d.id) connected.add(s);
+        });
+        
+        node.select('circle:first-child').attr('fill-opacity', n => connected.has(n.id) ? 0.95 : 0.1);
+        link.attr('stroke-opacity', e => {
+            const s = typeof e.source === 'object' ? e.source.id : e.source;
+            const t = typeof e.target === 'object' ? e.target.id : e.target;
+            return (s === d.id || t === d.id) ? 0.5 : 0.02;
+        });
+        
+        let sc = d.score >= 7 ? 'high' : d.score >= 4 ? 'mid' : 'low';
+        let h = `<div class="tt-title">${d.full_title}</div>`;
+        h += `<div class="tt-meta">${d.authors} · ${d.journal} · ${d.year}</div>`;
+        if (hasScores) h += `<span class="tt-score ${sc}">Relevance: ${d.score}/10</span>`;
+        if (d.explanation) h += `<div class="tt-section"><div class="tt-label">Why relevant</div><div class="tt-value">${d.explanation}</div></div>`;
+        if (d.summary) h += `<div class="tt-section"><div class="tt-label">Summary</div><div class="tt-value">${d.summary.substring(0,200)}${d.summary.length>200?'…':''}</div></div>`;
+        if (d.organisms && d.organisms !== 'not described') h += `<div class="tt-section"><div class="tt-label">Organisms</div><div class="tt-value">${d.organisms}</div></div>`;
+        if (d.conditions && d.conditions !== 'not described') h += `<div class="tt-section"><div class="tt-label">Conditions</div><div class="tt-value">${d.conditions}</div></div>`;
+        if (d.strategies && d.strategies !== 'not described') h += `<div class="tt-section"><div class="tt-label">Strategies</div><div class="tt-value">${d.strategies}</div></div>`;
+        h += `<div class="tt-section"><div class="tt-meta">PMID: ${d.id}${d.doi ? ' · DOI: '+d.doi : ''}</div></div>`;
+        
+        tooltip.innerHTML = h;
+        tooltip.classList.add('visible');
+    })
+    .on('mousemove', event => {
+        const x = event.clientX + 16;
+        const y = event.clientY - 16;
+        const r = tooltip.getBoundingClientRect();
+        tooltip.style.left = (x + r.width > window.innerWidth ? event.clientX - r.width - 16 : x) + 'px';
+        tooltip.style.top = (y + r.height > window.innerHeight ? window.innerHeight - r.height - 8 : y) + 'px';
+    })
+    .on('mouseout', () => {
+        tooltip.classList.remove('visible');
+        node.select('circle:first-child').attr('fill-opacity', 0.7);
+        link.attr('stroke-opacity', 0.12);
+    })
+    .on('click', (e, d) => { if (d.url) window.open(d.url, '_blank'); });
+    
+    // Tick — clamp positions within bounds so no node escapes
+    simulation.on('tick', () => {
+        nodesData.forEach(d => {
+            if (!d.fx) d.x = Math.max(bndLeft, Math.min(bndRight, d.x));
+            if (!d.fy) d.y = Math.max(bndTop, Math.min(bndBottom, d.y));
+        });
+        link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+        node.attr('transform', d => `translate(${d.x},${d.y})`);
+    });
+    
+    // Auto-fit after simulation stabilizes
+    simulation.on('end', () => { fitToView(); });
+    
+    // Drag — nodes stay pinned where you drop them; double-click to release
+    function dragstarted(e, d) { if (!e.active) simulation.alphaTarget(0.1).restart(); d.fx = d.x; d.fy = d.y; }
+    function dragged(e, d) { d.fx = e.x; d.fy = e.y; }
+    function dragended(e, d) { if (!e.active) simulation.alphaTarget(0); /* keep pinned: fx/fy stay */ }
+    
+    // Double-click to unpin a node
+    node.on('dblclick', (e, d) => { d.fx = null; d.fy = null; e.stopPropagation(); });
+    
+    // Filters
+    window.applyFilters = () => {
+        activeYears.clear();
+        document.querySelectorAll('#yearFilters input:checked').forEach(cb => activeYears.add(cb.value));
+        activeJournals.clear();
+        document.querySelectorAll('#journalFilters input:checked').forEach(cb => activeJournals.add(cb.value));
+        
+        const slider = document.getElementById('relevanceSlider');
+        if (slider) {
+            minRelevance = +slider.value;
+            document.getElementById('relevanceDisplay').textContent = '≥ ' + minRelevance;
+        }
+        
+        node.attr('visibility', d => {
+            const yearOk = activeYears.has(d.year);
+            const journalOk = activeJournals.has(d.journal);
+            const scoreOk = !hasScores || d.score >= minRelevance;
+            return (yearOk && journalOk && scoreOk) ? 'visible' : 'hidden';
+        });
+        
+        const visibleIds = new Set();
+        node.each(function(d) { if (d3.select(this).attr('visibility') !== 'hidden') visibleIds.add(d.id); });
+        
+        link.attr('visibility', d => {
+            const s = typeof d.source === 'object' ? d.source.id : d.source;
+            const t = typeof d.target === 'object' ? d.target.id : d.target;
+            return visibleIds.has(s) && visibleIds.has(t) ? 'visible' : 'hidden';
+        });
+    };
+    
+    // Controls
+    function fitToView() {
+        const pad = 60;
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        nodesData.forEach(d => {
+            if (d.x - d.radius < minX) minX = d.x - d.radius;
+            if (d.x + d.radius > maxX) maxX = d.x + d.radius;
+            if (d.y - d.radius < minY) minY = d.y - d.radius;
+            if (d.y + d.radius > maxY) maxY = d.y + d.radius;
+        });
+        const bw = maxX - minX + pad * 2;
+        const bh = maxY - minY + pad * 2;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const scale = Math.min(vw / bw, vh / bh, 1.5);
+        const tx = vw / 2 - (minX + maxX) / 2 * scale;
+        const ty = vh / 2 - (minY + maxY) / 2 * scale;
+        svg.transition().duration(600).call(zoom.transform,
+            d3.zoomIdentity.translate(tx, ty).scale(scale)
+        );
+    }
+    window.resetZoom = fitToView;
+    window.toggleLabels = () => {
+        showLabels = !showLabels;
+        const v = showLabels ? 'visible' : 'hidden';
+        node.selectAll('.node-label, .node-year').attr('visibility', v);
+    };
+    window.togglePanel = () => {
+        panelOpen = !panelOpen;
+        document.getElementById('sidePanel').classList.toggle('collapsed');
+        document.getElementById('infoPanel').classList.toggle('shifted');
+    };
+    window.toggleTheme = () => {
+        const body = document.body;
+        const current = body.getAttribute('data-theme');
+        body.setAttribute('data-theme', current === 'dark' ? '' : 'dark');
+    };
+    
+    // Responsive
+    window.addEventListener('resize', () => {
+        width = window.innerWidth - (panelOpen ? panelW : 0);
+        height = window.innerHeight;
+        svg.attr('width', window.innerWidth).attr('height', height);
+        simulation.force('x', d3.forceX(d => (panelOpen ? panelW : 0) + width / 2).strength(0.05));
+        simulation.alpha(0.3).restart();
+    });
+})();
+</script>
+</body>
+</html>

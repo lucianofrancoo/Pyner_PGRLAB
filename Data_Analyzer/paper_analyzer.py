@@ -112,13 +112,22 @@ class PaperAnalyzer:
         logger.info("=" * 80)
         
         results = []
+        # Track papers that failed PMC fetch for re-queuing
+        pmc_failed_queue = []  # List of (original_idx, paper) tuples
         
         for idx, paper in enumerate(publications, 1):
             logger.info(f"\n[{idx}/{self.stats['total']}] Analyzing: {paper.get('pmid', 'N/A')}")
             logger.info(f"   Title: {(paper.get('title') or 'No title')[:80]}...")
             
             try:
-                classified = self._analyze_single_paper(paper, user_query)
+                classified, pmc_fetch_failed = self._analyze_single_paper(paper, user_query)
+                
+                if pmc_fetch_failed:
+                    # PMC fetch failed even after retries — re-queue for later
+                    pmc_failed_queue.append((idx, paper))
+                    logger.info(f"   ⏳ Re-queued for PMC retry at end of batch")
+                    continue
+                
                 results.append(classified)
                 self.stats['analyzed'] += 1
                 
@@ -143,26 +152,94 @@ class PaperAnalyzer:
             except Exception as log_err:
                 logger.warning(f"   ⚠ Could not log all fields: {log_err}")
         
+        # === Re-process papers that failed PMC fetch ===
+        if pmc_failed_queue:
+            logger.info(f"\n{'='*80}")
+            logger.info(f"🔄 RETRYING {len(pmc_failed_queue)} papers with failed PMC fetch...")
+            logger.info(f"{'='*80}")
+            
+            import time as time_mod
+            time_mod.sleep(5)  # Wait before retrying
+            
+            for retry_idx, (orig_idx, paper) in enumerate(pmc_failed_queue, 1):
+                pmid = paper.get('pmid', 'N/A')
+                logger.info(f"\n[Retry {retry_idx}/{len(pmc_failed_queue)}] Re-analyzing: {pmid}")
+                logger.info(f"   Title: {(paper.get('title') or 'No title')[:80]}...")
+                
+                try:
+                    # Force one more attempt, then fall back to abstract-only
+                    classified, still_failed = self._analyze_single_paper(paper, user_query, force_abstract_fallback=True)
+                    results.append(classified)
+                    self.stats['analyzed'] += 1
+                    
+                    if still_failed:
+                        logger.warning(f"   ⚠ PMC still unavailable, analyzed with abstract only")
+                    
+                    if classified['Is_Relevant'] == 'Yes':
+                        self.stats['relevant'] += 1
+                        
+                except Exception as e:
+                    logger.error(f"   ✗ Error analyzing paper on retry: {e}")
+                    self.stats['errors'] += 1
+                    results.append(self._create_error_result(paper))
+                    continue
+                
+                try:
+                    logger.info(f"   ✓ Relevance: {classified['Relevance_Score']}/10")
+                    logger.info(f"   ✓ Explanation: {classified['Relevance_Explanation']}")
+                    logger.info(f"   ✓ Summary: {classified['Summary']}")
+                    logger.info(f"   ✓ Organisms: {classified['Organisms'][:60]}")
+                    logger.info(f"   ✓ Tissues_Organs: {classified['Tissues_Organs'][:60]}")
+                    logger.info(f"   ✓ Conditions: {classified['Conditions'][:60]}")
+                except Exception as log_err:
+                    logger.warning(f"   ⚠ Could not log all fields: {log_err}")
+        
         return results
     
-    def _analyze_single_paper(self, paper: Dict, user_query: str) -> Dict:
-        """Analyze single paper with Ollama"""
+    def _analyze_single_paper(self, paper: Dict, user_query: str, force_abstract_fallback: bool = False) -> tuple:
+        """
+        Analyze single paper with Ollama.
+        
+        Returns:
+            tuple: (classified_result, pmc_fetch_failed)
+                - classified_result: the analysis dict
+                - pmc_fetch_failed: True if PMC fetch failed and should be re-queued
+        """
+        import time as time_mod
+        
         title = paper.get('title') or ''
         abstract = paper.get('abstract', '')[:MAX_ABSTRACT_LENGTH]
         pmcid = paper.get('pmcid', None)
         
         # Try to fetch full text from PMC if PMCID available
         full_text = None
+        pmc_fetch_failed = False
+        
         if self.pmc_fetcher and pmcid:
             logger.info(f"   → Fetching full text from PMC: {pmcid}")
-            sections = self.pmc_fetcher.fetch_full_text(pmcid)
-            if sections and 'full_text_preview' in sections:
-                full_text = sections['full_text_preview']
-                self.stats['pmc_full_text'] += 1
-                logger.info(f"   ✓ Using PMC full text ({len(full_text)} chars)")
-            else:
-                logger.warning(f"   ⚠ PMC fetch failed, using abstract only")
-                self.stats['abstract_only'] += 1
+            
+            max_retries = 3
+            for attempt in range(max_retries):
+                sections = self.pmc_fetcher.fetch_full_text(pmcid)
+                if sections and 'full_text_preview' in sections:
+                    full_text = sections['full_text_preview']
+                    self.stats['pmc_full_text'] += 1
+                    logger.info(f"   ✓ Using PMC full text ({len(full_text)} chars)")
+                    break
+                else:
+                    if attempt < max_retries - 1:
+                        wait_time = (attempt + 1) * 5  # 5s, 10s, 15s
+                        logger.warning(f"   ⚠ PMC fetch attempt {attempt+1}/{max_retries} failed, retrying in {wait_time}s...")
+                        time_mod.sleep(wait_time)
+                    else:
+                        if not force_abstract_fallback:
+                            # Signal to re-queue this paper
+                            pmc_fetch_failed = True
+                            logger.warning(f"   ⚠ PMC fetch failed after {max_retries} attempts, will retry later")
+                            return None, pmc_fetch_failed
+                        else:
+                            logger.warning(f"   ⚠ PMC fetch failed on final retry, using abstract only")
+                            self.stats['abstract_only'] += 1
         else:
             self.stats['abstract_only'] += 1
         
@@ -291,7 +368,7 @@ class PaperAnalyzer:
             'Abstract_Preview': abstract[:200] + '...' if len(abstract) > 200 else abstract
         }
         
-        return result
+        return result, False
     
     def _create_error_result(self, paper: Dict) -> Dict:
         """Create result for papers that failed analysis"""
@@ -456,7 +533,7 @@ Examples:
     if not ollama.is_available():
         print("ERROR: Ollama is not available")
         print("Make sure Ollama is running: ollama serve")
-        print("And that the model is pulled: ollama pull qwen2.5:14b")
+        print("And that the model is pulled: ollama pull qwen3.5:9b")
         sys.exit(1)
     
     print(f"✓ Ollama connected")

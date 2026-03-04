@@ -69,7 +69,10 @@ class PMCFullTextFetcher:
             sections = self._parse_pmc_xml(xml_content)
             
             if sections:
-                logger.info(f"✓ Successfully fetched full text for {pmcid}")
+                if 'full_text_preview' in sections:
+                    logger.info(f"✓ Successfully fetched full text for {pmcid}")
+                else:
+                    logger.info(f"ℹ Fetched PMC data for {pmcid} (abstract only, no parseable body)")
                 return sections
             else:
                 logger.warning(f"Could not parse sections from {pmcid}")
@@ -137,8 +140,22 @@ class PMCFullTextFetcher:
             if 'results' in sections:
                 full_text_preview += sections['results']
             
+            # Fallback 1: if no Methods/Results, extract ALL body text
+            if not full_text_preview:
+                body_match = re.search(r'<body[^>]*>(.*?)</body>', xml_content, re.DOTALL | re.IGNORECASE)
+                if body_match:
+                    body_text = self._clean_xml(body_match.group(1))
+                    if body_text.strip():
+                        full_text_preview = body_text[:50000]
+                        sections['body'] = full_text_preview
+                        logger.info(f"   ℹ Using full body text (no Methods/Results sections found)")
+            
+            # Fallback 2: if no body either, use abstract from PMC XML
+            if not full_text_preview and 'abstract' in sections:
+                full_text_preview = sections['abstract']
+                logger.info(f"   ℹ Using PMC abstract (no body/methods/results found)")
+            
             if full_text_preview:
-                # No character limit - use complete text
                 sections['full_text_preview'] = full_text_preview
             
             return sections if sections else None

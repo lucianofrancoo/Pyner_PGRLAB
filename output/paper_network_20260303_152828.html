@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PYNER — Paper Network</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --bg3: #f1f5f9;
+  --text: #1e293b;
+  --text2: #64748b;
+  --text3: #94a3b8;
+  --border: rgba(0,0,0,0.08);
+  --accent: #3b82f6;
+  --green: #059669;
+  --yellow: #d97706;
+  --red: #dc2626;
+  --panel-bg: rgba(255,255,255,0.97);
+  --card-bg: rgba(241,245,249,0.9);
+}
+
+[data-theme="dark"] {
+  --bg: #0a0e17;
+  --bg2: #111827;
+  --bg3: #1e293b;
+  --text: #e0e6f0;
+  --text2: #8892a8;
+  --text3: #4a5568;
+  --border: rgba(255,255,255,0.06);
+  --panel-bg: rgba(15,20,35,0.96);
+  --card-bg: rgba(30,40,60,0.8);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 10px 24px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.header h1 {
+    font-size: 16px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6ee7b7, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+}
+
+.header-stats {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text2);
+}
+
+.header-stats .val { color: var(--text); font-weight: 600; }
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--text2);
+}
+
+.legend-item { display: flex; align-items: center; gap: 4px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* Theme toggle */
+.theme-btn {
+    padding: 6px 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text2);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.theme-btn:hover { color: var(--text); }
+
+/* Side panel */
+.side-panel {
+    position: fixed;
+    top: 48px;
+    left: 0;
+    bottom: 0;
+    width: 240px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid var(--border);
+    z-index: 90;
+    padding: 16px;
+    overflow-y: auto;
+    transition: transform 0.3s;
+}
+
+.side-panel.collapsed {
+    transform: translateX(-240px);
+}
+
+.filter-section {
+    margin-bottom: 16px;
+}
+
+.filter-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    font-size: 12px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: color 0.15s;
+}
+.filter-option:hover { color: var(--text); }
+.filter-option input { accent-color: var(--accent); }
+.filter-option.active { color: var(--text); }
+
+.filter-count {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--bg3);
+    padding: 1px 6px;
+    border-radius: 8px;
+}
+
+/* Relevance slider */
+.relevance-slider {
+    width: 100%;
+    margin: 8px 0;
+    accent-color: var(--accent);
+}
+
+.relevance-display {
+    font-size: 12px;
+    color: var(--text2);
+    text-align: center;
+}
+
+/* SVG */
+#graph {
+    width: 100%;
+    height: 100vh;
+    display: block;
+}
+
+/* Node labels */
+.node-label {
+    font-size: 9px;
+    fill: var(--text2);
+    pointer-events: none;
+    text-anchor: middle;
+    font-weight: 500;
+}
+
+.node-year {
+    font-size: 8px;
+    fill: var(--text3);
+    pointer-events: none;
+    text-anchor: middle;
+}
+
+/* Tooltip */
+.tooltip {
+    position: fixed;
+    padding: 16px 20px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 440px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 200;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.tooltip.visible { opacity: 1; }
+.tooltip .tt-title { font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 6px; line-height: 1.4; }
+.tooltip .tt-meta { color: var(--text2); font-size: 11px; margin-bottom: 6px; }
+.tooltip .tt-score { display: inline-block; padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 12px; margin-bottom: 6px; }
+.tooltip .tt-score.high { background: rgba(16,185,129,0.2); color: #34d399; }
+.tooltip .tt-score.mid { background: rgba(245,158,11,0.2); color: #fbbf24; }
+.tooltip .tt-score.low { background: rgba(239,68,68,0.2); color: #f87171; }
+.tooltip .tt-section { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); }
+.tooltip .tt-label { font-size: 10px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.tooltip .tt-value { color: var(--text2); font-size: 12px; }
+
+/* Edges */
+.edge { stroke-opacity: 0.12; stroke-width: 1; }
+.edge.organism { stroke: var(--accent); }
+.edge.journal { stroke: var(--text3); stroke-dasharray: 4 4; }
+
+/* Controls */
+.controls {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    gap: 6px;
+    z-index: 100;
+}
+.controls button {
+    padding: 6px 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text2);
+    font-size: 11px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s;
+}
+.controls button:hover { color: var(--text); }
+
+.info-panel {
+    position: fixed;
+    bottom: 16px;
+    left: 250px;
+    font-size: 10px;
+    color: var(--text3);
+    z-index: 100;
+    transition: left 0.3s;
+}
+.info-panel.shifted { left: 16px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🔬 PYNER — Paper Network</h1>
+    <div class="header-stats">
+        <span>Papers: <span class="val">28</span></span>
+        <span>Relevant: <span class='val'>17 / 28</span></span>
+    </div>
+    <div class="header-right">
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#34d399;"></div>≥7</div><div class="legend-item"><div class="legend-dot" style="background:#fbbf24;"></div>4-6</div><div class="legend-item"><div class="legend-dot" style="background:#f87171;"></div>≤3</div>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark/light mode">🌓</button>
+    </div>
+</div>
+
+<div class="side-panel" id="sidePanel">
+    
+    <div class="filter-section">
+        <div class="filter-title">Relevance Score</div>
+        <input type="range" class="relevance-slider" id="relevanceSlider" min="0" max="10" value="0" oninput="applyFilters()">
+        <div class="relevance-display" id="relevanceDisplay">≥ 0</div>
+    </div>
+    
+    <div class="filter-section" id="yearFilters">
+        <div class="filter-title"><label><input type="checkbox" checked id="yearSelectAll" onchange="toggleAllYears(this)"> Year</label></div>
+    </div>
+    <div class="filter-section" id="journalFilters">
+        <div class="filter-title"><label><input type="checkbox" checked id="journalSelectAll" onchange="toggleAllJournals(this)"> Journal</label></div>
+    </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+<svg id="graph"></svg>
+
+<div class="controls">
+    <button onclick="togglePanel()">☰ Filters</button>
+    <button onclick="resetZoom()">Reset View</button>
+    <button onclick="toggleLabels()">Labels</button>
+</div>
+
+<div class="info-panel" id="infoPanel">
+    Drag nodes · Scroll to zoom · Click to open paper
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+(function() {
+    const nodesData = [{"id": "31428107", "label": "Trichoderma erinaceum Bio-Priming Modulates the…", "full_title": "Trichoderma erinaceum Bio-Priming Modulates the WRKYs Defense Programming in Tomato Against the Fusarium oxysporum f. sp. lycopersici (Fol) Challenged Condition.", "authors": "Aamir M, Kashyap SP, Zehra A", "year": "2019", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2019.00911", "pmcid": "PMC6689972", "url": "https://www.ncbi.nlm.nih.gov/pubmed/31428107", "abstract": "The beneficial association and interaction of rhizocompetent microorganisms are widely used for plant biofertilization and amelioration of stress-induced damage in plants. To explore the regulatory mechanism involved in plant defense while associating with beneficial microbial species, and their interplay when co-inoculated with pathogens, we evaluated the response of tomato defense-related WRKY g", "score": 8, "is_relevant": "Yes", "summary": "This study examines how Trichoderma erinaceum bio-priming affects tomato defense-related WRKY gene expression and antioxidative enzyme activities in response to Fusarium oxysporum f. sp. lycopersici challenge.", "explanation": "The paper focuses on the interaction between Trichoderma erinaceum and tomato (Solanum lycopersicum) under Fol infection, which is relevant as it involves SlWRKY37 among other defense-related genes.", "organisms": "Solanum lycopersicum ; Trichoderma erinaceum ; Fusarium oxysporum f. sp. lycopersici", "tissues": "root ; leaf", "conditions": "unprimed ; Fol challenged ; T. erinaceum primed ; Fol + T. erinaceum", "strategies": "Microscopy ; qRT-PCR", "group": 0, "radius": 34}, {"id": "27625653", "label": "In silico Transcriptional Regulatory Networks…", "full_title": "In silico Transcriptional Regulatory Networks Involved in Tomato Fruit Ripening.", "authors": "Arhondakis S, Bita CE, Perrakis A", "year": "2016", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2016.01234", "pmcid": "PMC5003879", "url": "https://www.ncbi.nlm.nih.gov/pubmed/27625653", "abstract": "Tomato fruit ripening is a complex developmental programme partly mediated by transcriptional regulatory networks. Several transcription factors (TFs) which are members of gene families such as MADS-box and ERF were shown to play a significant role in ripening through interconnections into an intricate network. The accumulation of large datasets of expression profiles corresponding to different st", "score": 8, "is_relevant": "Yes", "summary": "The paper uses microarray analysis to identify transcriptional regulators of fruit ripening in tomatoes, focusing on gene expression changes during different stages of tomato development.", "explanation": "This study is relevant as it investigates the regulation of fruit ripening through gene expression analysis, which aligns with the user's interest in understanding genetic mechanisms involved in plant developmental processes.", "organisms": "Solanum lycopersicum", "tissues": "fruit", "conditions": "not described", "strategies": "Microarray ; microarray ; qRT-PCR", "group": 0, "radius": 34}, {"id": "40076548", "label": "Unraveling the Mechanism of the…", "full_title": "Unraveling the Mechanism of the Endophytic Bacterial Strain Pseudomonas oryzihabitans GDW1 in Enhancing Tomato Plant Growth Through Modulation of the Host Transcriptome and Bacteriome.", "authors": "Ahmed W, Wang Y, Ji W", "year": "2025", "journal": "International journal of molecular sciences", "doi": "10.3390/ijms26051922", "pmcid": "PMC11900241", "url": "https://www.ncbi.nlm.nih.gov/pubmed/40076548", "abstract": "Endophytic Pseudomonas species from agricultural crops have been extensively studied for their plant-growth-promoting (PGP) potential, but little is known about their PGP potential when isolated from perennial trees. This study investigated the plant-growth-promoting (PGP) potential of an endophyte, Pseudomonas oryzihabitans GDW1, isolated from a healthy pine tree by taking tomato as a host plant.", "score": 5, "is_relevant": "Yes", "summary": "This study investigates the plant-growth-promoting potential of Pseudomonas oryzihabitans GDW1 in tomato plants, revealing significant enhancement in growth parameters and modulation of host transcriptome and bacteriome.", "explanation": "The paper is relevant as it studies the interaction between an endophytic bacterial strain (P. oryzihabitans GDW1) and tomato plants, but does not focus on SlWRKY37 specifically.", "organisms": "Solanum lycopersicum ; Pseudomonas oryzihabitans", "tissues": "root ; shoot", "conditions": "PGP potential assessment", "strategies": "RNA-Seq ; qRT-PCR ; 16S rRNA gene amplicon sequencing", "group": 1, "radius": 25}, {"id": "35512210", "label": "A comparative transcriptomics and eQTL…", "full_title": "A comparative transcriptomics and eQTL approach identifies SlWD40 as a tomato fruit ripening regulator.", "authors": "Zhu F, Jadhav SS, Tohge T", "year": "2022", "journal": "Plant physiology", "doi": "10.1093/plphys/kiac200", "pmcid": "PMC9434188", "url": "https://www.ncbi.nlm.nih.gov/pubmed/35512210", "abstract": "Although multiple vital genes with strong effects on the tomato (Solanum lycopersicum) ripening process have been identified via the positional cloning of ripening mutants and cloning of ripening-related transcription factors (TFs), recent studies suggest that it is unlikely that we have fully characterized the gene regulatory networks underpinning this process. Here, combining comparative transcr", "score": 8, "is_relevant": "Yes", "summary": "The paper focuses on identifying key genes and pathways involved in stress responses using RNA-Seq analysis of two tomato cultivars under drought conditions.", "explanation": "This study is relevant as it investigates gene expression changes under environmental stress, which could include the target gene mentioned in the query if it plays a role in stress response.", "organisms": "Solanum lycopersicum", "tissues": "leaf ; root", "conditions": "drought stress", "strategies": "RNA-Seq ; qRT-PCR", "group": 0, "radius": 34}, {"id": "37332696", "label": "Transcriptomic analysis reveals the gene…", "full_title": "Transcriptomic analysis reveals the gene regulatory networks involved in leaf and root response to osmotic stress in tomato.", "authors": "Pirona R, Frugis G, Locatelli F", "year": "2023", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2023.1155797", "pmcid": "PMC10272567", "url": "https://www.ncbi.nlm.nih.gov/pubmed/37332696", "abstract": "Tomato (Solanum lycopersicum L.) is a major horticultural crop that is cultivated worldwide and is characteristic of the Mediterranean agricultural system. It represents a key component of the diet of billion people and an important source of vitamins and carotenoids. Tomato cultivation in open field often experiences drought episodes, leading to severe yield losses, since most modern cultivars ar", "score": 8, "is_relevant": "Yes", "summary": "This paper presents a transcriptomic analysis of two tomato genotypes (M82 and Tondo) in response to osmotic stress induced by PEG treatment. The study characterizes the specific responses of leaves and roots, identifying differentially expressed transcripts and gene regulatory networks involved in stress response.", "explanation": "The paper focuses on Solanum lycopersicum (tomato) and discusses SlWRKY37 as part of its transcriptomic analysis, making it relevant to the user query.", "organisms": "Solanum lycopersicum", "tissues": "leaf ; root", "conditions": "osmotic stress", "strategies": "RNA-Seq ; qRT-PCR", "group": 0, "radius": 34}, {"id": "26834766", "label": "De novo Transcriptome Sequencing and…", "full_title": "De novo Transcriptome Sequencing and Development of Abscission Zone-Specific Microarray as a New Molecular Tool for Analysis of Tomato Organ Abscission.", "authors": "Sundaresan S, Philosoph-Hadas S, Riov J", "year": "2015", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2015.01258", "pmcid": "PMC4712312", "url": "https://www.ncbi.nlm.nih.gov/pubmed/26834766", "abstract": "Abscission of flower pedicels and leaf petioles of tomato (Solanum lycopersicum) can be induced by flower removal or leaf deblading, respectively, which leads to auxin depletion, resulting in increased sensitivity of the abscission zone (AZ) to ethylene. However, the molecular mechanisms that drive the acquisition of abscission competence and its modulation by auxin gradients are not yet known. We", "score": 7, "is_relevant": "Yes", "summary": "This paper uses RNA-Seq to analyze the transcriptome of tomato flower and leaf abscission zones during organ abscission, identifying novel transcripts and developing an AZ-specific microarray for further studies.", "explanation": "The paper focuses on the molecular mechanisms involved in tomato organ abscission, which is relevant to the query as it involves Solanum lycopersicum (tomato) but does not specifically mention SlWRKY37 or its gene ID.", "organisms": "Solanum lycopersicum", "tissues": "flower pedicel ; leaf petiole", "conditions": "flower removal ; ethylene treatment", "strategies": "RNA-Seq ; microarray", "group": 0, "radius": 31}, {"id": "28611792", "label": "Structural and Functional Insights into…", "full_title": "Structural and Functional Insights into WRKY3 and WRKY4 Transcription Factors to Unravel the WRKY-DNA (W-Box) Complex Interaction in Tomato (Solanum lycopersicum L.). A Computational Approach.", "authors": "Aamir M, Singh VK, Meena M", "year": "2017", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2017.00819", "pmcid": "PMC5447077", "url": "https://www.ncbi.nlm.nih.gov/pubmed/28611792", "abstract": "The WRKY transcription factors (TFs), play crucial role in plant defense response against various abiotic and biotic stresses. The role of WRKY3 and WRKY4 genes in plant defense response against necrotrophic pathogens is well-reported. However, their functional annotation in tomato is largely unknown. In the present work, we have characterized the structural and functional attributes of the two id", "score": 8, "is_relevant": "Yes", "summary": "The paper focuses on analyzing two plant genes (SLAC1 and KAT1) involved in stomatal closure using computational methods to predict their expression patterns under various environmental conditions.", "explanation": "This paper is relevant as it discusses the computational analysis of SLAC1 and KAT1, which are directly related to the user's query about these genes. However, no experimental data or direct manipulation of these genes is presented in this study.", "organisms": "Arabidopsis thaliana", "tissues": "not described", "conditions": "computational analysis ; predictive modeling", "strategies": "computational analysis ; predictive modeling", "group": 0, "radius": 34}, {"id": "41145961", "label": "Antimicrobial Peptides as Part of…", "full_title": "Antimicrobial Peptides as Part of the Arsenal of Constitutive and Inducible Seed Defences in Tomato Seed Exudates Against Pathogens.", "authors": "Tarkowski ŁP, Hubert B, Marchi M", "year": "2025", "journal": "Molecular plant pathology", "doi": "10.1111/mpp.70164", "pmcid": "PMC12558808", "url": "https://www.ncbi.nlm.nih.gov/pubmed/41145961", "abstract": "Seed immune responses are an underexplored area in host-pathogen interactions, leaving seed-pathogen interactions poorly understood despite their considerable economic impact. This study examined tomato seed defences by assessing the antimicrobial activity (AA) of seed exudates during germination. Results showed genotype-dependent and constitutive defence responses from seeds showing AA in exudate", "score": 8, "is_relevant": "Yes", "summary": "The paper investigates the antimicrobial activity of plant extracts against bacterial pathogens and evaluates their potential as natural preservatives in food systems.", "explanation": "This study is relevant to the user query because it examines the efficacy of plant-based compounds, which may include those from medicinal plants, against various bacteria. The focus on antimicrobial properties aligns with an interest in alternative treatments or preservatives.", "organisms": "Solanum melongena ; Lactuca sativa ; Escherichia coli ; Staphylococcus aureus", "tissues": "seeds ; leaves", "conditions": "antimicrobial activity test ; preservative efficacy", "strategies": "antimicrobial assay ; preservative efficacy test", "group": 0, "radius": 34}, {"id": "29192231", "label": "Regulation of ethylene-responsive SlWRKYs involved…", "full_title": "Regulation of ethylene-responsive SlWRKYs involved in color change during tomato fruit ripening.", "authors": "Wang L, Zhang XL, Wang L", "year": "2017", "journal": "Scientific reports", "doi": "10.1038/s41598-017-16851-y", "pmcid": "PMC5709409", "url": "https://www.ncbi.nlm.nih.gov/pubmed/29192231", "abstract": "WRKY transcription factors (TFs) play important roles in stress responses in planta. However, the function of WRKY TFs in the regulation of fruit ripening is unclear. Here, 23 tomato SlWRKYs that are similar to ethylene-responsive WRKY genes from other plant species, or show up-regulation during fruit ripening in previous genome-wide study, were selected, and their function in fruit ripening was i", "score": 8, "is_relevant": "Yes", "summary": "The study investigates the role of ethylene-responsive WRKY transcription factors in tomato fruit ripening, focusing on their interaction with genes involved in color change and their regulation by other ripening regulators.", "explanation": "This paper is highly relevant to the user query as it specifically examines SlWRKYs (including SlWRKY37) that are ethylene-responsive and play a role in tomato fruit ripening, which aligns with the search terms provided.", "organisms": "Solanum lycopersicum ; Arabidopsis thaliana", "tissues": "fruit", "conditions": "ethylene treatment ; ripening conditions", "strategies": "qRT-PCR ; Western blot ; Yeast two-hybrid system ; Co-immunoprecipitation", "group": 0, "radius": 34}, {"id": "29709017", "label": "Structural and functional dissection of…", "full_title": "Structural and functional dissection of differentially expressed tomato WRKY transcripts in host defense response against the vascular wilt pathogen (Fusarium oxysporum f. sp. lycopersici).", "authors": "Aamir M, Singh VK, Dubey MK", "year": "2018", "journal": "PloS one", "doi": "10.1371/journal.pone.0193922", "pmcid": "PMC5927432", "url": "https://www.ncbi.nlm.nih.gov/pubmed/29709017", "abstract": "The WRKY transcription factors have indispensable role in plant growth, development and defense responses. The differential expression of WRKY genes following the stress conditions has been well demonstrated. We investigated the temporal and tissue-specific (root and leaf tissues) differential expression of plant defense-related WRKY genes, following the infection of Fusarium oxysporum f. sp. lyco", "score": 8, "is_relevant": "Yes", "summary": "The paper investigates gene expression changes in tomato plants under pathogen infection using microarray and qRT-PCR techniques, focusing on immune response pathways.", "explanation": "This study is relevant as it examines the immune response pathway in plants upon pathogen infection, which aligns with the user's interest in plant defense mechanisms against pathogens.", "organisms": "Solanum lycopersicum ; Pseudomonas syringae", "tissues": "leaf ; root", "conditions": "pathogen infection", "strategies": "Microarray ; PCR ; RT-PCR ; microarray ; qRT-PCR", "group": 0, "radius": 34}, {"id": "39731028", "label": "Comparative transcriptome analysis and heterologous…", "full_title": "Comparative transcriptome analysis and heterologous overexpression indicate that the ZjZOG gene may positively regulate the size of jujube fruit.", "authors": "Li M, Jiao S, Yao P", "year": "2024", "journal": "BMC plant biology", "doi": "10.1186/s12870-024-05997-3", "pmcid": "PMC11681679", "url": "https://www.ncbi.nlm.nih.gov/pubmed/39731028", "abstract": "Fruit size is a crucial economic trait that impacts the quality of jujube (Ziziphus jujuba), however, research in this area remains limited. This study utilized two jujube cultivars with similar genetic backgrounds but differing fruit sizes to investigate the regulatory mechanisms affecting fruit size through cytological observations, transcriptome sequencing, and heterologous overexpression.", "score": 3, "is_relevant": "No", "summary": "The study investigates the regulatory mechanisms affecting fruit size in jujube through comparative transcriptome analysis and heterologous overexpression of a candidate gene, ZjZOG, in tomato. The findings suggest that variations in mesocarp cell numbers during early development significantly influence final fruit size.", "explanation": "The paper is not directly relevant to the user query as it focuses on jujube rather than Solanum lycopersicum or related tomatoes. However, it does mention heterologous overexpression of a candidate gene in tomato, which tangentially relates to the query's interest in tomato genetics.", "organisms": "Ziziphus jujuba ; Solanum lycopersicum", "tissues": "fruit mesocarp", "conditions": "fruit size regulation", "strategies": "Sequencing ; heterologous overexpression ; qRT-PCR ; transcriptome sequencing", "group": 2, "radius": 19}, {"id": "31191610", "label": "Comparative Genomic Analysis Reveals Extensive…", "full_title": "Comparative Genomic Analysis Reveals Extensive Genetic Variations of WRKYs in Solanaceae and Functional Variations of CaWRKYs in Pepper.", "authors": "Cheng Y, Ahammed GJ, Yao Z", "year": "2019", "journal": "Frontiers in genetics", "doi": "10.3389/fgene.2019.00492", "pmcid": "PMC6546733", "url": "https://www.ncbi.nlm.nih.gov/pubmed/31191610", "abstract": "As a conserved protein family, WRKY has been shown to be involved in multiple biological processes in plants. However, the mechanism of functional diversity for WRKYs in pepper has not been well elucidated. Here, a total of 223 WRKY members from solanaceae crops including pepper, tomato and potato, were analyzed using comparative genomics. A tremendous genetic variation among WRKY members of diffe", "score": 8, "is_relevant": "Yes", "summary": "The paper focuses on the classification and analysis of WRKY transcription factors in Solanaceae plants, specifically examining their role in stress response pathways.", "explanation": "This study is highly relevant to the user query as it provides detailed information about WRKY transcription factors which are involved in plant stress responses. Although not directly mentioning the specific gene queried by the user, the paper offers valuable insights into the broader family of genes and their functions.", "organisms": "Solanaceae plants", "tissues": "not described", "conditions": "stress response", "strategies": "bioinformatics analysis ; sequence alignment", "group": 0, "radius": 34}, {"id": "27991526", "label": "Putative WRKYs associated with regulation…", "full_title": "Putative WRKYs associated with regulation of fruit ripening revealed by detailed expression analysis of the WRKY gene family in pepper.", "authors": "Cheng Y, Ahammed GJ, Yu J", "year": "2016", "journal": "Scientific reports", "doi": "10.1038/srep39000", "pmcid": "PMC5171846", "url": "https://www.ncbi.nlm.nih.gov/pubmed/27991526", "abstract": "WRKY transcription factors play important roles in plant development and stress responses. Here, global expression patterns of pepper CaWRKYs in various tissues as well as response to environmental stresses and plant hormones were systematically analyzed, with an emphasis on fruit ripening. The results showed that most CaWRKYs were expressed in at least two of the tissues tested. Group I, a subfam", "score": 5, "is_relevant": "Yes", "summary": "This paper analyzes the expression patterns of CaWRKY genes in pepper tissues and their role in fruit ripening, stress responses, and hormone regulation.", "explanation": "The paper focuses on WRKY transcription factors in pepper but does not specifically study SlWRKY37 or Solyc01g079360 in tomato. It mentions some conservation with tomato WRKY genes but does not provide detailed analysis of the specific gene queried.", "organisms": "Capsicum annuum ; Solanum lycopersicum", "tissues": "root ; stem ; leaf ; bud ; flower ; fruit", "conditions": "environmental stresses ; plant hormones", "strategies": "RNA-Seq ; qRT-PCR", "group": 1, "radius": 25}, {"id": "37239391", "label": "Genome-Wide Identification and Characterization of…", "full_title": "Genome-Wide Identification and Characterization of the VQ Motif-Containing Gene Family Based on Their Evolution and Expression Analysis under Abiotic Stress and Hormone Treatments in Foxtail Millet (Setaria italica L.).", "authors": "Liu M, Li C, Li Y", "year": "2023", "journal": "Genes", "doi": "10.3390/genes14051032", "pmcid": "PMC10218184", "url": "https://www.ncbi.nlm.nih.gov/pubmed/37239391", "abstract": "Valine-glutamine (VQ) motif-containing proteins are transcriptional regulatory cofactors that play critical roles in plant growth and response to biotic and abiotic stresses. However, information on the VQ gene family in foxtail millet (Setaria italica L.) is currently limited. In this study, a total of 32 SiVQ genes were identified in foxtail millet and classified into seven groups (I-VII), based", "score": 0, "is_relevant": "No", "summary": "This paper identifies and characterizes 32 VQ motif-containing genes in foxtail millet, analyzing their evolutionary relationships, gene structures, expression patterns under abiotic stress and hormone treatments, and potential interactions with WRKY transcription factors.", "explanation": "The paper focuses on the identification of VQ motif-containing genes in foxtail millet (Setaria italica) and does not mention Solanum lycopersicum or SlWRKY37. Therefore, it is not relevant to the user query.", "organisms": "Setaria italica", "tissues": "not described", "conditions": "abiotic stress ; hormone treatments", "strategies": "not described", "group": 2, "radius": 14}, {"id": "38371631", "label": "MicroRNA396 negatively regulates shoot regeneration…", "full_title": "MicroRNA396 negatively regulates shoot regeneration in tomato.", "authors": "Park SJ, Park JS, Yang JH", "year": "2024", "journal": "Horticulture research", "doi": "10.1093/hr/uhad291", "pmcid": "PMC10873581", "url": "https://www.ncbi.nlm.nih.gov/pubmed/38371631", "abstract": "Numerous studies have been dedicated to genetically engineering crops to enhance their yield and quality. One of the key requirements for generating genetically modified plants is the reprogramming of cell fate. However, the efficiency of shoot regeneration during this process is highly dependent on genotypes, and the underlying molecular mechanisms remain poorly understood. Here, we identified mi", "score": 8, "is_relevant": "Yes", "summary": "The study investigates gene expression changes in tomato plants under drought stress conditions using RNA-Seq and qRT-PCR techniques, focusing on identifying key genes involved in plant response to water scarcity.", "explanation": "This paper is relevant as it focuses on the genetic mechanisms of plant responses to environmental stresses such as drought, which aligns with the user's interest in understanding how plants adapt to changing conditions. The study specifically mentions RNA-Seq and qRT-PCR analyses, which are common techniques used for identifying differentially expressed genes.", "organisms": "Solanum lycopersicum", "tissues": "seedling ; leaf", "conditions": "drought stress ; control", "strategies": "RNA-Seq ; Sequencing ; qRT-PCR", "group": 0, "radius": 34}, {"id": "39838304", "label": "Genome-wide identification of HbVQ proteins…", "full_title": "Genome-wide identification of HbVQ proteins and their interaction with HbWRKY14 to regulate the expression of HbSRPP in Hevea brasiliensis.", "authors": "Zhu J, Qu L, Zeng L", "year": "2025", "journal": "BMC genomics", "doi": "10.1186/s12864-025-11243-3", "pmcid": "PMC11748332", "url": "https://www.ncbi.nlm.nih.gov/pubmed/39838304", "abstract": "Valine-glutamine motif-containing proteins (VQ proteins) play important roles in plant growth, development and response to stress. However, information on the VQ gene family in rubber tree (Hevea brasiliensis Muell. Arg.) is limited.", "score": 0, "is_relevant": "No", "summary": "This paper identifies and characterizes VQ protein genes in Hevea brasiliensis, focusing on their expression patterns and interactions with other proteins involved in stress responses.", "explanation": "The paper is not relevant to the user query as it focuses on VQ protein genes in rubber tree (Hevea brasiliensis) rather than the specific gene or pathway mentioned in the query related to a different plant species.", "organisms": "Hevea brasiliensis", "tissues": "not specified", "conditions": "not described", "strategies": "qRT-PCR ; Western blot", "group": 2, "radius": 14}, {"id": "39081527", "label": "Plant responses to abiotic stress…", "full_title": "Plant responses to abiotic stress regulated by histone acetylation.", "authors": "Wang F, Li CH, Liu Y", "year": "2024", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2024.1404977", "pmcid": "PMC11286584", "url": "https://www.ncbi.nlm.nih.gov/pubmed/39081527", "abstract": "In eukaryotes, histone acetylation and deacetylation play an important role in the regulation of gene expression. Histone acetylation levels are reversibly regulated by histone acetyltransferases (HATs) and histone deacetylases (HDACs). Increasing evidence highlights histone acetylation plays essential roles in the regulation of gene expression in plant response to environmental stress. In this re", "score": 3, "is_relevant": "No", "summary": "The paper reviews recent advances in histone acetylation's role in regulating abiotic stress responses in plants, including temperature, light, salt, and drought. It highlights the potential for improving agricultural productivity through understanding these mechanisms.", "explanation": "This review does not focus on Solanum lycopersicum or SlWRKY37 specifically but discusses broader epigenetic regulation in plant stress responses which may tangentially relate to the query's target gene and species.", "organisms": "not described", "tissues": "not described", "conditions": "abiotic stress", "strategies": "not described", "group": 2, "radius": 19}, {"id": "38674482", "label": "Transcriptome Analysis for Salt-Responsive Genes…", "full_title": "Transcriptome Analysis for Salt-Responsive Genes in Two Different Alfalfa (Medicago sativa L.) Cultivars and Functional Analysis of MsHPCA1.", "authors": "Gao Q, Yu R, Ma X", "year": "2024", "journal": "Plants (Basel, Switzerland)", "doi": "10.3390/plants13081073", "pmcid": "PMC11054072", "url": "https://www.ncbi.nlm.nih.gov/pubmed/38674482", "abstract": "Alfalfa (Medicago sativa L.) is an important forage legume and soil salinization seriously affects its growth and yield. In a previous study, we identified a salt-tolerant variety 'Gongnong NO.1' and a salt-sensitive variety 'Sibeide'. To unravel the molecular mechanism involved in salt stress, we conducted transcriptomic analysis on these two cultivars grown under 0 and 250 mM NaCl treatments for", "score": 0, "is_relevant": "No", "summary": "This study investigates the molecular mechanisms of salt stress in alfalfa by comparing two cultivars, 'Gongnong NO.1' (salt-tolerant) and 'Sibeide' (salt-sensitive), through transcriptomic analysis under NaCl treatment. The expression of MsHPCA1 was found to be responsive to both NaCl and H2O2 treatments.", "explanation": "The paper focuses on alfalfa and does not mention Solanum lycopersicum or the gene SlWRKY37, making it irrelevant to the user query.", "organisms": "Medicago sativa L.", "tissues": "root ; shoot", "conditions": "NaCl treatment", "strategies": "RNA-Seq ; qRT-PCR", "group": 2, "radius": 14}, {"id": "36352873", "label": "Research progress on the relationship…", "full_title": "Research progress on the relationship between leaf senescence and quality, yield and stress resistance in horticultural plants.", "authors": "Zhao W, Zhao H, Wang H", "year": "2022", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2022.1044500", "pmcid": "PMC9638160", "url": "https://www.ncbi.nlm.nih.gov/pubmed/36352873", "abstract": "Leaf senescence, the final stage of leaf development, is one of the adaptive mechanisms formed by plants over a long period of evolution. Leaf senescence is accompanied by various changes in cell structure, physiological metabolism, and gene expressions. This process is controlled by a variety of internal and external factors. Meanwhile, the genes and plant hormones involved in leaf aging affect t", "score": 8, "is_relevant": "Yes", "summary": "The paper investigates how various environmental stresses affect gene expression and phenotypic traits in plants, focusing on stress responses related to drought, heat, and light conditions. It uses RNA-Seq and qRT-PCR to analyze changes in gene expression under different experimental conditions.", "explanation": "This paper is relevant because it examines the effects of environmental stresses on plant gene expression, which aligns with the user's interest in understanding how plants respond to stress at a molecular level. The use of RNA-Seq and qRT-PCR provides detailed insights into specific genes involved in stress responses.", "organisms": "plants", "tissues": "leaf ; root ; stem", "conditions": "drought stress ; heat shock ; light conditions", "strategies": "RNA-Seq ; qRT-PCR ; microarray", "group": 0, "radius": 34}, {"id": "36233267", "label": "Genome-Wide Identification, Characterization, and Expression…", "full_title": "Genome-Wide Identification, Characterization, and Expression Analysis of Tubby-like Protein (TLP) Gene Family Members in Woodland Strawberry (Fragaria vesca).", "authors": "Li S, Wang G, Chang L", "year": "2022", "journal": "International journal of molecular sciences", "doi": "10.3390/ijms231911961", "pmcid": "PMC9569999", "url": "https://www.ncbi.nlm.nih.gov/pubmed/36233267", "abstract": "Tubby-like proteins (TLPs) play important roles in plant growth and development and in responses to abiotic stress. However, TLPs in strawberry remain poorly studied. In this study, eight TLPs were identified in woodland strawberry (Fragaria vesca subspecies vesca 'Ruegen'). Protein structure analysis revealed that the structure of FvTLPs is highly conserved, but evolutionary and gene structure an", "score": 0, "is_relevant": "No", "summary": "This paper identifies and characterizes eight Tubby-like Protein (TLP) genes in woodland strawberry (Fragaria vesca). The study includes subcellular localization, interaction studies with FvSKP1s, and expression analysis under various abiotic stresses and hormone treatments.", "explanation": "The paper does not match the user query as it focuses on Tubby-like Protein genes in woodland strawberry (Fragaria vesca) rather than WRKY transcription factor SlWRKY37 or Solanum lycopersicum/tomato.", "organisms": "Fragaria vesca", "tissues": "root ; leaf ; flower ; fruit ; seedling", "conditions": "salt stress ; drought stress ; cold stress ; heat stress ; ABA treatment ; MeJA treatment", "strategies": "GUS activity assays ; PCR ; qRT-PCR ; subcellular localization ; yeast two-hybrid", "group": 2, "radius": 14}, {"id": "37780521", "label": "Transcriptomic analysis reveals that methyl…", "full_title": "Transcriptomic analysis reveals that methyl jasmonate confers salt tolerance in alfalfa by regulating antioxidant activity and ion homeostasis.", "authors": "Yin Y, Yang T, Li S", "year": "2023", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2023.1258498", "pmcid": "PMC10536279", "url": "https://www.ncbi.nlm.nih.gov/pubmed/37780521", "abstract": "Alfalfa, a globally cultivated forage crop, faces significant challenges due to its vulnerability to salt stress. Jasmonates (JAs) play a pivotal role in modulating both plant growth and response to stressors.", "score": 8, "is_relevant": "Yes", "summary": "The study investigates the effects of different concentrations of a plant hormone on stress responses in Medicago truncatula seedlings, focusing on phenotypic changes and gene expression patterns.", "explanation": "This paper is relevant as it examines the impact of a specific plant hormone (likely auxin or cytokinin) on stress response mechanisms in plants, which aligns with the query's interest in hormonal effects on plant physiology.", "organisms": "Medicago truncatula", "tissues": "seedling ; whole plant", "conditions": "stress response ; hormonal treatment", "strategies": "Microscopy ; Western blot ; qRT-PCR", "group": 0, "radius": 34}, {"id": "39362333", "label": "Unravelling the role of WRKY…", "full_title": "Unravelling the role of WRKY transcription factors in leaf senescence: Genetic and molecular insights.", "authors": "Ahmad Z, Ramakrishnan M, Wang C", "year": "2025", "journal": "Journal of advanced research", "doi": "10.1016/j.jare.2024.09.026", "pmcid": "PMC12302417", "url": "https://www.ncbi.nlm.nih.gov/pubmed/39362333", "abstract": "Leaf senescence (LS), the final phase in leaf development, is an important and precisely regulated process crucial for plant well-being and the redistribution of nutrients. It is intricately controlled by various regulatory factors, including WRKY transcription factors (TFs). WRKYs are one of the most significant plant TF families, and several of them are differentially regulated and important dur", "score": 8, "is_relevant": "Yes", "summary": "The paper investigates the role of WRKY transcription factors in Arabidopsis thaliana under drought stress conditions, focusing on gene expression and protein interactions related to stress response pathways.", "explanation": "This paper is relevant as it discusses WRKY transcription factors which are mentioned in the user query. The study focuses on their involvement in plant stress responses, particularly drought, aligning with the interest in these genes under environmental stresses.", "organisms": "Arabidopsis thaliana", "tissues": "roots ; leaves", "conditions": "drought stress ; control", "strategies": "RNA-Seq ; Sequencing ; Western blot ; Yeast two-hybrid ; qRT-PCR", "group": 0, "radius": 34}, {"id": "36833390", "label": "Identification and Functional Characterization of…", "full_title": "Identification and Functional Characterization of WRKY, PHD and MYB Three Salt Stress Responsive Gene Families in Mungbean (Vigna radiata L.).", "authors": "Li S, Liu J, Xue C", "year": "2023", "journal": "Genes", "doi": "10.3390/genes14020463", "pmcid": "PMC9956968", "url": "https://www.ncbi.nlm.nih.gov/pubmed/36833390", "abstract": "WRKY-, PHD-, and MYB-like proteins are three important types of transcription factors in mungbeans, and play an important role in development and stress resistance. The genes' structures and characteristics were clearly reported and were shown to contain the conservative WRKYGQK heptapeptide sequence, Cys4-His-cys3 zinc binding motif, and HTH (helix) tryptophan cluster W structure, respectively. K", "score": 3, "is_relevant": "No", "summary": "This paper identifies and characterizes WRKY, PHD, and MYB gene families in mungbeans under salt stress conditions, focusing on their structural characteristics and expression patterns.", "explanation": "The paper focuses on mungbean genes under salt stress but does not specifically mention SlWRKY37 or Solyc01g079360 from tomato. It is relevant in the context of gene families involved in stress response, but not directly related to the query.", "organisms": "Vigna radiata", "tissues": "not described", "conditions": "salt stress ; ABA treatment ; PEG treatment", "strategies": "transcriptomics ; qRT-PCR", "group": 2, "radius": 19}, {"id": "36768747", "label": "Characterization of the WRKY Gene…", "full_title": "Characterization of the WRKY Gene Family Related to Anthocyanin Biosynthesis and the Regulation Mechanism under Drought Stress and Methyl Jasmonate Treatment in Lycoris radiata.", "authors": "Wang N, Song G, Zhang F", "year": "2023", "journal": "International journal of molecular sciences", "doi": "10.3390/ijms24032423", "pmcid": "PMC9917153", "url": "https://www.ncbi.nlm.nih.gov/pubmed/36768747", "abstract": "Lycoris radiata, belonging to the Amaryllidaceae family, is a well-known Chinese traditional medicinal plant and susceptible to many stresses. WRKY proteins are one of the largest families of transcription factors (TFs) in plants and play significant functions in regulating physiological metabolisms and abiotic stress responses. The WRKY TF family has been identified and investigated in many medic", "score": 0, "is_relevant": "No", "summary": "This paper characterizes WRKY transcription factors in Lycoris radiata and their role in anthocyanin biosynthesis under drought stress and methyl jasmonate treatment.", "explanation": "The paper does not match the user query as it focuses on Lycoris radiata rather than Solanum lycopersicum or tomato. The WRKY gene mentioned (SlWRKY37) is specific to tomatoes, while this study investigates a different species and its own set of WRKY genes.", "organisms": "Lycoris radiata", "tissues": "not specified in detail ; flowers", "conditions": "drought stress ; methyl jasmonate treatment", "strategies": "RNA-Seq ; qRT-PCR ; metabolomics", "group": 2, "radius": 14}, {"id": "38683692", "label": "The MdVQ37-MdWRKY100 complex regulates salicylic…", "full_title": "The MdVQ37-MdWRKY100 complex regulates salicylic acid content and MdRPM1 expression to modulate resistance to Glomerella leaf spot in apples.", "authors": "Dong Q, Duan D, Wang F", "year": "2024", "journal": "Plant biotechnology journal", "doi": "10.1111/pbi.14351", "pmcid": "PMC11258982", "url": "https://www.ncbi.nlm.nih.gov/pubmed/38683692", "abstract": "Glomerella leaf spot (GLS), caused by the fungus Colletotrichum fructicola, is considered one of the most destructive diseases affecting apples. The VQ-WRKY complex plays a crucial role in the response of plants to biotic stresses. However, our understanding of the defensive role of the VQ-WRKY complex on woody plants, particularly apples, under biotic stress, remains limited. In this study, we el", "score": 9, "is_relevant": "Yes", "summary": "The paper investigates the role of a specific gene in the stress response mechanism of plants, focusing on its expression and function under environmental stresses such as drought and heat.", "explanation": "This paper is highly relevant to the user query because it directly examines the role of a specific gene in plant stress response mechanisms, which aligns with the interest in understanding how plants cope with environmental stresses at the genetic level.", "organisms": "Malus domestica", "tissues": "seedling ; leaf", "conditions": "drought stress ; heat shock", "strategies": "qRT-PCR ; Western blot ; enzyme activity assay", "group": 0, "radius": 37}, {"id": "40430996", "label": "Genome-Wide Identification, Characterization, and Expression…", "full_title": "Genome-Wide Identification, Characterization, and Expression Analysis of VQ Gene Family in Salix suchowensis Under Abiotic Stresses and Hormone Treatments.", "authors": "Wang H, Wang Y, Wang Y", "year": "2025", "journal": "Plants (Basel, Switzerland)", "doi": "10.3390/plants14101431", "pmcid": "PMC12114880", "url": "https://www.ncbi.nlm.nih.gov/pubmed/40430996", "abstract": "The valine glutamine (VQ) proteins are transcription cofactors involved in various aspects of plant biology, including growth, development, and stress resistance, making them an attractive target for genetic engineering aimed at enhancing plant resilience and productivity. However, comprehensive reports or systematic studies on VQ cofactors in Salix suchowensis remain lacking. In this study, we an", "score": 0, "is_relevant": "No", "summary": "This study identifies and characterizes VQ gene family members in Salix suchowensis, analyzing their expression under various abiotic stresses and hormone treatments.", "explanation": "The paper focuses on the VQ gene family in Salix suchowensis and does not mention Solanum lycopersicum or SlWRKY37. Therefore, it is not relevant to the user query.", "organisms": "Salix suchowensis", "tissues": "not described", "conditions": "PEG ; NaCl ; 40 °C ; ABA ; SA ; MeJA", "strategies": "qRT-PCR", "group": 2, "radius": 14}, {"id": "34777407", "label": "Trichoderma-Induced Ethylene Responsive Factor MsERF105…", "full_title": "Trichoderma-Induced Ethylene Responsive Factor MsERF105 Mediates Defense Responses in Malus sieversii.", "authors": "Ji S, Liu Z, Wang Y", "year": "2021", "journal": "Frontiers in plant science", "doi": "10.3389/fpls.2021.708010", "pmcid": "PMC8585786", "url": "https://www.ncbi.nlm.nih.gov/pubmed/34777407", "abstract": "Trichoderma can induce plant hormone signal pathways mediating plant defenses, resulting in broad-spectrum resistance to phytopathogens. Herein, Malus sieversii seedlings were treated with Trichoderma biofertilizer and/or Alternaria alternata f. sp. mali, and transcriptome analysis revealed significant differential expression. There was a high similarity between the transcriptome expression profil", "score": 0, "is_relevant": "No", "summary": "The paper investigates how Trichoderma biofertilizer influences defense responses in Malus sieversii against Alternaria alternata f. sp. mali infection, focusing on differential gene expression and the role of MsERF105.", "explanation": "This paper does not match the user query as it focuses on Malus sieversii rather than Solanum lycopersicum or tomato. The target gene SlWRKY37 is also not mentioned in this study.", "organisms": "Malus sieversii ; Alternaria alternata f.sp.mali", "tissues": "not described", "conditions": "Trichoderma biofertilizer treatment ; Alternaria alternata f.sp.mali infection", "strategies": "RNA-Seq ; qRT-PCR", "group": 2, "radius": 14}, {"id": "37762142", "label": "Wheat VQ Motif-Containing Protein VQ25-A…", "full_title": "Wheat VQ Motif-Containing Protein VQ25-A Facilitates Leaf Senescence via the Abscisic Acid Pathway.", "authors": "Meng X, Lu M, Xia Z", "year": "2023", "journal": "International journal of molecular sciences", "doi": "10.3390/ijms241813839", "pmcid": "PMC10531066", "url": "https://www.ncbi.nlm.nih.gov/pubmed/37762142", "abstract": "Leaf senescence is an important factor affecting the functional transition from nutrient assimilation to nutrient remobilization in crops. The senescence of wheat leaves is of great significance for its yield and quality. In the leaf senescence process, transcriptional regulation is a committed step in integrating various senescence-related signals. Although the plant-specific transcriptional regu", "score": 0, "is_relevant": "No", "summary": "The paper investigates TaVQ25-A's role in wheat leaf senescence, showing it accelerates senescence and interacts with a WRKY transcription factor. It is expressed during senescence stages.", "explanation": "This paper does not focus on the genes or pathways mentioned in the user query related to tomato or stress response in plants other than wheat. The gene TaVQ25-A studied here is specific to wheat and its role in leaf senescence, which is unrelated to the query.", "organisms": "Triticum aestivum", "tissues": "leaf", "conditions": "dark phase ; light phase", "strategies": "PCR ; Western blot ; qRT-PCR", "group": 2, "radius": 14}];
+    const edgesData = [{"source": "31428107", "target": "27625653", "type": "organism", "label": "solanum lycopersicum"}, {"source": "31428107", "target": "40076548", "type": "organism", "label": "solanum lycopersicum"}, {"source": "31428107", "target": "35512210", "type": "organism", "label": "solanum lycopersicum"}, {"source": "31428107", "target": "37332696", "type": "organism", "label": "solanum lycopersicum"}, {"source": "31428107", "target": "26834766", "type": "organism", "label": "solanum lycopersicum"}, {"source": "31428107", "target": "29192231", "type": "organism", "label": "solanum lycopersicum"}, {"source": "31428107", "target": "29709017", "type": "organism", "label": "solanum lycopersicum"}, {"source": "31428107", "target": "39731028", "type": "organism", "label": "solanum lycopersicum"}, {"source": "31428107", "target": "27991526", "type": "organism", "label": "solanum lycopersicum"}, {"source": "31428107", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27625653", "target": "40076548", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27625653", "target": "35512210", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27625653", "target": "37332696", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27625653", "target": "26834766", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27625653", "target": "29192231", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27625653", "target": "29709017", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27625653", "target": "39731028", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27625653", "target": "27991526", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27625653", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "40076548", "target": "35512210", "type": "organism", "label": "solanum lycopersicum"}, {"source": "40076548", "target": "37332696", "type": "organism", "label": "solanum lycopersicum"}, {"source": "40076548", "target": "26834766", "type": "organism", "label": "solanum lycopersicum"}, {"source": "40076548", "target": "29192231", "type": "organism", "label": "solanum lycopersicum"}, {"source": "40076548", "target": "29709017", "type": "organism", "label": "solanum lycopersicum"}, {"source": "40076548", "target": "39731028", "type": "organism", "label": "solanum lycopersicum"}, {"source": "40076548", "target": "27991526", "type": "organism", "label": "solanum lycopersicum"}, {"source": "40076548", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "35512210", "target": "37332696", "type": "organism", "label": "solanum lycopersicum"}, {"source": "35512210", "target": "26834766", "type": "organism", "label": "solanum lycopersicum"}, {"source": "35512210", "target": "29192231", "type": "organism", "label": "solanum lycopersicum"}, {"source": "35512210", "target": "29709017", "type": "organism", "label": "solanum lycopersicum"}, {"source": "35512210", "target": "39731028", "type": "organism", "label": "solanum lycopersicum"}, {"source": "35512210", "target": "27991526", "type": "organism", "label": "solanum lycopersicum"}, {"source": "35512210", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "37332696", "target": "26834766", "type": "organism", "label": "solanum lycopersicum"}, {"source": "37332696", "target": "29192231", "type": "organism", "label": "solanum lycopersicum"}, {"source": "37332696", "target": "29709017", "type": "organism", "label": "solanum lycopersicum"}, {"source": "37332696", "target": "39731028", "type": "organism", "label": "solanum lycopersicum"}, {"source": "37332696", "target": "27991526", "type": "organism", "label": "solanum lycopersicum"}, {"source": "37332696", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "26834766", "target": "29192231", "type": "organism", "label": "solanum lycopersicum"}, {"source": "26834766", "target": "29709017", "type": "organism", "label": "solanum lycopersicum"}, {"source": "26834766", "target": "39731028", "type": "organism", "label": "solanum lycopersicum"}, {"source": "26834766", "target": "27991526", "type": "organism", "label": "solanum lycopersicum"}, {"source": "26834766", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "29192231", "target": "29709017", "type": "organism", "label": "solanum lycopersicum"}, {"source": "29192231", "target": "39731028", "type": "organism", "label": "solanum lycopersicum"}, {"source": "29192231", "target": "27991526", "type": "organism", "label": "solanum lycopersicum"}, {"source": "29192231", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "29709017", "target": "39731028", "type": "organism", "label": "solanum lycopersicum"}, {"source": "29709017", "target": "27991526", "type": "organism", "label": "solanum lycopersicum"}, {"source": "29709017", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "39731028", "target": "27991526", "type": "organism", "label": "solanum lycopersicum"}, {"source": "39731028", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "27991526", "target": "38371631", "type": "organism", "label": "solanum lycopersicum"}, {"source": "28611792", "target": "29192231", "type": "organism", "label": "arabidopsis thaliana"}, {"source": "28611792", "target": "39362333", "type": "organism", "label": "arabidopsis thaliana"}, {"source": "29192231", "target": "39362333", "type": "organism", "label": "arabidopsis thaliana"}, {"source": "40076548", "target": "36233267", "type": "journal", "label": "international journal of molecular sciences"}, {"source": "40076548", "target": "36768747", "type": "journal", "label": "international journal of molecular sciences"}, {"source": "40076548", "target": "37762142", "type": "journal", "label": "international journal of molecular sciences"}, {"source": "36233267", "target": "36768747", "type": "journal", "label": "international journal of molecular sciences"}, {"source": "36233267", "target": "37762142", "type": "journal", "label": "international journal of molecular sciences"}, {"source": "36768747", "target": "37762142", "type": "journal", "label": "international journal of molecular sciences"}, {"source": "37239391", "target": "36833390", "type": "journal", "label": "genes"}, {"source": "38674482", "target": "40430996", "type": "journal", "label": "plants (basel, switzerland)"}];
+    const hasScores = true;
+    const allYears = ["2025", "2024", "2023", "2022", "2021", "2019", "2018", "2017", "2016", "2015"];
+    const allJournals = ["BMC genomics", "BMC plant biology", "Frontiers in genetics", "Frontiers in plant science", "Genes", "Horticulture research", "International journal of molecular sciences", "Journal of advanced research", "Molecular plant pathology", "Plant biotechnology journal", "Plant physiology", "Plants (Basel, Switzerland)", "PloS one", "Scientific reports"];
+    
+    // State
+    let activeYears = new Set(allYears);
+    let activeJournals = new Set(allJournals);
+    let minRelevance = 0;
+    let showLabels = true;
+    let panelOpen = true;
+    
+    // Colors
+    const colorScale = d3.scaleOrdinal().domain([0, 1, 2]).range(['#34d399', '#fbbf24', '#f87171']);
+    const defaultColor = '#3b82f6';
+    function nodeColor(d) { return hasScores ? colorScale(d.group) : defaultColor; }
+    
+    // Build filter UI
+    const yearDiv = document.getElementById('yearFilters');
+    allYears.forEach(y => {
+        const count = nodesData.filter(n => n.year === y).length;
+        yearDiv.innerHTML += `<label class="filter-option active"><input type="checkbox" checked value="${y}" class="year-cb" onchange="applyFilters()"> ${y} <span class="filter-count">${count}</span></label>`;
+    });
+    
+    const journalDiv = document.getElementById('journalFilters');
+    allJournals.forEach(j => {
+        const count = nodesData.filter(n => n.journal === j).length;
+        const short = j.length > 28 ? j.substring(0, 26) + '…' : j;
+        journalDiv.innerHTML += `<label class="filter-option active"><input type="checkbox" checked value="${j}" class="journal-cb" onchange="applyFilters()"> ${short} <span class="filter-count">${count}</span></label>`;
+    });
+    
+    // Select All toggles
+    window.toggleAllYears = (master) => {
+        document.querySelectorAll('.year-cb').forEach(cb => { cb.checked = master.checked; });
+        applyFilters();
+    };
+    window.toggleAllJournals = (master) => {
+        document.querySelectorAll('.journal-cb').forEach(cb => { cb.checked = master.checked; });
+        applyFilters();
+    };
+    
+    // Dimensions
+    const panelW = 240;
+    let width = window.innerWidth - panelW;
+    let height = window.innerHeight;
+    const offsetX = panelW;
+    
+    const svg = d3.select('#graph').attr('width', window.innerWidth).attr('height', height);
+    const g = svg.append('g');
+    
+    const zoom = d3.zoom().scaleExtent([0.15, 5]).on('zoom', e => g.attr('transform', e.transform));
+    svg.call(zoom);
+    
+    // Layout bounds — keep everything inside a reasonable area
+    const bndLeft = offsetX + 60;
+    const bndRight = offsetX + width - 60;
+    const bndTop = 80;
+    const bndBottom = height - 60;
+    const cx = (bndLeft + bndRight) / 2;
+    const cy = (bndTop + bndBottom) / 2;
+    
+    // Year scale for vertical positioning (recent → top)
+    const yearExtent = d3.extent(nodesData, d => +d.year || 2020);
+    const yScale = d3.scaleLinear()
+        .domain([yearExtent[1], yearExtent[0]])  // Recent on top
+        .range([bndTop + 40, bndBottom - 40]);
+    
+    // Scale forces based on number of nodes — gentle repulsion, strong centering
+    const n = nodesData.length;
+    const chargeStr = n > 40 ? -80 : n > 20 ? -120 : -180;
+    const linkDist = n > 40 ? 80 : n > 20 ? 100 : 120;
+    
+    // Simulation
+    const simulation = d3.forceSimulation(nodesData)
+        .force('link', d3.forceLink(edgesData).id(d => d.id).distance(linkDist).strength(0.2))
+        .force('charge', d3.forceManyBody().strength(chargeStr))
+        .force('x', d3.forceX(cx).strength(0.06))
+        .force('y', d3.forceY(d => {
+            if (hasScores) {
+                const scoreY = (10 - d.score) / 10;
+                const yearY = yScale(+d.year || 2020);
+                return scoreY * 150 + yearY * 0.7;
+            }
+            return yScale(+d.year || 2020);
+        }).strength(0.07))
+        .force('collision', d3.forceCollide().radius(d => d.radius + 6))
+        .alphaDecay(0.025);
+    
+    // Draw edges
+    const link = g.append('g').selectAll('line').data(edgesData).join('line')
+        .attr('class', d => 'edge ' + d.type);
+    
+    // Draw nodes
+    const node = g.append('g').selectAll('g').data(nodesData).join('g')
+        .attr('cursor', 'pointer')
+        .call(d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended));
+    
+    node.append('circle')
+        .attr('r', d => d.radius)
+        .attr('fill', nodeColor)
+        .attr('fill-opacity', 0.7)
+        .attr('stroke', nodeColor)
+        .attr('stroke-opacity', 0.3)
+        .attr('stroke-width', 2);
+    
+    node.append('circle')
+        .attr('r', d => d.radius + 4)
+        .attr('fill', 'none')
+        .attr('stroke', nodeColor)
+        .attr('stroke-opacity', 0.08)
+        .attr('stroke-width', 6);
+    
+    // Labels: first 5 words of title
+    const labels = node.append('text')
+        .attr('class', 'node-label')
+        .attr('dy', d => d.radius + 13)
+        .text(d => d.label);
+    
+    // Year sub-label
+    node.append('text')
+        .attr('class', 'node-year')
+        .attr('dy', d => d.radius + 23)
+        .text(d => d.year);
+    
+    // Tooltip
+    const tooltip = document.getElementById('tooltip');
+    
+    node.on('mouseover', (event, d) => {
+        const connected = new Set([d.id]);
+        edgesData.forEach(e => {
+            const s = typeof e.source === 'object' ? e.source.id : e.source;
+            const t = typeof e.target === 'object' ? e.target.id : e.target;
+            if (s === d.id) connected.add(t);
+            if (t === d.id) connected.add(s);
+        });
+        
+        node.select('circle:first-child').attr('fill-opacity', n => connected.has(n.id) ? 0.95 : 0.1);
+        link.attr('stroke-opacity', e => {
+            const s = typeof e.source === 'object' ? e.source.id : e.source;
+            const t = typeof e.target === 'object' ? e.target.id : e.target;
+            return (s === d.id || t === d.id) ? 0.5 : 0.02;
+        });
+        
+        let sc = d.score >= 7 ? 'high' : d.score >= 4 ? 'mid' : 'low';
+        let h = `<div class="tt-title">${d.full_title}</div>`;
+        h += `<div class="tt-meta">${d.authors} · ${d.journal} · ${d.year}</div>`;
+        if (hasScores) h += `<span class="tt-score ${sc}">Relevance: ${d.score}/10</span>`;
+        if (d.explanation) h += `<div class="tt-section"><div class="tt-label">Why relevant</div><div class="tt-value">${d.explanation}</div></div>`;
+        if (d.summary) h += `<div class="tt-section"><div class="tt-label">Summary</div><div class="tt-value">${d.summary.substring(0,200)}${d.summary.length>200?'…':''}</div></div>`;
+        if (d.organisms && d.organisms !== 'not described') h += `<div class="tt-section"><div class="tt-label">Organisms</div><div class="tt-value">${d.organisms}</div></div>`;
+        if (d.conditions && d.conditions !== 'not described') h += `<div class="tt-section"><div class="tt-label">Conditions</div><div class="tt-value">${d.conditions}</div></div>`;
+        if (d.strategies && d.strategies !== 'not described') h += `<div class="tt-section"><div class="tt-label">Strategies</div><div class="tt-value">${d.strategies}</div></div>`;
+        h += `<div class="tt-section"><div class="tt-meta">PMID: ${d.id}${d.doi ? ' · DOI: '+d.doi : ''}</div></div>`;
+        
+        tooltip.innerHTML = h;
+        tooltip.classList.add('visible');
+    })
+    .on('mousemove', event => {
+        const x = event.clientX + 16;
+        const y = event.clientY - 16;
+        const r = tooltip.getBoundingClientRect();
+        tooltip.style.left = (x + r.width > window.innerWidth ? event.clientX - r.width - 16 : x) + 'px';
+        tooltip.style.top = (y + r.height > window.innerHeight ? window.innerHeight - r.height - 8 : y) + 'px';
+    })
+    .on('mouseout', () => {
+        tooltip.classList.remove('visible');
+        node.select('circle:first-child').attr('fill-opacity', 0.7);
+        link.attr('stroke-opacity', 0.12);
+    })
+    .on('click', (e, d) => { if (d.url) window.open(d.url, '_blank'); });
+    
+    // Tick — clamp positions within bounds so no node escapes
+    simulation.on('tick', () => {
+        nodesData.forEach(d => {
+            if (!d.fx) d.x = Math.max(bndLeft, Math.min(bndRight, d.x));
+            if (!d.fy) d.y = Math.max(bndTop, Math.min(bndBottom, d.y));
+        });
+        link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+        node.attr('transform', d => `translate(${d.x},${d.y})`);
+    });
+    
+    // Auto-fit after simulation stabilizes
+    simulation.on('end', () => { fitToView(); });
+    
+    // Drag — nodes stay pinned where you drop them; double-click to release
+    function dragstarted(e, d) { if (!e.active) simulation.alphaTarget(0.1).restart(); d.fx = d.x; d.fy = d.y; }
+    function dragged(e, d) { d.fx = e.x; d.fy = e.y; }
+    function dragended(e, d) { if (!e.active) simulation.alphaTarget(0); /* keep pinned: fx/fy stay */ }
+    
+    // Double-click to unpin a node
+    node.on('dblclick', (e, d) => { d.fx = null; d.fy = null; e.stopPropagation(); });
+    
+    // Filters
+    window.applyFilters = () => {
+        activeYears.clear();
+        document.querySelectorAll('#yearFilters input:checked').forEach(cb => activeYears.add(cb.value));
+        activeJournals.clear();
+        document.querySelectorAll('#journalFilters input:checked').forEach(cb => activeJournals.add(cb.value));
+        
+        const slider = document.getElementById('relevanceSlider');
+        if (slider) {
+            minRelevance = +slider.value;
+            document.getElementById('relevanceDisplay').textContent = '≥ ' + minRelevance;
+        }
+        
+        node.attr('visibility', d => {
+            const yearOk = activeYears.has(d.year);
+            const journalOk = activeJournals.has(d.journal);
+            const scoreOk = !hasScores || d.score >= minRelevance;
+            return (yearOk && journalOk && scoreOk) ? 'visible' : 'hidden';
+        });
+        
+        const visibleIds = new Set();
+        node.each(function(d) { if (d3.select(this).attr('visibility') !== 'hidden') visibleIds.add(d.id); });
+        
+        link.attr('visibility', d => {
+            const s = typeof d.source === 'object' ? d.source.id : d.source;
+            const t = typeof d.target === 'object' ? d.target.id : d.target;
+            return visibleIds.has(s) && visibleIds.has(t) ? 'visible' : 'hidden';
+        });
+    };
+    
+    // Controls
+    function fitToView() {
+        const pad = 60;
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        nodesData.forEach(d => {
+            if (d.x - d.radius < minX) minX = d.x - d.radius;
+            if (d.x + d.radius > maxX) maxX = d.x + d.radius;
+            if (d.y - d.radius < minY) minY = d.y - d.radius;
+            if (d.y + d.radius > maxY) maxY = d.y + d.radius;
+        });
+        const bw = maxX - minX + pad * 2;
+        const bh = maxY - minY + pad * 2;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const scale = Math.min(vw / bw, vh / bh, 1.5);
+        const tx = vw / 2 - (minX + maxX) / 2 * scale;
+        const ty = vh / 2 - (minY + maxY) / 2 * scale;
+        svg.transition().duration(600).call(zoom.transform,
+            d3.zoomIdentity.translate(tx, ty).scale(scale)
+        );
+    }
+    window.resetZoom = fitToView;
+    window.toggleLabels = () => {
+        showLabels = !showLabels;
+        const v = showLabels ? 'visible' : 'hidden';
+        node.selectAll('.node-label, .node-year').attr('visibility', v);
+    };
+    window.togglePanel = () => {
+        panelOpen = !panelOpen;
+        document.getElementById('sidePanel').classList.toggle('collapsed');
+        document.getElementById('infoPanel').classList.toggle('shifted');
+    };
+    window.toggleTheme = () => {
+        const body = document.body;
+        const current = body.getAttribute('data-theme');
+        body.setAttribute('data-theme', current === 'dark' ? '' : 'dark');
+    };
+    
+    // Responsive
+    window.addEventListener('resize', () => {
+        width = window.innerWidth - (panelOpen ? panelW : 0);
+        height = window.innerHeight;
+        svg.attr('width', window.innerWidth).attr('height', height);
+        simulation.force('x', d3.forceX(d => (panelOpen ? panelW : 0) + width / 2).strength(0.05));
+        simulation.alpha(0.3).restart();
+    });
+})();
+</script>
+</body>
+</html>

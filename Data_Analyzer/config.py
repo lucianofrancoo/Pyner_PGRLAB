@@ -22,7 +22,7 @@ LOGS_DIR.mkdir(parents=True, exist_ok=True)
 # OLLAMA CONFIGURATION
 # ============================================
 OLLAMA_BASE_URL = "http://localhost:11434"
-OLLAMA_MODEL = "qwen2.5:14b"
+OLLAMA_MODEL = "qwen3.5:9b"
 OLLAMA_TIMEOUT = 600  # seconds (10 minutes)
 
 # ============================================

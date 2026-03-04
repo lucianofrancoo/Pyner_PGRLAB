@@ -20,7 +20,7 @@ API_RELOAD = True
 
 # Ollama LLM
 OLLAMA_HOST = "http://localhost:11434"
-OLLAMA_MODEL = "qwen2.5:14b"
+OLLAMA_MODEL = "qwen3.5:9b"
 OLLAMA_TIMEOUT = 30
 QUERY_EXPANSION_ENABLED = True
 
