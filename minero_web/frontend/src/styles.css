@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
 
 :root {
+  color-scheme: dark;
   /* Base — dark navy, not pitch black */
   --bg-base: #111d2e;
   --bg-soft: #162135;
@@ -173,8 +174,9 @@ select option {
 }
 
 .pickaxe-logo {
-  width: 56px;
-  height: 56px;
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
   flex: 0 0 auto;
   filter:
     drop-shadow(0 0 10px rgba(212, 160, 23, 0.55)) drop-shadow(0 0 22px rgba(212, 160, 23, 0.2));
@@ -415,12 +417,6 @@ select option {
   gap: 14px;
 }
 
-.top-stack {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: 14px;
-}
-
 .panel {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
@@ -489,6 +485,11 @@ select option {
   padding: 10px 12px;
   color: var(--text-main);
   transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+option {
+  background-color: var(--bg-soft);
+  color: var(--text-main);
 }
 
 .field textarea {
@@ -1320,6 +1321,21 @@ button.ghost:hover {
   }
 }
 
+.chop {
+  animation: chop 800ms ease-in-out infinite alternate;
+  transform-origin: bottom right;
+}
+
+@keyframes chop {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-45deg);
+  }
+}
+
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -1422,4 +1438,153 @@ button.ghost:hover {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* ================================================================
+   MODO PRO — ProAnalysisView
+   ================================================================ */
+
+.pro-panel .details-panel {
+  max-height: 560px;
+  overflow-y: auto;
+}
+
+.pro-panel .repo-title-block h2 {
+  background: linear-gradient(135deg, #5efcde 0%, #06b6d4 50%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Chip de relevancia Pro */
+.chip-yes {
+  background: rgba(25, 211, 162, 0.15) !important;
+  border: 1px solid rgba(25, 211, 162, 0.5) !important;
+  color: #19d3a2 !important;
+}
+
+.chip-error {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
+  color: #ef4444 !important;
+}
+
+/* Tabs de grupos de campos */
+.pro-group-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 10px;
+}
+
+.pro-tab {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.pro-tab:hover {
+  border-color: rgba(6, 182, 212, 0.4);
+  color: var(--teal);
+}
+
+.pro-tab.active {
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.5);
+  color: var(--teal);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.1);
+}
+
+/* Grid de campos del detalle Pro */
+.pro-fields {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.pro-field {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 8px;
+  align-items: baseline;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 6px;
+}
+
+.pro-field dt {
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pro-field dd {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  word-break: break-word;
+}
+
+.pro-field.empty dt {
+  color: rgba(79, 106, 136, 0.5);
+}
+
+.pro-field.empty dd {
+  color: rgba(79, 106, 136, 0.4);
+}
+
+.muted {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.pro-summary {
+  margin: 8px 0 4px;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+.pro-explanation {
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  line-height: 1.4;
+}
+
+.pro-abstract-preview {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Details panel en modo Pro es más alto */
+.pro-details {
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.pro-details h3 {
+  margin: 0 0 6px;
+  font-size: 0.94rem;
+  color: var(--teal);
+  line-height: 1.35;
 }

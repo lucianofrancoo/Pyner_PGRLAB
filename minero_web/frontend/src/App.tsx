@@ -2,12 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { BookOpenText, ChartSpline, Database, Search } from 'lucide-react';
 import { SearchView } from './components/SearchView';
 import { ResultsView } from './components/ResultsView';
+import { ProAnalysisView } from './components/ProAnalysisView';
 import { AnalysisView } from './components/AnalysisView';
 import { HelpView } from './components/HelpView';
 import { StatusBanner } from './components/StatusBanner';
 import { QuerySummary } from './components/QuerySummary';
-import { checkHealth, generateQuery, runSearchWithQuery } from './lib/api';
-import type { AppStatus, AppView, MineroResponse, QueryGeneration, SearchPayload } from './types';
+import { analyzePapers, checkHealth, generateQuery, runSearchWithQuery } from './lib/api';
+import type { AppStatus, AppView, MineroResponse, ProAnalysisResponse, QueryGeneration, SearchPayload } from './types';
 
 const API_BASE = import.meta.env.VITE_MINERO_API_URL ?? 'http://127.0.0.1:8010';
 
@@ -48,143 +49,11 @@ interface PendingRun {
 
 function PickaxeLogo() {
   return (
-    <svg
+    <img
+      src="/logos/gemini.png"
+      alt="Minero project logo"
       className="pickaxe-logo"
-      viewBox="0 0 72 72"
-      role="img"
-      aria-label="Minero project logo"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        {/* Background gradient — deep forest green to near-black */}
-        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0e2318" />
-          <stop offset="55%" stopColor="#0a1c13" />
-          <stop offset="100%" stopColor="#060f0a" />
-        </linearGradient>
-
-        {/* Shiny gold for pickaxe head */}
-        <linearGradient id="goldHead" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#ffe98a" />
-          <stop offset="40%" stopColor="#d4a017" />
-          <stop offset="100%" stopColor="#8c6500" />
-        </linearGradient>
-
-        {/* Warm wood for handle */}
-        <linearGradient id="woodHandle" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#9c6c30" />
-          <stop offset="100%" stopColor="#4e2d08" />
-        </linearGradient>
-
-        {/* Teal accent for data-node dots */}
-        <linearGradient id="tealDot" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#5efcde" />
-          <stop offset="100%" stopColor="#06b6d4" />
-        </linearGradient>
-
-        {/* Outer rim glow */}
-        <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#d4a017" stopOpacity="0.8" />
-          <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.5" />
-        </linearGradient>
-
-        {/* Gold glow filter */}
-        <filter id="glowGold" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="1.6" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-
-        {/* Teal glow filter */}
-        <filter id="glowTeal" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="1.4" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-
-        {/* Inner shadow for bg depth */}
-        <filter id="innerShadow">
-          <feFlood floodColor="#000" floodOpacity="0.45" result="flood" />
-          <feComposite in="flood" in2="SourceGraphic" operator="in" result="shadow" />
-          <feBlend in="SourceGraphic" in2="shadow" />
-        </filter>
-      </defs>
-
-      {/* ── Background rounded rectangle ── */}
-      <rect x="2" y="2" width="68" height="68" rx="20" fill="url(#bgGrad)" />
-
-      {/* Subtle inner highlight top */}
-      <rect x="2" y="2" width="68" height="34" rx="20"
-        fill="url(#bgGrad)" opacity="0.15" />
-
-      {/* Gradient rim border */}
-      <rect x="2" y="2" width="68" height="68" rx="20"
-        fill="none" stroke="url(#rimGrad)" strokeWidth="1.6" />
-
-      {/* ── Inner glow ring (subtle) ── */}
-      <rect x="5" y="5" width="62" height="62" rx="18"
-        fill="none" stroke="#d4a017" strokeWidth="0.5" strokeOpacity="0.18" />
-
-      {/* ── Pickaxe handle ── */}
-      <line
-        x1="20" y1="52" x2="40" y2="30"
-        stroke="url(#woodHandle)" strokeWidth="5.5"
-        strokeLinecap="round"
-      />
-      {/* Handle highlight stripe */}
-      <line
-        x1="21.5" y1="50" x2="39" y2="31.5"
-        stroke="#c88c3a" strokeWidth="1.5"
-        strokeLinecap="round" strokeOpacity="0.5"
-      />
-
-      {/* ── Pickaxe head — forward spike (main) ── */}
-      <path
-        d="M32 26 C34 18 44 12 56 15 C51 21 42 26 34 27 Z"
-        fill="url(#goldHead)"
-        filter="url(#glowGold)"
-      />
-      {/* Head highlight ridge */}
-      <path
-        d="M33 25 C36 21 43 17 52 16"
-        fill="none" stroke="#ffe98a" strokeWidth="1.2"
-        strokeLinecap="round" strokeOpacity="0.7"
-      />
-
-      {/* ── Pickaxe head — back horn ── */}
-      <path
-        d="M32 26 C29 22 24 16 16 15 C18 20 24 25 31 27 Z"
-        fill="url(#goldHead)"
-      />
-
-      {/* Tip flash */}
-      <line x1="54" y1="14" x2="59.5" y2="9.5"
-        stroke="#ffe98a" strokeWidth="2.2" strokeLinecap="round"
-        filter="url(#glowGold)"
-      />
-
-      {/* ── Handle grip cap ── */}
-      <circle cx="20" cy="52" r="3.5" fill="url(#goldHead)" opacity="0.9" />
-      <circle cx="20" cy="52" r="1.8" fill="#ffe98a" opacity="0.6" />
-
-      {/* ── Data-node constellation (bottom-right) ── */}
-      {/* Nodes */}
-      <circle cx="49" cy="52" r="2.8" fill="url(#tealDot)" filter="url(#glowTeal)" opacity="0.95" />
-      <circle cx="56" cy="45" r="1.8" fill="url(#tealDot)" filter="url(#glowTeal)" opacity="0.8" />
-      <circle cx="57" cy="55" r="1.4" fill="url(#tealDot)" opacity="0.7" />
-      {/* Connecting lines */}
-      <line x1="49" y1="52" x2="56" y2="45"
-        stroke="#06b6d4" strokeWidth="0.9" strokeOpacity="0.55" />
-      <line x1="56" y1="45" x2="57" y2="55"
-        stroke="#06b6d4" strokeWidth="0.9" strokeOpacity="0.4" />
-      <line x1="49" y1="52" x2="57" y2="55"
-        stroke="#06b6d4" strokeWidth="0.6" strokeOpacity="0.3" />
-    </svg>
+    />
   );
 }
 
@@ -222,6 +91,11 @@ export default function App() {
   const [llmAvailable, setLlmAvailable] = useState(false);
   const [pendingRun, setPendingRun] = useState<PendingRun | null>(null);
   const [step, setStep] = useState<'idle' | 'generating' | 'running'>('idle');
+
+  // ─── Estado modo Pro ──────────────────────────────────────────
+  const [proResponse, setProResponse] = useState<ProAnalysisResponse | null>(null);
+  const [proLoading, setProLoading] = useState(false);
+  const [showPro, setShowPro] = useState(false);
 
   useEffect(() => {
     checkHealth()
@@ -262,6 +136,9 @@ export default function App() {
     setStep('running');
     setStatus('loading');
     setError('');
+    // Reset pro state on new search
+    setProResponse(null);
+    setShowPro(false);
 
     try {
       const result = await runSearchWithQuery({
@@ -290,6 +167,24 @@ export default function App() {
     }
     return statusMessage(status);
   }, [status, error]);
+
+  async function handleRunPro(
+    publications: Record<string, unknown>[],
+    query: string
+  ): Promise<void> {
+    setProLoading(true);
+    try {
+      const result = await analyzePapers(publications, query);
+      setProResponse(result);
+      setShowPro(true);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Pro analysis failed';
+      setError(message);
+      setStatus('error');
+    } finally {
+      setProLoading(false);
+    }
+  }
 
   return (
     <div className="app-shell">
@@ -336,19 +231,7 @@ export default function App() {
 
           <section className="workspace">
             {view === 'buscar' ? (
-              <div className="top-stack">
-                <QuerySummary query={pendingRun?.query_generation ?? null} />
-                <section className="panel compact flow-panel">
-                  <header className="panel-header">
-                    <h2>Workflow Status</h2>
-                    <p>
-                      {pendingRun
-                        ? 'Query generated. Confirm to execute against PubMed or BioProject.'
-                        : 'No run yet. Use the Search view to start.'}
-                    </p>
-                  </header>
-                </section>
-              </div>
+              <QuerySummary query={pendingRun?.query_generation ?? null} />
             ) : null}
 
             {view === 'buscar' ? (
@@ -363,7 +246,20 @@ export default function App() {
                 onDiscard={() => setPendingRun(null)}
               />
             ) : null}
-            {view === 'resultados' ? <ResultsView response={response} /> : null}
+            {view === 'resultados' ? (
+              showPro && proResponse ? (
+                <ProAnalysisView
+                  proResponse={proResponse}
+                  onClose={() => setShowPro(false)}
+                />
+              ) : (
+                <ResultsView
+                  response={response}
+                  onRunPro={handleRunPro}
+                  proLoading={proLoading}
+                />
+              )
+            ) : null}
             {view === 'analisis' ? <AnalysisView response={response} /> : null}
             {view === 'ayuda' ? <HelpView /> : null}
           </section>
