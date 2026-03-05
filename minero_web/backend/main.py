@@ -14,11 +14,13 @@ ROOT_DIR = Path(__file__).resolve().parents[2]
 FETCHER_DIR = ROOT_DIR / "Fetcher_NCBI"
 PHASES_DIR = ROOT_DIR / "Query_generator" / "phases"
 DATA_ANALYZER_DIR = ROOT_DIR / "Data_Analyzer"
+DATA_VISUALIZATION_DIR = ROOT_DIR / "Data_visualization"
 
 sys.path.insert(0, str(FETCHER_DIR))
 sys.path.insert(0, str(PHASES_DIR))
 # DATA_ANALYZER_DIR se agrega al final para no interferir con Fetcher_NCBI/config.py
 sys.path.append(str(DATA_ANALYZER_DIR))
+sys.path.append(str(DATA_VISUALIZATION_DIR))
 
 from boolean_fetcher_integrated import BooleanFetcherIntegrated
 from ncbi_linkout import LinkoutFetcher
@@ -337,6 +339,19 @@ def analyze_papers(request: AnalyzePapersRequest) -> Dict[str, Any]:
         stats.get("errors", 0),
     )
 
+    network_html = ""
+    try:
+        from paper_visualizer import PaperVisualizer
+        visualizer = PaperVisualizer()
+        visualizer.set_data(
+            query=request.query,
+            publications=request.publications,
+            classified_results=results
+        )
+        network_html = visualizer.generate_html_content()
+    except Exception as exc:
+        logger.exception("[Pro] Error generando visualización: %s", exc)
+
     return {
         "metadata": {
             "total_analyzed": stats.get("analyzed", 0),
@@ -349,6 +364,7 @@ def analyze_papers(request: AnalyzePapersRequest) -> Dict[str, Any]:
             "analyzed_at": datetime.now(timezone.utc).isoformat(),
         },
         "results": results,
+        "network_html": network_html,
     }
 
 

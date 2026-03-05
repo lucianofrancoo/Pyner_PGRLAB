@@ -22,6 +22,12 @@ const NAV_ITEMS: Array<{ id: AppView; label: string; icon: typeof Search }> = [
   { id: 'ayuda', label: 'Help', icon: BookOpenText },
 ];
 
+const LOADING_STEPS = {
+  generating: ['Reading your question...', 'Building search query...'],
+  running: ['Searching records...', 'Sorting results...', 'Scoring relevance...', 'Preparing summary...'],
+  pro: ['Reading abstracts...', 'Extracting key entities...', 'Creating graphs...', 'Scoring evidence...'],
+} as const;
+
 function statusMessage(status: AppStatus): string {
   switch (status) {
     case 'loading':
@@ -90,6 +96,7 @@ export default function App() {
   const [llmAvailable, setLlmAvailable] = useState(false);
   const [pendingRun, setPendingRun] = useState<PendingRun | null>(null);
   const [step, setStep] = useState<'idle' | 'generating' | 'running'>('idle');
+  const [loadingStepIndex, setLoadingStepIndex] = useState(0);
 
   // ─── Estado modo Pro ──────────────────────────────────────────
   const [proResponse, setProResponse] = useState<ProAnalysisResponse | null>(null);
@@ -167,6 +174,30 @@ export default function App() {
     return statusMessage(status);
   }, [status, error]);
 
+  const activeLoadingStage = useMemo<'generating' | 'running' | 'pro' | null>(() => {
+    if (proLoading) return 'pro';
+    if (step === 'generating') return 'generating';
+    if (step === 'running' || status === 'loading') return 'running';
+    return null;
+  }, [proLoading, step, status]);
+
+  useEffect(() => {
+    setLoadingStepIndex(0);
+
+    if (!activeLoadingStage) return;
+
+    const stages = LOADING_STEPS[activeLoadingStage];
+    const interval = window.setInterval(() => {
+      setLoadingStepIndex((prev) => (prev + 1) % stages.length);
+    }, 1400);
+
+    return () => window.clearInterval(interval);
+  }, [activeLoadingStage]);
+
+  const loadingDetail = activeLoadingStage
+    ? LOADING_STEPS[activeLoadingStage][loadingStepIndex]
+    : null;
+
   async function handleRunPro(
     publications: Record<string, unknown>[],
     query: string
@@ -226,7 +257,12 @@ export default function App() {
 
       <main className="main-content">
         <div className="main-frame">
-          <StatusBanner status={status} message={message} metadata={response?.metadata ?? null} />
+          <StatusBanner
+            status={status}
+            message={message}
+            detail={loadingDetail}
+            metadata={response?.metadata ?? null}
+          />
 
           <section className="workspace">
             {view === 'buscar' ? (

@@ -370,6 +370,18 @@ select option {
   color: var(--text-main);
 }
 
+.status-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.status-detail {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
 .status-main svg {
   color: var(--accent);
 }

@@ -4,10 +4,11 @@ import type { AppStatus, MineroMetadata } from '../types';
 interface StatusBannerProps {
   status: AppStatus;
   message: string;
+  detail?: string | null;
   metadata: MineroMetadata | null;
 }
 
-export function StatusBanner({ status, message, metadata }: StatusBannerProps) {
+export function StatusBanner({ status, message, detail, metadata }: StatusBannerProps) {
   const icon =
     status === 'loading' ? (
       <LoaderCircle className="spin" size={18} />
@@ -25,7 +26,10 @@ export function StatusBanner({ status, message, metadata }: StatusBannerProps) {
     <div className={`status-banner ${status}`}>
       <div className="status-main">
         {icon}
-        <span>{message}</span>
+        <div className="status-text">
+          <span>{message}</span>
+          {detail ? <small className="status-detail">{detail}</small> : null}
+        </div>
       </div>
       {metadata ? (
         <div className="status-meta">

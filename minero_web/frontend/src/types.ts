@@ -180,4 +180,5 @@ export interface ProAnalysisMetadata {
 export interface ProAnalysisResponse {
   metadata: ProAnalysisMetadata;
   results: ProAnalysisResult[];
+  network_html?: string;
 }
