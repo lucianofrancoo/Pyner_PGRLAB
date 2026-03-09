@@ -331,22 +331,29 @@ class BooleanFetcherIntegrated:
             exp_count = len(bs_data.get('experiments', []))
             logger.info(f"      • {bs_id}: {exp_count} experiment(s)")
         
-        # PubMed search disabled - only generate SRA hierarchy data
-        # To enable PubMed cascade search, uncomment the code below
+        publications, search_method = self.search_pubmed_publications(
+            bioproject_id,
+            biosamples_dict,
+            sra_runs,
+            cascade=True
+        )
         
-        # publications, search_method = self.search_pubmed_publications(
-        #     bioproject_id,
-        #     biosamples_dict,
-        #     sra_runs,
-        #     cascade=True
-        # )
-        
-        # No PubMed search - set all publication fields to NA
-        result['publications_found'] = 0
-        result['search_method'] = "NA"
-        result['dois'] = "NA"
-        result['pmids'] = "NA"
-        result['papers_summary'] = "NA"
+        if publications:
+            result['publications_found'] = len(publications)
+            result['search_method'] = search_method
+            result['dois'] = [p.get('doi', '') for p in publications if p.get('doi')]
+            result['pmids'] = [p.get('pmid', '') for p in publications if p.get('pmid')]
+            summaries = []
+            for p in publications[:3]:
+                title = p.get('title', 'Unknown')
+                summaries.append(f"[{p.get('pmid')}] {title}")
+            result['papers_summary'] = " | ".join(summaries)
+        else:
+            result['publications_found'] = 0
+            result['search_method'] = "NA"
+            result['dois'] = []
+            result['pmids'] = []
+            result['papers_summary'] = "No publications found"
         
         return result
     

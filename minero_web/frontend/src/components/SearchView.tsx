@@ -18,8 +18,7 @@ const DEFAULT_QUERY =
 
 const MAX_HARD_LIMIT = 10000;
 
-const SOURCE_DESCRIPTIONS: Record<SourceMode, string> = {
-  pubmed: 'PubMed: fast, focused on papers and abstracts.',
+const SOURCE_DESCRIPTIONS: Record<string, string> = {
   pmc: 'PMC: full-text search — more results, slower.',
   bioproject: 'BioProject: slower, focused on projects and SRA hierarchy.',
 };
@@ -35,7 +34,7 @@ export function SearchView({
   onDiscard,
 }: SearchViewProps) {
   const [naturalQuery, setNaturalQuery] = useState(DEFAULT_QUERY);
-  const [source, setSource] = useState<SourceMode>('pubmed');
+  const [source, setSource] = useState<SourceMode>('pmc');
   const [useLlm, setUseLlm] = useState(true);
   // '' = unlimted input display; internally sent as MAX_HARD_LIMIT
   const [maxResultsInput, setMaxResultsInput] = useState<string>('');
@@ -85,7 +84,6 @@ export function SearchView({
           <label className="field">
             <span>Data source</span>
             <select value={source} onChange={(event) => setSource(event.target.value as SourceMode)}>
-              <option value="pubmed">PubMed</option>
               <option value="pmc">PMC (full-text)</option>
               <option value="bioproject">BioProject</option>
             </select>
