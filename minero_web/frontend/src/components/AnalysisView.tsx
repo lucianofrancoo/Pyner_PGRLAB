@@ -1,7 +1,8 @@
-import type { MineroResponse, RelevanceLabel } from '../types';
+import type { MineroResponse, ProAnalysisResponse, RelevanceLabel } from '../types';
 
 interface AnalysisViewProps {
   response: MineroResponse | null;
+  proResponse: ProAnalysisResponse | null;
 }
 
 const EVIDENCE_DISPLAY: Record<string, string> = {
@@ -15,7 +16,7 @@ function percent(value: number, total: number): number {
   return Math.round((value / total) * 100);
 }
 
-export function AnalysisView({ response }: AnalysisViewProps) {
+export function AnalysisView({ response, proResponse }: AnalysisViewProps) {
   if (!response) {
     return (
       <section className="panel">
@@ -89,6 +90,25 @@ export function AnalysisView({ response }: AnalysisViewProps) {
           ))}
         </article>
       </div>
+
+      {proResponse?.network_html ? (
+        <article className="analytics-network">
+          <header className="analytics-network-header">
+            <h3>Paper Network (Pro)</h3>
+            <p>
+              Interactive graph with lateral filters for relevance, year and journal.
+            </p>
+          </header>
+          <div className="analytics-network-frame">
+            <iframe
+              title="Paper Network Filters"
+              srcDoc={proResponse.network_html}
+              style={{ width: '100%', height: '100%', border: 'none' }}
+              sandbox="allow-scripts allow-downloads allow-same-origin"
+            />
+          </div>
+        </article>
+      ) : null}
     </section>
   );
 }

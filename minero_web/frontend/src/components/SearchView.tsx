@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FlaskConical, Search, Pickaxe } from 'lucide-react';
 import type { QueryGeneration, SearchPayload, SourceMode } from '../types';
 
@@ -22,6 +22,8 @@ const SOURCE_DESCRIPTIONS: Record<string, string> = {
   pmc: 'PMC: full-text search — more results, slower.',
   bioproject: 'BioProject: slower, focused on projects and SRA hierarchy.',
 };
+
+const LINE_WINDOW_POINTS = 28;
 
 type QuerySegment = {
   text: string;
@@ -90,10 +92,70 @@ export function SearchView({
   }, [maxResultsInput]);
 
   const sourceDescription = SOURCE_DESCRIPTIONS[source];
+  const isSearchRunning = isRunning && Boolean(pendingQuery);
   const querySegments = useMemo(
     () => splitByTopLevelParentheses(pendingQuery?.ncbi_query ?? ''),
     [pendingQuery?.ncbi_query]
   );
+  const compactQuery = useMemo(
+    () => (pendingQuery?.ncbi_query ?? '').replace(/\s+/g, ' ').trim(),
+    [pendingQuery?.ncbi_query]
+  );
+
+  const [processedCount, setProcessedCount] = useState(0);
+  const [lineSeries, setLineSeries] = useState<number[]>([0]);
+  const processedRef = useRef(0);
+  const estimatedTarget = useMemo(() => {
+    if (resolvedMaxResults >= MAX_HARD_LIMIT) {
+      return source === 'bioproject' ? 3500 : 2200;
+    }
+    return Math.max(120, Math.min(resolvedMaxResults, 8000));
+  }, [resolvedMaxResults, source]);
+
+  const linePoints = useMemo(() => {
+    const safeSeries = lineSeries.length ? lineSeries : [0];
+    const maxValue = Math.max(estimatedTarget, ...safeSeries, 1);
+    return safeSeries
+      .map((value, index) => {
+        const x = safeSeries.length === 1 ? 0 : (index / (safeSeries.length - 1)) * 100;
+        const y = 38 - (value / maxValue) * 32;
+        return `${x.toFixed(2)},${y.toFixed(2)}`;
+      })
+      .join(' ');
+  }, [lineSeries, estimatedTarget]);
+
+  const areaPoints = useMemo(() => {
+    if (!linePoints) return '';
+    return `0,38 ${linePoints} 100,38`;
+  }, [linePoints]);
+
+  useEffect(() => {
+    if (!isSearchRunning) {
+      processedRef.current = 0;
+      setProcessedCount(0);
+      setLineSeries([0]);
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      const current = processedRef.current;
+      const baseJump = Math.max(2, Math.floor(estimatedTarget * 0.018));
+      const next =
+        current >= estimatedTarget
+          ? estimatedTarget
+          : Math.min(estimatedTarget, current + baseJump + Math.floor(Math.random() * 12));
+
+      processedRef.current = next;
+      setProcessedCount(next);
+      setLineSeries((prev) => {
+        const appended = [...prev, next];
+        if (appended.length > LINE_WINDOW_POINTS) appended.shift();
+        return appended;
+      });
+    }, 650);
+
+    return () => window.clearInterval(timer);
+  }, [isSearchRunning, estimatedTarget]);
 
   async function handleGenerate(): Promise<void> {
     await onGenerate({
@@ -116,7 +178,7 @@ export function SearchView({
         <p>Write your biological question in natural language and run Minero.</p>
       </header>
 
-      <form className="search-form" onSubmit={handleSubmit}>
+      <form className={`search-form${isSearchRunning ? ' search-form--minimized' : ''}`} onSubmit={handleSubmit}>
         <label className="field">
           <span>Biological query</span>
           <textarea
@@ -184,39 +246,101 @@ export function SearchView({
         <section className="panel compact" style={{ marginTop: 12 }}>
           <header className="panel-header">
             <h2>Confirmation</h2>
-            <p>Review the generated NCBI query and confirm to run the real search.</p>
+            <p>
+              {isSearchRunning
+                ? 'Search is running. Query preview collapsed while records are being processed.'
+                : 'Review the generated NCBI query and confirm to run the real search.'}
+            </p>
           </header>
-          <div className="query-block query-block-colored">
-            {querySegments.map((segment, index) => {
-              if (segment.type === 'plain') {
-                return (
-                  <span key={`plain-${index}`} className="query-segment-plain">
-                    {segment.text}
-                  </span>
-                );
-              }
-              return (
-                <span
-                  key={`group-${index}`}
-                  className={`query-segment query-segment--${(segment.groupIndex ?? 0) % 6}`}
-                >
-                  {segment.text}
-                </span>
-              );
-            })}
-          </div>
-          <div className="actions">
-            <button type="button" className="ghost" onClick={handleGenerate} disabled={loading}>
-              <FlaskConical size={16} /> Regenerate
-            </button>
-            <button type="button" className="ghost" onClick={onDiscard} disabled={loading}>
-              Discard
-            </button>
-            <button type="button" className="primary" onClick={onConfirm} disabled={loading}>
-              {isRunning ? <Pickaxe size={16} className="chop" /> : <Search size={16} />}
-              {isRunning ? 'Searching...' : 'Confirm and search'}
-            </button>
-          </div>
+          {isSearchRunning ? (
+            <>
+              <div className="query-mini">
+                <small>Active query</small>
+                <p title={compactQuery}>{compactQuery}</p>
+              </div>
+
+              <div className="loading-workbench">
+                <div className="loading-chart">
+                  <div className="loading-chart-header">
+                    <strong>Processing Stream</strong>
+                    <small>Records processed over time</small>
+                  </div>
+                  <div className="loading-line-chart">
+                    <svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="lineAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="rgba(74, 222, 128, 0.45)" />
+                          <stop offset="100%" stopColor="rgba(74, 222, 128, 0.02)" />
+                        </linearGradient>
+                      </defs>
+                      <polygon points={areaPoints} fill="url(#lineAreaGrad)" />
+                      <polyline points={linePoints} fill="none" stroke="rgba(74, 222, 128, 0.95)" strokeWidth="1.6" />
+                    </svg>
+                  </div>
+                  <div className="loading-chart-metrics">
+                    <article>
+                      <small>Processed</small>
+                      <strong>{processedCount.toLocaleString()}</strong>
+                    </article>
+                    <article>
+                      <small>Target window</small>
+                      <strong>{estimatedTarget.toLocaleString()}</strong>
+                    </article>
+                  </div>
+                </div>
+
+                <div className="loading-skeleton" aria-hidden="true">
+                  <div className="skeleton-line w-70" />
+                  <div className="skeleton-line w-55" />
+                  <div className="skeleton-line w-85" />
+                  <div className="skeleton-row">
+                    <div className="skeleton-cell w-25" />
+                    <div className="skeleton-cell w-45" />
+                    <div className="skeleton-cell w-30" />
+                  </div>
+                  <div className="skeleton-row">
+                    <div className="skeleton-cell w-20" />
+                    <div className="skeleton-cell w-40" />
+                    <div className="skeleton-cell w-35" />
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="query-block query-block-colored">
+                {querySegments.map((segment, index) => {
+                  if (segment.type === 'plain') {
+                    return (
+                      <span key={`plain-${index}`} className="query-segment-plain">
+                        {segment.text}
+                      </span>
+                    );
+                  }
+                  return (
+                    <span
+                      key={`group-${index}`}
+                      className={`query-segment query-segment--${(segment.groupIndex ?? 0) % 6}`}
+                    >
+                      {segment.text}
+                    </span>
+                  );
+                })}
+              </div>
+              <div className="actions">
+                <button type="button" className="ghost" onClick={handleGenerate} disabled={loading}>
+                  <FlaskConical size={16} /> Regenerate
+                </button>
+                <button type="button" className="ghost" onClick={onDiscard} disabled={loading}>
+                  Discard
+                </button>
+                <button type="button" className="primary" onClick={onConfirm} disabled={loading}>
+                  {isRunning ? <Pickaxe size={16} className="chop" /> : <Search size={16} />}
+                  {isRunning ? 'Searching...' : 'Confirm and search'}
+                </button>
+              </div>
+            </>
+          )}
         </section>
       ) : null}
     </section>

@@ -303,7 +303,9 @@ export default function App() {
                 />
               )
             ) : null}
-            {view === 'analisis' ? <AnalysisView response={response} /> : null}
+            {view === 'analisis' ? (
+              <AnalysisView response={response} proResponse={proResponse} />
+            ) : null}
             {view === 'ayuda' ? <HelpView /> : null}
           </section>
         </div>
