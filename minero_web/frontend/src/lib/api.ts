@@ -3,7 +3,7 @@ import type { MineroResponse, ProAnalysisResponse, QueryGeneration, SearchPayloa
 const API_BASE = import.meta.env.VITE_MINERO_API_URL ?? '';
 const DEFAULT_TIMEOUT_MS = 180000;
 const PUBMED_SEARCH_TIMEOUT_MS = 180000;
-const BIOPROJECT_SEARCH_TIMEOUT_MS = 600000;
+const BIOPROJECT_SEARCH_TIMEOUT_MS = 1200000;
 
 async function fetchWithTimeout(
   input: string,
@@ -137,4 +137,3 @@ export async function analyzePapers(
 
   return response.json();
 }
-

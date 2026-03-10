@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Download, FlaskConical, Search as SearchIcon } from 'lucide-react';
 import type { BioprojectResult, MineroResponse, MineroResult, PubmedResult } from '../types';
-import { exportCsv, exportJson } from '../lib/exporters';
+import { exportBioprojectMetadataTsv, exportBioprojectSraTsv, exportCsv, exportJson } from '../lib/exporters';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
@@ -30,6 +30,18 @@ function extractTagByPrefix(tags: string[], prefix: string): string {
   const match = tags.find((tag) => tag.startsWith(prefix));
   if (!match) return '-';
   return match.replace(prefix, '').trim() || '-';
+}
+
+function normalizeTissueLabel(value: string): TissueLabel | null {
+  const t = value.toLowerCase().trim();
+  if (!t || t === '-' || t === 'na' || t === 'n/a') return null;
+  if (/\broot|roots|radic/i.test(t)) return 'root';
+  if (/\bleaf|leaves|foliar/i.test(t)) return 'leaf';
+  if (/\bseed|seedling/i.test(t)) return 'seed';
+  if (/\bfruit|fruits|tomato fruit/i.test(t)) return 'fruit';
+  if (/\bwhole[\s-]?plant\b|\bplant\b/i.test(t)) return 'whole-plant';
+  if (/\bunknown\b/i.test(t)) return 'unknown';
+  return null;
 }
 
 function formatTag(tag: string): string {
@@ -79,23 +91,42 @@ function inferTissue(text: string): TissueLabel {
   return 'unknown';
 }
 
+function resolveBioprojectTissue(row: BioprojectResult): TissueLabel {
+  const tags = row.classification.tags ?? [];
+  const tissueTag = extractTagByPrefix(tags, 'tejido:');
+  const fromTag = normalizeTissueLabel(tissueTag);
+  if (fromTag) return fromTag;
+  return inferTissue(`${row.title ?? ''} ${row.description ?? ''}`);
+}
+
+function looksInstitution(value: string): boolean {
+  const v = value.toLowerCase();
+  return /(university|universidad|institute|institut|academy|college|center|centre|laboratory|lab|department|hospital|school|research|ministry)/i.test(v);
+}
+
+function resolveBioprojectOrganism(row: BioprojectResult): string {
+  const raw = String(row.organism ?? '').trim();
+  const tag = extractTagByPrefix(row.classification.tags ?? [], 'organismo:');
+  const tagValue = tag === '-' ? '' : tag;
+
+  if (tagValue && (!raw || looksInstitution(raw))) return tagValue;
+  if (raw) return raw;
+  if (tagValue) return tagValue;
+  return 'Unknown organism';
+}
+
 function BioProjectDashboard({ results }: { results: BioprojectResult[] }) {
-  let totalExps = 0;
   let totalRuns = 0;
   let totalBiosamples = 0;
 
-  const tissueMap: Record<string, number> = {};
   const conditionMap: Record<string, number> = {};
   const strategyMap: Record<string, number> = {};
 
   results.forEach(r => {
-    totalExps += parseCount(r.sra_experiments_count);
     totalRuns += parseCount(r.sra_runs_count);
     totalBiosamples += parseCount(r.biosamples_count);
 
     const tags = r.classification.tags ?? [];
-    const tissue = extractTagByPrefix(tags, 'tejido:');
-    if (tissue !== '-') tissueMap[tissue] = (tissueMap[tissue] || 0) + 1;
 
     const condition = extractTagByPrefix(tags, 'condicion:');
     if (condition !== '-') conditionMap[condition] = (conditionMap[condition] || 0) + 1;
@@ -111,9 +142,12 @@ function BioProjectDashboard({ results }: { results: BioprojectResult[] }) {
   ].reverse(); // reverse to show larger categories at the top/bottom depending on layout
 
   const toChartData = (map: Record<string, number>) =>
-    Object.entries(map).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value).slice(0, 10);
+    Object.entries(map)
+      .filter(([, value]) => value > 0)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 10);
 
-  const tissueData = toChartData(tissueMap);
   const conditionData = toChartData(conditionMap);
   const strategyData = toChartData(strategyMap);
 
@@ -134,23 +168,6 @@ function BioProjectDashboard({ results }: { results: BioprojectResult[] }) {
           </ResponsiveContainer>
         </div>
       </div>
-
-      {tissueData.length > 0 && (
-        <div className="panel flow-panel" style={{ height: 280, padding: '16px', display: 'flex', flexDirection: 'column' }}>
-          <h4 style={{ margin: '0 0 4px 0', fontSize: '0.75rem', color: '#8ba5c4', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Tissues Detected</h4>
-          <div style={{ flex: 1, minHeight: 0 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                <Pie data={tissueData} innerRadius="55%" outerRadius="80%" paddingAngle={2} dataKey="value">
-                  {tissueData.map((_, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
-                </Pie>
-                <Tooltip contentStyle={{ backgroundColor: '#1c2d42', borderColor: '#4f6a88', borderRadius: '8px', color: '#dce8f7', fontSize: '12px' }} />
-                <Legend verticalAlign="bottom" height={24} wrapperStyle={{ fontSize: '11px', color: '#dce8f7', paddingTop: '10px' }} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      )}
 
       {conditionData.length > 0 && (
         <div className="panel flow-panel" style={{ height: 280, padding: '16px', display: 'flex', flexDirection: 'column' }}>
@@ -239,10 +256,11 @@ export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps
       };
       let biosamples = 0;
       let runs = 0;
+      let experiments = 0;
 
       rows.forEach((row) => {
-        const haystack = `${row.title ?? ''} ${row.description ?? ''}`;
-        tissueCounts[inferTissue(haystack)] += 1;
+        tissueCounts[resolveBioprojectTissue(row)] += 1;
+        experiments += parseCount(row.sra_experiments_count);
         biosamples += parseCount(row.biosamples_count);
         runs += parseCount(row.sra_runs_count);
       });
@@ -255,6 +273,7 @@ export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps
         journals: 0,
         years: [],
         projects: rows.length,
+        experiments,
         biosamples,
         runs,
         tissueCounts,
@@ -359,6 +378,24 @@ export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps
           <button className="ghost repo-export-secondary" type="button" onClick={() => exportJson(response)}>
             <Download size={14} /> JSON
           </button>
+          {!isPubmedSource && (
+            <>
+              <button
+                className="ghost repo-export-secondary"
+                type="button"
+                onClick={() => exportBioprojectSraTsv(filteredResults)}
+              >
+                <Download size={14} /> SRA Libraries TSV
+              </button>
+              <button
+                className="ghost repo-export-secondary"
+                type="button"
+                onClick={() => exportBioprojectMetadataTsv(response)}
+              >
+                <Download size={14} /> Metadata TSV
+              </button>
+            </>
+          )}
           {/* Botón Pro — solo para PubMed / PMC */}
           {onRunPro && isPubmedSource && (
             <button
@@ -395,8 +432,8 @@ export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps
               <span>{isPubmedSource ? 'with PMCID' : 'runs'}</span>
             </article>
             <article>
-              <strong>{isPubmedSource ? streamStats.reviews : streamStats.biosamples}</strong>
-              <span>{isPubmedSource ? 'reviews' : 'biosamples'}</span>
+              <strong>{isPubmedSource ? streamStats.reviews : streamStats.experiments}</strong>
+              <span>{isPubmedSource ? 'reviews' : 'experiments'}</span>
             </article>
           </div>
         </div>
@@ -463,7 +500,9 @@ export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps
             {filteredResults.map((item, index) => {
               const active = index === selectedIndex;
               const tags = item.classification.tags ?? [];
-              const tissueTag = extractTagByPrefix(tags, 'tejido:');
+              const bioprojectTissue = isBioproject(response.metadata.source, item)
+                ? resolveBioprojectTissue(item)
+                : 'unknown';
               const strategyTag = extractTagByPrefix(tags, 'estrategia:');
               if (isPubmed(response.metadata.source, item)) {
                 return (
@@ -497,10 +536,10 @@ export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps
                   </td>
                   <td className="repo-title">{shortText(item.title || 'Untitled record')}</td>
                   <td className="repo-organism">
-                    {isBioproject(response.metadata.source, item) ? item.organism || 'Unknown organism' : '-'}
+                    {isBioproject(response.metadata.source, item) ? resolveBioprojectOrganism(item) : '-'}
                   </td>
                   <td>
-                    <span className="repo-chip">{tissueTag.toUpperCase()}</span>
+                    <span className="repo-chip">{bioprojectTissue.toUpperCase()}</span>
                   </td>
                   <td>{isBioproject(response.metadata.source, item) ? parseCount(item.sra_runs_count) : '-'}</td>
                   <td>{strategyTag === '-' ? '-' : shortText(strategyTag, 20)}</td>

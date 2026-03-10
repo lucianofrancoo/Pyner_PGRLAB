@@ -23,6 +23,50 @@ const SOURCE_DESCRIPTIONS: Record<string, string> = {
   bioproject: 'BioProject: slower, focused on projects and SRA hierarchy.',
 };
 
+type QuerySegment = {
+  text: string;
+  type: 'plain' | 'group';
+  groupIndex?: number;
+};
+
+function splitByTopLevelParentheses(query: string): QuerySegment[] {
+  if (!query.trim()) return [{ text: query, type: 'plain' }];
+
+  const segments: QuerySegment[] = [];
+  let cursor = 0;
+  let groupIndex = 0;
+
+  while (cursor < query.length) {
+    if (query[cursor] !== '(') {
+      const nextParen = query.indexOf('(', cursor);
+      const end = nextParen === -1 ? query.length : nextParen;
+      segments.push({ text: query.slice(cursor, end), type: 'plain' });
+      cursor = end;
+      continue;
+    }
+
+    let depth = 0;
+    let end = cursor;
+    while (end < query.length) {
+      const char = query[end];
+      if (char === '(') depth += 1;
+      if (char === ')') depth -= 1;
+      end += 1;
+      if (depth === 0) break;
+    }
+
+    segments.push({
+      text: query.slice(cursor, end),
+      type: 'group',
+      groupIndex,
+    });
+    groupIndex += 1;
+    cursor = end;
+  }
+
+  return segments;
+}
+
 export function SearchView({
   loading,
   isGenerating,
@@ -46,6 +90,10 @@ export function SearchView({
   }, [maxResultsInput]);
 
   const sourceDescription = SOURCE_DESCRIPTIONS[source];
+  const querySegments = useMemo(
+    () => splitByTopLevelParentheses(pendingQuery?.ncbi_query ?? ''),
+    [pendingQuery?.ncbi_query]
+  );
 
   async function handleGenerate(): Promise<void> {
     await onGenerate({
@@ -125,10 +173,6 @@ export function SearchView({
         </label>
 
         <div className="actions">
-          <button type="button" className="ghost" onClick={() => setNaturalQuery(DEFAULT_QUERY)}>
-            <FlaskConical size={16} /> Load sample
-          </button>
-
           <button type="submit" className="primary" disabled={loading || naturalQuery.trim().length < 3}>
             {isGenerating ? <Pickaxe size={16} className="chop" /> : <Search size={16} />}
             {isGenerating ? 'Generating query...' : 'Generate query'}
@@ -142,7 +186,25 @@ export function SearchView({
             <h2>Confirmation</h2>
             <p>Review the generated NCBI query and confirm to run the real search.</p>
           </header>
-          <pre className="query-block">{pendingQuery.ncbi_query}</pre>
+          <div className="query-block query-block-colored">
+            {querySegments.map((segment, index) => {
+              if (segment.type === 'plain') {
+                return (
+                  <span key={`plain-${index}`} className="query-segment-plain">
+                    {segment.text}
+                  </span>
+                );
+              }
+              return (
+                <span
+                  key={`group-${index}`}
+                  className={`query-segment query-segment--${(segment.groupIndex ?? 0) % 6}`}
+                >
+                  {segment.text}
+                </span>
+              );
+            })}
+          </div>
           <div className="actions">
             <button type="button" className="ghost" onClick={handleGenerate} disabled={loading}>
               <FlaskConical size={16} /> Regenerate

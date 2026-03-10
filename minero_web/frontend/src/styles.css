@@ -618,6 +618,50 @@ button.ghost:hover {
   line-height: 1.45;
 }
 
+.query-block-colored {
+  display: block;
+}
+
+.query-segment-plain {
+  color: #c7d5e8;
+}
+
+.query-segment {
+  display: inline;
+  border-radius: 8px;
+  padding: 1px 3px;
+}
+
+.query-segment--0 {
+  color: #a7f3d0;
+  background: rgba(16, 185, 129, 0.16);
+}
+
+.query-segment--1 {
+  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.17);
+}
+
+.query-segment--2 {
+  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.2);
+}
+
+.query-segment--3 {
+  color: #ddd6fe;
+  background: rgba(124, 58, 237, 0.2);
+}
+
+.query-segment--4 {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.18);
+}
+
+.query-segment--5 {
+  color: #99f6e4;
+  background: rgba(20, 184, 166, 0.18);
+}
+
 .chips-wrap {
   display: flex;
   flex-wrap: wrap;

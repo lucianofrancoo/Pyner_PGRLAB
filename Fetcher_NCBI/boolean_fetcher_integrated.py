@@ -44,6 +44,56 @@ if NCBI_API_KEY:
     logger.info("✓ Using NCBI API key")
 
 
+def _clean_text(value: str) -> str:
+    return " ".join(str(value).split()).strip()
+
+
+def _looks_like_institution(value: str) -> bool:
+    lower = value.lower()
+    return any(
+        token in lower
+        for token in (
+            "university",
+            "universidad",
+            "institute",
+            "institut",
+            "academy",
+            "college",
+            "center",
+            "centre",
+            "laboratory",
+            "lab",
+            "department",
+            "hospital",
+            "school",
+            "research",
+            "ministry",
+        )
+    )
+
+
+def _pick_bioproject_organism(doc) -> str:
+    candidate_paths = [
+        ".//OrganismName",
+        ".//Organism/OrganismName",
+        ".//Target/Organism/OrganismName",
+        ".//Target/Organism/Name",
+        ".//Organism/Name",
+    ]
+
+    for path in candidate_paths:
+        value = _clean_text(doc.findtext(path, ""))
+        if value and not _looks_like_institution(value):
+            return value
+
+    # Keep legacy fallback, but avoid returning institution/lab names as organism.
+    fallback = _clean_text(doc.findtext(".//Name", ""))
+    if fallback and not _looks_like_institution(fallback):
+        return fallback
+
+    return ""
+
+
 class BooleanFetcherIntegrated:
     """
     Orchestrates complete workflow: Boolean→BioProject→SRA→PubMed
@@ -126,8 +176,8 @@ class BooleanFetcherIntegrated:
                     if desc:
                         bp_data['description'] = desc
                     
-                    # Extract Organism Name
-                    organism = doc.findtext(".//Name", "")
+                    # Extract Organism Name (avoid generic/institution names)
+                    organism = _pick_bioproject_organism(doc)
                     if organism:
                         bp_data['organism'] = organism
                     

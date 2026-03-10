@@ -66,7 +66,13 @@ function PickaxeLogo() {
 function InstitutionalLogos() {
   return (
     <div className="inst-logos">
-      <div className="inst-logo-wrap">
+      <a
+        className="inst-logo-wrap"
+        href="https://pgrlab.cl/"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Visit Plant Genome Regulation Lab website"
+      >
         <img
           src="/logos/pgrlab.png"
           alt="PGRLab"
@@ -74,8 +80,14 @@ function InstitutionalLogos() {
           className="inst-logo"
           onError={(e) => { (e.target as HTMLImageElement).parentElement!.style.display = 'none'; }}
         />
-      </div>
-      <div className="inst-logo-wrap inst-logo-wrap--phyto">
+      </a>
+      <a
+        className="inst-logo-wrap inst-logo-wrap--phyto"
+        href="https://phytolearning.cl/"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Visit Phytolearning website"
+      >
         <img
           src="/logos/phytolearning.png"
           alt="Phytolearning"
@@ -83,7 +95,7 @@ function InstitutionalLogos() {
           className="inst-logo"
           onError={(e) => { (e.target as HTMLImageElement).parentElement!.style.display = 'none'; }}
         />
-      </div>
+      </a>
     </div>
   );
 }
