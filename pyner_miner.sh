@@ -51,7 +51,7 @@ validate_environment() {
     
     # Check required files
     local required_files=(
-        "Query_generator/phases/phase3/api/main.py"
+        "Query_generator/test_query_expander.py"
         "Fetcher_NCBI/pubmed_boolean_search.py"
         "Fetcher_NCBI/boolean_fetcher_integrated.py"
         "Fetcher_NCBI/config.py"
@@ -279,7 +279,7 @@ printf "\n${GREEN}━━━━━━━━━━━━━━━━━━━━�
 printf "${GREEN}[4/6] Generating boolean query with AI...${NC}\n"
 printf "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n\n"
 
-cd "$ROOT_DIR/Query_generator/phases/phase3"
+cd "$ROOT_DIR/Query_generator"
 
 # Create a temporary file to capture the output while allowing interaction
 TEMP_GEN_OUTPUT=$(mktemp)
@@ -287,9 +287,8 @@ TEMP_GEN_OUTPUT=$(mktemp)
 # Export SEARCH_DB so the interactive CLI can adapt field tags for PMC
 export SEARCH_DB
 
-# Run main.py in interactive mode (default) and tee output to file
-# We don't use --quick to allow the new refinement loop
-python3 api/main.py "$USER_INPUT" 2>/dev/null | tee "$TEMP_GEN_OUTPUT"
+# Run the new optimized query expander (Phase 1)
+python3 test_query_expander.py "$USER_INPUT" | tee "$TEMP_GEN_OUTPUT"
 GEN_EXIT_CODE=${PIPESTATUS[0]}
 
 if [ $GEN_EXIT_CODE -ne 0 ]; then

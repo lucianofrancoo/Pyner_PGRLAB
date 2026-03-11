@@ -1,2 +1,17 @@
 # Local test outputs
 /test_fetcher_results.csv
+
+# Large Data & Output Folders
+output/
+taxdump/
+gene_data/
+pubmedbert_cache/
+temp_downloads/
+__pycache__/
+
+# Big intermediate files
+*.gz
+*.tar.gz
+*.pt
+*step2_mesh_consolidated*.json
+*.log
