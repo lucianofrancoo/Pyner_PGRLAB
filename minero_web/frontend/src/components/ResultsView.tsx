@@ -7,6 +7,14 @@ import {
   PieChart, Pie, Cell, Legend
 } from 'recharts';
 
+const PRO_LOADING_STAGES = [
+  'Converting PMC IDs to PMID...',
+  'Fetching full text from PMC...',
+  'Building evidence prompt for each paper...',
+  'Running LLM extraction and scoring...',
+  'Aggregating metadata and network payload...',
+];
+
 interface ResultsViewProps {
   response: MineroResponse | null;
   onRunPro?: (publications: Record<string, unknown>[], query: string) => void;
@@ -198,10 +206,32 @@ function BioProjectDashboard({ results }: { results: BioprojectResult[] }) {
 export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps) {
   const [searchText, setSearchText] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [proElapsedSeconds, setProElapsedSeconds] = useState(0);
+  const [proStageIndex, setProStageIndex] = useState(0);
 
   useEffect(() => {
     setSelectedIndex(0);
   }, [response]);
+
+  useEffect(() => {
+    if (!proLoading) {
+      setProElapsedSeconds(0);
+      setProStageIndex(0);
+      return;
+    }
+
+    const tick = window.setInterval(() => {
+      setProElapsedSeconds((prev) => prev + 1);
+    }, 1000);
+    const stageTick = window.setInterval(() => {
+      setProStageIndex((prev) => (prev + 1) % PRO_LOADING_STAGES.length);
+    }, 3000);
+
+    return () => {
+      window.clearInterval(tick);
+      window.clearInterval(stageTick);
+    };
+  }, [proLoading]);
 
   const filteredResults = useMemo(() => {
     if (!response) return [];
@@ -335,6 +365,14 @@ export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps
     return `conic-gradient(${slices.join(', ')})`;
   }, [tissueEntries, streamStats.total]);
 
+  const proElapsedLabel = useMemo(() => {
+    const minutes = Math.floor(proElapsedSeconds / 60);
+    const seconds = proElapsedSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }, [proElapsedSeconds]);
+
+  const activeProStage = PRO_LOADING_STAGES[proStageIndex];
+
   if (!response) {
     return (
       <section className="panel">
@@ -404,6 +442,45 @@ export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps
           )}
         </div>
       </header>
+
+      {proLoading && (
+        <section className="pro-live-panel" aria-live="polite">
+          <div className="pro-live-head">
+            <strong>Pro Analyzer Live</strong>
+            <small>Deep extraction is running on the backend</small>
+          </div>
+          <div className="pro-live-grid">
+            <article>
+              <small>Current stage</small>
+              <strong>{activeProStage}</strong>
+            </article>
+            <article>
+              <small>Elapsed</small>
+              <strong>{proElapsedLabel}</strong>
+            </article>
+            <article>
+              <small>Batch size</small>
+              <strong>{response.results.length.toLocaleString()} papers</strong>
+            </article>
+            <article>
+              <small>Source</small>
+              <strong>{response.metadata.source.toUpperCase()}</strong>
+            </article>
+          </div>
+          <div className="pro-live-track" aria-hidden="true">
+            <span />
+          </div>
+          <div className="pro-live-pipeline" aria-hidden="true">
+            <span className="node on" />
+            <span className="link" />
+            <span className="node on" />
+            <span className="link" />
+            <span className="node pulse" />
+            <span className="link" />
+            <span className="node" />
+          </div>
+        </section>
+      )}
 
       <section className="repo-metadata-stream">
         <div className="stream-column">

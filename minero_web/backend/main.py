@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import copy
 import logging
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -14,6 +16,8 @@ from pydantic import BaseModel, Field
 ROOT_DIR = Path(__file__).resolve().parents[2]
 FETCHER_DIR = ROOT_DIR / "Fetcher_NCBI"
 PHASES_DIR = ROOT_DIR / "Query_generator" / "phases"
+QUERY_GENERATOR_DIR = ROOT_DIR / "Query_generator"
+QUERY_GENERATOR_SCRIPT = QUERY_GENERATOR_DIR / "test_query_expander.py"
 DATA_ANALYZER_DIR = ROOT_DIR / "Data_Analyzer"
 DATA_VISUALIZATION_DIR = ROOT_DIR / "Data_visualization"
 
@@ -40,6 +44,9 @@ LLM_CLASSIFICATION_LIMITS = {
     "bioproject": 5,
 }
 QUERY_GENERATION_TIMEOUT_SEC = 45
+QUERY_GENERATION_SCRIPT_TIMEOUT_SEC = 180
+FRONTEND_MAX_QUERY_LIST_ITEMS = 80
+FRONTEND_MAX_QUERY_TERM_LENGTH = 180
 
 
 class SearchRequest(BaseModel):
@@ -47,6 +54,7 @@ class SearchRequest(BaseModel):
     source: Literal["pubmed", "pmc", "bioproject"] = "pubmed"
     max_results: int = Field(default=20, ge=1, le=10000)
     use_llm: bool = True
+    request_id: Optional[str] = None
 
 
 class GenerateQueryRequest(BaseModel):
@@ -60,12 +68,14 @@ class RunSearchRequest(BaseModel):
     use_llm: bool = True
     ncbi_query: str = Field(min_length=3, description="Query booleana NCBI generada")
     query_generation: Dict[str, Any] = Field(default_factory=dict)
+    request_id: Optional[str] = None
 
 
 class AppState:
     query_service: Optional[QueryGeneratorService] = None
     classifier: Optional[ResultClassifier] = None
     llm_client: Optional[OllamaClient] = None
+    search_progress: Dict[str, Dict[str, Any]] = {}
 
 
 state = AppState()
@@ -127,13 +137,75 @@ def health() -> Dict[str, Any]:
     }
 
 
+@app.get("/api/minero/progress/{request_id}")
+def get_progress(request_id: str) -> Dict[str, Any]:
+    progress = state.search_progress.get(request_id)
+    if not progress:
+        raise HTTPException(status_code=404, detail="Progress not found")
+    return progress
+
+
 def _ensure_services() -> tuple[QueryGeneratorService, ResultClassifier]:
     if not state.query_service or not state.classifier:
         raise HTTPException(status_code=503, detail="Servicio no inicializado")
     return state.query_service, state.classifier
 
 
+def _set_progress(
+    request_id: Optional[str],
+    *,
+    stage: Optional[str] = None,
+    processed: Optional[int] = None,
+    target: Optional[int] = None,
+    message: Optional[str] = None,
+    done: Optional[bool] = None,
+) -> None:
+    if not request_id:
+        return
+    current = state.search_progress.get(request_id, {})
+    payload = {
+        **current,
+        "request_id": request_id,
+        "stage": stage if stage is not None else current.get("stage", "queued"),
+        "processed": int(processed if processed is not None else current.get("processed", 0)),
+        "target": int(target if target is not None else current.get("target", 0)),
+        "message": message if message is not None else current.get("message", ""),
+        "done": bool(done if done is not None else current.get("done", False)),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    state.search_progress[request_id] = payload
+
+
 def _generate_query_payload(natural_query: str, use_llm_requested: bool) -> Dict[str, Any]:
+    # Primary path: use exactly the same script path as pyner_miner.sh.
+    phase1_result = _build_phase1_boolean_query(natural_query, use_llm_requested)
+    if phase1_result and phase1_result.get("ncbi_query"):
+        return {
+            "user_input": natural_query,
+            "extracted": {
+                "organism": None,
+                "organism_variants": [],
+                "strategies": [],
+                "tissues": [],
+                "conditions": [],
+                "genes": [],
+                "free_terms": [],
+            },
+            "synonyms": {
+                "organism": [],
+                "strategies": [],
+                "tissues": [],
+                "conditions": [],
+                "genes": [],
+            },
+            "ncbi_query": phase1_result["ncbi_query"],
+            "ready_to_use": True,
+            "clarification_needed": False,
+            "clarification_message": "",
+            "query_mode": "phase1_expander",
+        }
+
+    # Fallback: legacy Phase 3 query generator
     query_service, classifier = _ensure_services()
     use_llm = use_llm_requested and classifier.llm_available
 
@@ -164,7 +236,111 @@ def _generate_query_payload(natural_query: str, use_llm_requested: bool) -> Dict
         message = query_payload.get("clarification_message") or "La consulta requiere mas contexto"
         raise HTTPException(status_code=400, detail=message)
 
+    query_payload["query_mode"] = "phase3_legacy"
     return query_payload
+
+
+def _trim_string_list(values: Any, max_items: int, max_term_length: int) -> tuple[List[str], int]:
+    if not isinstance(values, list):
+        return [], 0
+
+    trimmed: List[str] = []
+    for item in values[:max_items]:
+        if isinstance(item, str):
+            text = item.strip()
+            if text:
+                trimmed.append(text[:max_term_length])
+    omitted = max(0, len(values) - len(trimmed))
+    return trimmed, omitted
+
+
+def _compact_query_payload_for_frontend(query_payload: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Reduce payload size before returning to frontend while preserving backend behavior.
+    Upstream query generation can include large synonym/variant arrays.
+    """
+    compacted = copy.deepcopy(query_payload)
+    truncation: Dict[str, int] = {}
+
+    extracted = compacted.get("extracted")
+    if isinstance(extracted, dict):
+        for key in ("organism_variants", "strategies", "tissues", "conditions", "genes", "free_terms"):
+            values = extracted.get(key)
+            trimmed, omitted = _trim_string_list(
+                values,
+                max_items=FRONTEND_MAX_QUERY_LIST_ITEMS,
+                max_term_length=FRONTEND_MAX_QUERY_TERM_LENGTH,
+            )
+            if isinstance(values, list):
+                extracted[key] = trimmed
+                if omitted:
+                    truncation[f"extracted.{key}"] = omitted
+
+    synonyms = compacted.get("synonyms")
+    if isinstance(synonyms, dict):
+        for key in ("organism", "strategies", "tissues", "conditions", "genes"):
+            values = synonyms.get(key)
+            trimmed, omitted = _trim_string_list(
+                values,
+                max_items=FRONTEND_MAX_QUERY_LIST_ITEMS,
+                max_term_length=FRONTEND_MAX_QUERY_TERM_LENGTH,
+            )
+            if isinstance(values, list):
+                synonyms[key] = trimmed
+                if omitted:
+                    truncation[f"synonyms.{key}"] = omitted
+
+    if truncation:
+        compacted["frontend_truncation"] = truncation
+
+    return compacted
+
+
+def _build_phase1_boolean_query(user_input: str, _use_llm_requested: bool) -> Optional[Dict[str, Any]]:
+    if not QUERY_GENERATOR_SCRIPT.exists():
+        logger.warning("Query generator script not found: %s", QUERY_GENERATOR_SCRIPT)
+        return None
+
+    try:
+        cmd = ["python3", str(QUERY_GENERATOR_SCRIPT), user_input]
+        # Intentionally run with the same invocation as pyner_miner.sh:
+        # python3 test_query_expander.py "$USER_INPUT"
+        logger.info("[phase1-script] Running: %s", " ".join(cmd))
+        proc = subprocess.Popen(
+            cmd,
+            cwd=str(QUERY_GENERATOR_DIR),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+
+        output_lines: List[str] = []
+        assert proc.stdout is not None
+        for line in proc.stdout:
+            # Mirror script output in backend console for debugging (same as CLI flow).
+            print(line, end="")
+            output_lines.append(line.rstrip("\n"))
+
+        return_code = proc.wait(timeout=QUERY_GENERATION_SCRIPT_TIMEOUT_SEC)
+        if return_code != 0:
+            logger.warning("phase1 script returned non-zero exit code: %s", return_code)
+            return None
+
+        lines = output_lines
+        for idx, line in enumerate(lines):
+            if line.strip() == "NCBI Query:":
+                for query_line in lines[idx + 1 :]:
+                    query = query_line.strip()
+                    if query:
+                        return {"ncbi_query": query}
+                break
+        logger.warning("phase1 script did not emit a parsable 'NCBI Query:' block")
+    except subprocess.TimeoutExpired:
+        logger.warning("Phase1 script timed out after %ss", QUERY_GENERATION_SCRIPT_TIMEOUT_SEC)
+    except Exception as exc:
+        logger.warning("Phase1 script execution failed; using legacy query. Error: %s", exc)
+    return None
 
 
 def _execute_search(
@@ -173,6 +349,7 @@ def _execute_search(
     use_llm_requested: bool,
     ncbi_query: str,
     query_payload: Dict[str, Any],
+    request_id: Optional[str] = None,
 ) -> Dict[str, Any]:
     _, classifier = _ensure_services()
     use_llm = use_llm_requested and classifier.llm_available
@@ -194,6 +371,15 @@ def _execute_search(
     if not ncbi_query:
         raise HTTPException(status_code=500, detail="No se pudo generar query NCBI")
 
+    _set_progress(
+        request_id,
+        stage="searching",
+        processed=0,
+        target=max_results,
+        message="Submitting query to NCBI...",
+        done=False,
+    )
+
     raw_results: List[Dict[str, Any]] = []
     results: List[Dict[str, Any]] = []
 
@@ -201,8 +387,35 @@ def _execute_search(
         # PMC usa la misma interfaz pero busca en full-text (db='pmc')
         db = "pmc" if source == "pmc" else "pubmed"
         fetcher = LinkoutFetcher()
+        last_processed = 0
+
+        def on_pubmed_progress(event: Dict[str, Any]) -> None:
+            nonlocal last_processed
+            stage = str(event.get("stage") or "searching")
+            message = str(event.get("message") or "")
+            processed = int(event.get("processed") or 0)
+            target = int(event.get("target") or max_results)
+            last_processed = max(last_processed, processed)
+            _set_progress(
+                request_id,
+                stage=stage,
+                processed=processed,
+                target=target,
+                message=message,
+            )
+
         raw_results = fetcher.search_publications_by_boolean_query(
-            ncbi_query, max_results=max_results, db=db
+            ncbi_query,
+            max_results=max_results,
+            db=db,
+            progress_callback=on_pubmed_progress,
+        )
+        _set_progress(
+            request_id,
+            stage="classifying",
+            processed=last_processed,
+            target=max(len(raw_results), max_results),
+            message="Classifying records...",
         )
         results = [
             classifier.classify_pubmed(
@@ -214,7 +427,35 @@ def _execute_search(
         ]
     else:
         fetcher = BooleanFetcherIntegrated()
-        raw_results = fetcher.run_workflow(ncbi_query, max_bioproject=max_results)
+        _set_progress(
+            request_id,
+            stage="searching",
+            processed=0,
+            target=max_results,
+            message="Resolving BioProject -> SRA -> PubMed...",
+        )
+
+        def on_bioproject_progress(event: Dict[str, Any]) -> None:
+            _set_progress(
+                request_id,
+                stage=str(event.get("stage") or "searching"),
+                processed=int(event.get("processed") or 0),
+                target=int(event.get("target") or max_results),
+                message=str(event.get("message") or ""),
+            )
+
+        raw_results = fetcher.run_workflow(
+            ncbi_query,
+            max_bioproject=max_results,
+            progress_callback=on_bioproject_progress,
+        )
+        _set_progress(
+            request_id,
+            stage="classifying",
+            processed=len(raw_results),
+            target=max(len(raw_results), max_results),
+            message="Classifying projects...",
+        )
         results = [
             classifier.classify_bioproject(
                 record=item,
@@ -232,6 +473,15 @@ def _execute_search(
         status = "partial-success"
     else:
         status = "success"
+
+    _set_progress(
+        request_id,
+        stage="done",
+        processed=len(results),
+        target=max(len(results), max_results),
+        message=f"Completed with {len(results)} records.",
+        done=True,
+    )
 
     return {
         "metadata": {
@@ -252,11 +502,19 @@ def _execute_search(
 @app.post("/api/minero/generate-query")
 def generate_query(request: GenerateQueryRequest) -> Dict[str, Any]:
     query_payload = _generate_query_payload(request.natural_query, request.use_llm)
-    return {"query_generation": query_payload}
+    return {"query_generation": _compact_query_payload_for_frontend(query_payload)}
 
 
 @app.post("/api/minero/run-search")
 def run_search(request: RunSearchRequest) -> Dict[str, Any]:
+    _set_progress(
+        request.request_id,
+        stage="queued",
+        processed=0,
+        target=request.max_results,
+        message="Search queued...",
+        done=False,
+    )
     query_payload = request.query_generation or {}
     query_payload["ncbi_query"] = request.ncbi_query
     # Si la fuente es PMC, normalizar field tags para PMC antes de buscar
@@ -266,17 +524,28 @@ def run_search(request: RunSearchRequest) -> Dict[str, Any]:
         ncbi_query = _re.sub(r"\[Organism\]", "[all]", ncbi_query)
         ncbi_query = _re.sub(r"\[All Fields\]", "[all]", ncbi_query)
         query_payload["ncbi_query"] = ncbi_query
-    return _execute_search(
+    response = _execute_search(
         source=request.source,
         max_results=request.max_results,
         use_llm_requested=request.use_llm,
         ncbi_query=ncbi_query,
         query_payload=query_payload,
+        request_id=request.request_id,
     )
+    response["query_generation"] = _compact_query_payload_for_frontend(response.get("query_generation", {}))
+    return response
 
 
 @app.post("/api/minero/search")
 def search(request: SearchRequest) -> Dict[str, Any]:
+    _set_progress(
+        request.request_id,
+        stage="queued",
+        processed=0,
+        target=request.max_results,
+        message="Search queued...",
+        done=False,
+    )
     query_payload = _generate_query_payload(request.natural_query, request.use_llm)
     ncbi_query = query_payload.get("ncbi_query", "")
     if request.source == "pmc":
@@ -284,13 +553,16 @@ def search(request: SearchRequest) -> Dict[str, Any]:
         ncbi_query = _re.sub(r"\[Organism\]", "[all]", ncbi_query)
         ncbi_query = _re.sub(r"\[All Fields\]", "[all]", ncbi_query)
         query_payload["ncbi_query"] = ncbi_query
-    return _execute_search(
+    response = _execute_search(
         source=request.source,
         max_results=request.max_results,
         use_llm_requested=request.use_llm,
         ncbi_query=ncbi_query,
         query_payload=query_payload,
+        request_id=request.request_id,
     )
+    response["query_generation"] = _compact_query_payload_for_frontend(response.get("query_generation", {}))
+    return response
 
 
 # ================================================================

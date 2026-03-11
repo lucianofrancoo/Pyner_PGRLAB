@@ -64,14 +64,14 @@ Puedes cambiar el modelo sin editar codigo, usando variables de entorno al inici
 
 ```bash
 cd minero_web
-OLLAMA_MODEL=qwen3.5:9b ./run_minero_web.sh
+OLLAMA_MODEL=qwen3.5:9b ../run_minero_web.sh
 ```
 
 Opcionalmente puedes cambiar tambien la URL de Ollama:
 
 ```bash
 cd minero_web
-OLLAMA_URL=http://127.0.0.1:11434 OLLAMA_MODEL=qwen3.5:9b ./run_minero_web.sh
+OLLAMA_URL=http://127.0.0.1:11434 OLLAMA_MODEL=qwen3.5:9b ../run_minero_web.sh
 ```
 
 Notas:

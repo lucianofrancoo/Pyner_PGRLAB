@@ -105,6 +105,16 @@ export interface SearchPayload {
   use_llm: boolean;
 }
 
+export interface SearchProgress {
+  request_id: string;
+  stage: string;
+  processed: number;
+  target: number;
+  message: string;
+  done: boolean;
+  updated_at: string;
+}
+
 export type AppView = 'buscar' | 'resultados' | 'analisis' | 'ayuda';
 export type AppStatus = 'idle' | 'loading' | 'success' | 'partial-success' | 'empty' | 'error';
 

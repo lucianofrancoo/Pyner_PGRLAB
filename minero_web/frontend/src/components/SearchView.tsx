@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FlaskConical, History, Search, Pickaxe, Trash2 } from 'lucide-react';
-import type { QueryGeneration, SearchHistoryEntry, SearchPayload, SourceMode } from '../types';
+import type { QueryGeneration, SearchHistoryEntry, SearchPayload, SearchProgress, SourceMode } from '../types';
 
 interface SearchViewProps {
   loading: boolean;
   isGenerating: boolean;
   isRunning: boolean;
   llmAvailable: boolean;
+  searchProgress: SearchProgress | null;
   pendingQuery: QueryGeneration | null;
   searchHistory: SearchHistoryEntry[];
   onGenerate: (payload: SearchPayload) => Promise<void>;
@@ -26,7 +27,6 @@ const SOURCE_DESCRIPTIONS: Record<string, string> = {
   pmc: 'PMC: full-text search — more results, slower.',
   bioproject: 'BioProject: slower, focused on projects and SRA hierarchy.',
 };
-
 const LINE_WINDOW_POINTS = 28;
 
 type QuerySegment = {
@@ -78,6 +78,7 @@ export function SearchView({
   isGenerating,
   isRunning,
   llmAvailable,
+  searchProgress,
   pendingQuery,
   searchHistory,
   onGenerate,
@@ -109,20 +110,42 @@ export function SearchView({
     () => (pendingQuery?.ncbi_query ?? '').replace(/\s+/g, ' ').trim(),
     [pendingQuery?.ncbi_query]
   );
-
-  const [processedCount, setProcessedCount] = useState(0);
   const [lineSeries, setLineSeries] = useState<number[]>([0]);
-  const processedRef = useRef(0);
-  const estimatedTarget = useMemo(() => {
-    if (resolvedMaxResults >= MAX_HARD_LIMIT) {
-      return source === 'bioproject' ? 3500 : 2200;
+
+  const processedCount = searchProgress?.processed ?? 0;
+  const targetWindowValue = useMemo(() => {
+    const fromProgress = searchProgress?.target ?? 0;
+    if (fromProgress > 0) return fromProgress;
+    return resolvedMaxResults;
+  }, [searchProgress?.target, resolvedMaxResults]);
+  const targetWindowLabel = targetWindowValue >= MAX_HARD_LIMIT
+    ? `up to ${MAX_HARD_LIMIT.toLocaleString()}`
+    : targetWindowValue.toLocaleString();
+
+  const processingStatus = useMemo(() => {
+    if (searchProgress?.message) return searchProgress.message;
+    if (source === 'pmc') return 'Converting PMC IDs to PMID and fetching records...';
+    if (source === 'bioproject') return 'Resolving BioProject → SRA → PubMed links...';
+    return 'Fetching PubMed records...';
+  }, [searchProgress?.message, source]);
+
+  useEffect(() => {
+    if (!isSearchRunning) {
+      setLineSeries([0]);
+      return;
     }
-    return Math.max(120, Math.min(resolvedMaxResults, 8000));
-  }, [resolvedMaxResults, source]);
+    setLineSeries((prev) => {
+      const last = prev[prev.length - 1] ?? 0;
+      const nextValue = Math.max(last, processedCount);
+      const appended = [...prev, nextValue];
+      if (appended.length > LINE_WINDOW_POINTS) appended.shift();
+      return appended;
+    });
+  }, [isSearchRunning, processedCount]);
 
   const linePoints = useMemo(() => {
     const safeSeries = lineSeries.length ? lineSeries : [0];
-    const maxValue = Math.max(estimatedTarget, ...safeSeries, 1);
+    const maxValue = Math.max(targetWindowValue, ...safeSeries, 1);
     return safeSeries
       .map((value, index) => {
         const x = safeSeries.length === 1 ? 0 : (index / (safeSeries.length - 1)) * 100;
@@ -130,40 +153,8 @@ export function SearchView({
         return `${x.toFixed(2)},${y.toFixed(2)}`;
       })
       .join(' ');
-  }, [lineSeries, estimatedTarget]);
-
-  const areaPoints = useMemo(() => {
-    if (!linePoints) return '';
-    return `0,38 ${linePoints} 100,38`;
-  }, [linePoints]);
-
-  useEffect(() => {
-    if (!isSearchRunning) {
-      processedRef.current = 0;
-      setProcessedCount(0);
-      setLineSeries([0]);
-      return;
-    }
-
-    const timer = window.setInterval(() => {
-      const current = processedRef.current;
-      const baseJump = Math.max(2, Math.floor(estimatedTarget * 0.018));
-      const next =
-        current >= estimatedTarget
-          ? estimatedTarget
-          : Math.min(estimatedTarget, current + baseJump + Math.floor(Math.random() * 12));
-
-      processedRef.current = next;
-      setProcessedCount(next);
-      setLineSeries((prev) => {
-        const appended = [...prev, next];
-        if (appended.length > LINE_WINDOW_POINTS) appended.shift();
-        return appended;
-      });
-    }, 650);
-
-    return () => window.clearInterval(timer);
-  }, [isSearchRunning, estimatedTarget]);
+  }, [lineSeries, targetWindowValue]);
+  const areaPoints = `0,38 ${linePoints} 100,38`;
 
   async function handleGenerate(): Promise<void> {
     await onGenerate({
@@ -247,6 +238,8 @@ export function SearchView({
           <span>
             LLM Classification (Ollama)
             <em>
+              Query generation always attempts LLM to match CLI mode.
+              {' '}
               {llmAvailable
                 ? 'Available. If it fails, Minero uses heuristic fallback.'
                 : 'Unavailable right now. Heuristic fallback will be used.'}
@@ -304,9 +297,10 @@ export function SearchView({
                     </article>
                     <article>
                       <small>Target window</small>
-                      <strong>{estimatedTarget.toLocaleString()}</strong>
+                      <strong>{targetWindowLabel}</strong>
                     </article>
                   </div>
+                  <small>{processingStatus}</small>
                 </div>
 
                 <div className="loading-skeleton" aria-hidden="true">

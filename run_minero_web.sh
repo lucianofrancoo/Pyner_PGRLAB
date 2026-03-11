@@ -2,8 +2,8 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BACKEND_DIR="$ROOT_DIR/backend"
-FRONTEND_DIR="$ROOT_DIR/frontend"
+BACKEND_DIR="$ROOT_DIR/minero_web/backend"
+FRONTEND_DIR="$ROOT_DIR/minero_web/frontend"
 BACKEND_VENV="$BACKEND_DIR/.venv"
 
 BACKEND_HOST="${BACKEND_HOST:-0.0.0.0}"

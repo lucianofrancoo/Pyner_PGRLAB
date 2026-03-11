@@ -22,7 +22,7 @@ import csv
 import logging
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 from collections import defaultdict
 
 from Bio import Entrez
@@ -408,7 +408,12 @@ class BooleanFetcherIntegrated:
         return result
     
     
-    def run_workflow(self, boolean_query: str, max_bioproject: int = 50) -> List[Dict]:
+    def run_workflow(
+        self,
+        boolean_query: str,
+        max_bioproject: int = 50,
+        progress_callback: Optional[Callable[[Dict[str, Any]], None]] = None,
+    ) -> List[Dict]:
         """
         Execute complete workflow:
         1. Boolean search
@@ -427,6 +432,15 @@ class BooleanFetcherIntegrated:
         if not bioprojects:
             logger.warning("No BioProjects found")
             return []
+        if progress_callback:
+            progress_callback(
+                {
+                    "stage": "searching",
+                    "processed": 0,
+                    "target": len(bioprojects),
+                    "message": f"Found {len(bioprojects)} BioProjects. Processing...",
+                }
+            )
         
         # Step 2: Process each BioProject
         logger.info(f"\n{'='*70}")
@@ -436,6 +450,15 @@ class BooleanFetcherIntegrated:
         self.results = []
         for i, bp_data in enumerate(bioprojects, 1):
             logger.info(f"\n[{i}/{len(bioprojects)}]")
+            if progress_callback:
+                progress_callback(
+                    {
+                        "stage": "fetching",
+                        "processed": i - 1,
+                        "target": len(bioprojects),
+                        "message": f"Processing BioProject {i}/{len(bioprojects)}...",
+                    }
+                )
             
             try:
                 enriched = self.process_bioproject(bp_data)
@@ -446,6 +469,15 @@ class BooleanFetcherIntegrated:
                 self.results.append(bp_data)
             
             time.sleep(RATE_LIMIT)
+            if progress_callback:
+                progress_callback(
+                    {
+                        "stage": "fetching",
+                        "processed": i,
+                        "target": len(bioprojects),
+                        "message": f"Processed BioProject {i}/{len(bioprojects)}.",
+                    }
+                )
         
         return self.results
     

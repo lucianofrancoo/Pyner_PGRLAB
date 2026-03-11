@@ -6,13 +6,14 @@ import { ProAnalysisView } from './components/ProAnalysisView';
 import { AnalysisView } from './components/AnalysisView';
 import { HelpView } from './components/HelpView';
 import { StatusBanner } from './components/StatusBanner';
-import { analyzePapers, checkHealth, generateQuery, runSearchWithQuery } from './lib/api';
+import { analyzePapers, checkHealth, generateQuery, getSearchProgress, runSearchWithQuery } from './lib/api';
 import type {
   AppStatus,
   AppView,
   MineroResponse,
   ProAnalysisResponse,
   QueryGeneration,
+  SearchProgress,
   SearchHistoryEntry,
   SearchPayload,
 } from './types';
@@ -125,6 +126,7 @@ export default function App() {
   const [proResponse, setProResponse] = useState<ProAnalysisResponse | null>(null);
   const [proLoading, setProLoading] = useState(false);
   const [showPro, setShowPro] = useState(false);
+  const [searchProgress, setSearchProgress] = useState<SearchProgress | null>(null);
 
   useEffect(() => {
     checkHealth()
@@ -157,7 +159,9 @@ export default function App() {
     try {
       const query_generation = await generateQuery({
         natural_query: payload.natural_query,
-        use_llm: payload.use_llm,
+        // Keep query generation aligned with pyner_miner.sh:
+        // always attempt LLM for query building; classification toggle is applied in run-search.
+        use_llm: true,
       });
       setPendingRun({
         source: payload.source,
@@ -185,15 +189,31 @@ export default function App() {
     // Reset pro state on new search
     setProResponse(null);
     setShowPro(false);
+    setSearchProgress(null);
+    const requestId = `run-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    let stopPolling = false;
+    let poll: number | null = null;
 
     try {
+      poll = window.setInterval(async () => {
+        if (stopPolling) return;
+        try {
+          const progress = await getSearchProgress(requestId);
+          setSearchProgress(progress);
+        } catch {
+          // ignore intermittent 404/not-ready during first seconds
+        }
+      }, 1200);
+
       const result = await runSearchWithQuery({
         source: pendingRun.source,
         max_results: pendingRun.max_results,
         use_llm: pendingRun.use_llm,
         ncbi_query: pendingRun.query_generation.ncbi_query,
         query_generation: pendingRun.query_generation,
+        request_id: requestId,
       });
+      stopPolling = true;
       setResponse(result);
       const historyEntry: SearchHistoryEntry = {
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -207,13 +227,17 @@ export default function App() {
       };
       setSearchHistory((prev) => [historyEntry, ...prev].slice(0, MAX_HISTORY_ENTRIES));
       setPendingRun(null);
+      setSearchProgress(null);
       setStatus(result.metadata.status);
       setView('resultados');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unexpected error';
       setError(message);
       setStatus('error');
+      setSearchProgress(null);
     } finally {
+      stopPolling = true;
+      if (poll !== null) window.clearInterval(poll);
       setStep('idle');
     }
   }
@@ -348,14 +372,15 @@ export default function App() {
 
           <section className="workspace">
             {view === 'buscar' ? (
-              <SearchView
-                loading={status === 'loading'}
-                isGenerating={step === 'generating'}
-                isRunning={step === 'running'}
-                llmAvailable={llmAvailable}
-                pendingQuery={pendingRun?.query_generation ?? null}
-                searchHistory={searchHistory}
-                onGenerate={handleGenerate}
+                <SearchView
+                  loading={status === 'loading'}
+                  isGenerating={step === 'generating'}
+                  isRunning={step === 'running'}
+                  llmAvailable={llmAvailable}
+                  searchProgress={searchProgress}
+                  pendingQuery={pendingRun?.query_generation ?? null}
+                  searchHistory={searchHistory}
+                  onGenerate={handleGenerate}
                 onConfirm={handleConfirm}
                 onDiscard={() => setPendingRun(null)}
                 onOpenHistory={handleOpenHistory}

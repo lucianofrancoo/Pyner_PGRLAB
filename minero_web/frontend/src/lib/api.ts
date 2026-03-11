@@ -1,4 +1,10 @@
-import type { MineroResponse, ProAnalysisResponse, QueryGeneration, SearchPayload } from '../types';
+import type {
+  MineroResponse,
+  ProAnalysisResponse,
+  QueryGeneration,
+  SearchPayload,
+  SearchProgress,
+} from '../types';
 
 const API_BASE = import.meta.env.VITE_MINERO_API_URL ?? '';
 const DEFAULT_TIMEOUT_MS = 180000;
@@ -50,7 +56,11 @@ export async function generateQuery(payload: Pick<SearchPayload, 'natural_query'
 }
 
 export async function runSearchWithQuery(
-  payload: Omit<SearchPayload, 'natural_query'> & { query_generation: QueryGeneration; ncbi_query: string }
+  payload: Omit<SearchPayload, 'natural_query'> & {
+    query_generation: QueryGeneration;
+    ncbi_query: string;
+    request_id?: string;
+  }
 ): Promise<MineroResponse> {
   const timeoutMs =
     payload.source === 'bioproject' ? BIOPROJECT_SEARCH_TIMEOUT_MS : PUBMED_SEARCH_TIMEOUT_MS;
@@ -96,6 +106,14 @@ export async function runMineroSearch(payload: SearchPayload): Promise<MineroRes
     throw new Error(detail);
   }
 
+  return response.json();
+}
+
+export async function getSearchProgress(requestId: string): Promise<SearchProgress> {
+  const response = await fetchWithTimeout(`${API_BASE}/api/minero/progress/${requestId}`, {}, 5000);
+  if (!response.ok) {
+    throw new Error('Could not fetch search progress');
+  }
   return response.json();
 }
 
