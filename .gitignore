@@ -2,7 +2,11 @@
 /test_fetcher_results.csv
 
 # Large Data & Output Folders
-output/
+**/output/*
+!**/output/final_synonym_dictionary.json
+!**/output/final_gene_dictionary.json
+!**/output/final_taxonomy_dictionary.json
+!**/output/condition_lexicon.json
 taxdump/
 gene_data/
 pubmedbert_cache/
