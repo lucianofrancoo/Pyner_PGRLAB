@@ -14,7 +14,6 @@ venv/
 env/
 ENV/
 .bgrm/
-output/
 
 # Node
 node_modules/
@@ -35,3 +34,16 @@ pubmed_results_*.csv
 pubmed_results_*.json
 bioproject_fetch_*.csv
 sra_results_*.csv
+
+# Large Data & Output Folders
+output/
+taxdump/
+gene_data/
+pubmedbert_cache/
+temp_downloads/
+
+# Big intermediate files
+*.gz
+*.tar.gz
+*.pt
+*step2_mesh_consolidated*.json
