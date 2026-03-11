@@ -57,3 +57,23 @@ La respuesta de `POST /api/minero/search` incluye:
 
 - Si Ollama no esta disponible, backend clasifica con fallback heuristico.
 - Se preserva compatibilidad de campos actuales: la clasificacion se agrega sin eliminar metadatos previos.
+
+## 5. Cambiar modelo de Ollama
+
+Puedes cambiar el modelo sin editar codigo, usando variables de entorno al iniciar:
+
+```bash
+cd minero_web
+OLLAMA_MODEL=qwen3.5:9b ./run_minero_web.sh
+```
+
+Opcionalmente puedes cambiar tambien la URL de Ollama:
+
+```bash
+cd minero_web
+OLLAMA_URL=http://127.0.0.1:11434 OLLAMA_MODEL=qwen3.5:9b ./run_minero_web.sh
+```
+
+Notas:
+- `OLLAMA_MODEL` se aplica tanto a generacion de query como a clasificacion/pro-analisis.
+- Si el modelo no existe localmente, descargalo primero: `ollama pull <modelo>`.

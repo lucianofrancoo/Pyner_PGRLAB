@@ -1,4 +1,5 @@
 import type { MineroResponse, ProAnalysisResponse, RelevanceLabel } from '../types';
+import { PaperNetwork } from './PaperNetwork';
 
 interface AnalysisViewProps {
   response: MineroResponse | null;
@@ -36,6 +37,13 @@ export function AnalysisView({ response, proResponse }: AnalysisViewProps) {
     byLabel[result.classification.relevance_label] += 1;
     byEvidence[result.classification.evidence_level] =
       (byEvidence[result.classification.evidence_level] ?? 0) + 1;
+  });
+
+  const authorByPmid: Record<string, string> = {};
+  response.results.forEach((result) => {
+    if ('pmid' in result && Array.isArray(result.authors) && result.authors.length > 0) {
+      authorByPmid[result.pmid] = result.authors[0];
+    }
   });
 
   return (
@@ -91,20 +99,21 @@ export function AnalysisView({ response, proResponse }: AnalysisViewProps) {
         </article>
       </div>
 
-      {proResponse?.network_html ? (
+      {proResponse?.results?.length ? (
         <article className="analytics-network">
           <header className="analytics-network-header">
             <h3>Paper Network (Pro)</h3>
             <p>
-              Interactive graph with lateral filters for relevance, year and journal.
+              Integrated graph with native filters for relevance, year and journal.
             </p>
           </header>
           <div className="analytics-network-frame">
-            <iframe
-              title="Paper Network Filters"
-              srcDoc={proResponse.network_html}
-              style={{ width: '100%', height: '100%', border: 'none' }}
-              sandbox="allow-scripts allow-downloads allow-same-origin"
+            <PaperNetwork
+              papers={proResponse.results}
+              authorByPmid={authorByPmid}
+              title="PYNER Paper Network"
+              subtitle="Integrated in Minero web app (no embedded page)."
+              compact
             />
           </div>
         </article>

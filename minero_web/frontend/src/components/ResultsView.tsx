@@ -44,16 +44,6 @@ function normalizeTissueLabel(value: string): TissueLabel | null {
   return null;
 }
 
-function formatTag(tag: string): string {
-  return tag
-    .replace(/^organismo:/, 'organism: ')
-    .replace(/^condicion:/, 'condition: ')
-    .replace(/^estrategia:/, 'strategy: ')
-    .replace(/^tejido:/, 'tissue: ')
-    .replace(/^evidencia:/, 'evidence: ')
-    .replace(/^alineacion:/, 'alignment: ');
-}
-
 function pubmedTypeLabel(publicationType: string): string {
   if (publicationType.toLowerCase().includes('review')) return 'Review';
   return 'Article';
@@ -550,56 +540,6 @@ export function ResultsView({ response, onRunPro, proLoading }: ResultsViewProps
         </table>
       </div>
 
-      <aside className="details-panel">
-        <h3>Why this record matters</h3>
-        {selected ? (
-          <>
-            <p>{selected.classification.reason_short}</p>
-            {isPubmed(response.metadata.source, selected) ? (
-              <dl>
-                <div>
-                  <dt>DOI</dt>
-                  <dd>{selected.doi && selected.doi !== 'NA' ? selected.doi : '-'}</dd>
-                </div>
-                <div>
-                  <dt>PMCID</dt>
-                  <dd>{selected.pmcid && selected.pmcid !== 'NA' ? selected.pmcid : '-'}</dd>
-                </div>
-                <div>
-                  <dt>PubMed URL</dt>
-                  <dd>{selected.url ? <a className="repo-link" href={selected.url} target="_blank" rel="noreferrer">Open</a> : '-'}</dd>
-                </div>
-              </dl>
-            ) : isBioproject(response.metadata.source, selected) ? (
-              <>
-                <dl>
-                  <div>
-                    <dt>Biosamples</dt>
-                    <dd>{parseCount(selected.biosamples_count)}</dd>
-                  </div>
-                  <div>
-                    <dt>Runs</dt>
-                    <dd>{parseCount(selected.sra_runs_count)}</dd>
-                  </div>
-                </dl>
-              </>
-            ) : null}
-            <ul>
-              {selected.classification.tags.map((tag) => (
-                <li key={tag}>{formatTag(tag)}</li>
-              ))}
-            </ul>
-            <dl>
-              <div>
-                <dt>Model source</dt>
-                <dd>{selected.classification.model_source}</dd>
-              </div>
-            </dl>
-          </>
-        ) : (
-          <p>No records match the current filters.</p>
-        )}
-      </aside>
     </section>
   );
 }

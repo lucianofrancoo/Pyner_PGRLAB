@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
 import { Download, Search as SearchIcon, Network, Table as TableIcon } from 'lucide-react';
 import type { ProAnalysisResponse, ProAnalysisResult } from '../types';
+import { PaperNetwork } from './PaperNetwork';
 
 interface ProAnalysisViewProps {
     proResponse: ProAnalysisResponse;
+    authorByPmid?: Record<string, string>;
     onClose: () => void;
 }
 
@@ -81,7 +83,7 @@ function exportProCsv(results: ProAnalysisResult[]): void {
     URL.revokeObjectURL(url);
 }
 
-export function ProAnalysisView({ proResponse, onClose }: ProAnalysisViewProps) {
+export function ProAnalysisView({ proResponse, authorByPmid, onClose }: ProAnalysisViewProps) {
     const [searchText, setSearchText] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [activeGroup, setActiveGroup] = useState(0);
@@ -119,7 +121,7 @@ export function ProAnalysisView({ proResponse, onClose }: ProAnalysisViewProps) 
                         >
                             <TableIcon size={14} /> Data
                         </button>
-                        {proResponse.network_html && (
+                        {proResponse.results.length > 0 && (
                             <button
                                 type="button"
                                 className={`ghost ${viewMode === 'network' ? 'active' : ''}`}
@@ -195,13 +197,13 @@ export function ProAnalysisView({ proResponse, onClose }: ProAnalysisViewProps) 
                 </div>
             </section>
 
-            {viewMode === 'network' && proResponse.network_html ? (
-                <div style={{ flex: 1, position: 'relative', width: '100%', minHeight: '600px', backgroundColor: '#fff', borderRadius: '4px', overflow: 'hidden' }}>
-                    <iframe
-                        title="Interactive Network Graph"
-                        srcDoc={proResponse.network_html}
-                        style={{ width: '100%', height: '100%', border: 'none' }}
-                        sandbox="allow-scripts allow-downloads allow-same-origin"
+            {viewMode === 'network' && proResponse.results.length > 0 ? (
+                <div style={{ flex: 1, position: 'relative', width: '100%', minHeight: '600px', borderRadius: '10px', overflow: 'hidden' }}>
+                    <PaperNetwork
+                        papers={proResponse.results}
+                        authorByPmid={authorByPmid}
+                        title="PYNER Paper Network"
+                        subtitle="Native graph mode integrated with Pro Analysis."
                     />
                 </div>
             ) : (

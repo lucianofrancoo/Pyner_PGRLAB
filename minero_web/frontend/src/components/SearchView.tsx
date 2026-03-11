@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { FlaskConical, Search, Pickaxe } from 'lucide-react';
-import type { QueryGeneration, SearchPayload, SourceMode } from '../types';
+import { FlaskConical, History, Search, Pickaxe, Trash2 } from 'lucide-react';
+import type { QueryGeneration, SearchHistoryEntry, SearchPayload, SourceMode } from '../types';
 
 interface SearchViewProps {
   loading: boolean;
@@ -8,9 +8,13 @@ interface SearchViewProps {
   isRunning: boolean;
   llmAvailable: boolean;
   pendingQuery: QueryGeneration | null;
+  searchHistory: SearchHistoryEntry[];
   onGenerate: (payload: SearchPayload) => Promise<void>;
   onConfirm: () => Promise<void>;
   onDiscard: () => void;
+  onOpenHistory: (entryId: string) => void;
+  onDeleteHistory: (entryId: string) => void;
+  onClearHistory: () => void;
 }
 
 const DEFAULT_QUERY =
@@ -75,9 +79,13 @@ export function SearchView({
   isRunning,
   llmAvailable,
   pendingQuery,
+  searchHistory,
   onGenerate,
   onConfirm,
   onDiscard,
+  onOpenHistory,
+  onDeleteHistory,
+  onClearHistory,
 }: SearchViewProps) {
   const [naturalQuery, setNaturalQuery] = useState(DEFAULT_QUERY);
   const [source, setSource] = useState<SourceMode>('pmc');
@@ -169,6 +177,18 @@ export function SearchView({
   async function handleSubmit(event: React.FormEvent): Promise<void> {
     event.preventDefault();
     await handleGenerate();
+  }
+
+  function sourceLabel(source: SourceMode): string {
+    if (source === 'pmc') return 'PMC';
+    if (source === 'pubmed') return 'PubMed';
+    return 'BioProject';
+  }
+
+  function formatDate(value: string): string {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleString();
   }
 
   return (
@@ -343,6 +363,61 @@ export function SearchView({
           )}
         </section>
       ) : null}
+
+      <section className="panel compact search-history-panel" style={{ marginTop: 12 }}>
+        <header className="panel-header">
+          <h2>
+            <History size={16} style={{ marginRight: 8, verticalAlign: 'text-bottom' }} />
+            Previous Searches
+          </h2>
+          <p>Reopen any previous search result stored in this browser.</p>
+        </header>
+        {searchHistory.length === 0 ? (
+          <p className="search-history-empty">No previous searches yet.</p>
+        ) : (
+          <>
+            <div className="actions">
+              <button type="button" className="ghost" onClick={onClearHistory} disabled={loading}>
+                <Trash2 size={16} />
+                Clear history
+              </button>
+            </div>
+            <div className="search-history-list">
+              {searchHistory.map((entry) => (
+                <article key={entry.id} className="search-history-item">
+                  <div className="search-history-main">
+                    <strong title={entry.natural_query || entry.ncbi_query}>
+                      {(entry.natural_query || entry.ncbi_query).trim() || 'Search without title'}
+                    </strong>
+                    <small>
+                      {sourceLabel(entry.source)} · {entry.total_results.toLocaleString()} results ·{' '}
+                      {formatDate(entry.created_at)}
+                    </small>
+                  </div>
+                  <div className="search-history-actions">
+                    <button
+                      type="button"
+                      className="ghost"
+                      onClick={() => onOpenHistory(entry.id)}
+                      disabled={loading}
+                    >
+                      View results
+                    </button>
+                    <button
+                      type="button"
+                      className="ghost"
+                      onClick={() => onDeleteHistory(entry.id)}
+                      disabled={loading}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
+        )}
+      </section>
     </section>
   );
 }

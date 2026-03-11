@@ -5,6 +5,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -38,6 +39,7 @@ LLM_CLASSIFICATION_LIMITS = {
     "pubmed": 8,
     "bioproject": 5,
 }
+QUERY_GENERATION_TIMEOUT_SEC = 45
 
 
 class SearchRequest(BaseModel):
@@ -135,7 +137,29 @@ def _generate_query_payload(natural_query: str, use_llm_requested: bool) -> Dict
     query_service, classifier = _ensure_services()
     use_llm = use_llm_requested and classifier.llm_available
 
-    query_payload = query_service.generate_query(natural_query, use_llm=use_llm)
+    try:
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(query_service.generate_query, natural_query, use_llm)
+            query_payload = future.result(timeout=QUERY_GENERATION_TIMEOUT_SEC)
+    except FuturesTimeoutError:
+        if use_llm:
+            logger.warning(
+                "Generate-query timeout with LLM after %ss; retrying with heuristic mode",
+                QUERY_GENERATION_TIMEOUT_SEC,
+            )
+            query_payload = query_service.generate_query(natural_query, use_llm=False)
+        else:
+            raise HTTPException(
+                status_code=504,
+                detail=f"Query generation timeout after {QUERY_GENERATION_TIMEOUT_SEC}s",
+            )
+    except Exception as exc:
+        if use_llm:
+            logger.warning("Generate-query failed with LLM (%s); retrying with heuristic mode", exc)
+            query_payload = query_service.generate_query(natural_query, use_llm=False)
+        else:
+            raise
+
     if not query_payload.get("ready_to_use"):
         message = query_payload.get("clarification_message") or "La consulta requiere mas contexto"
         raise HTTPException(status_code=400, detail=message)

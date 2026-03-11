@@ -18,7 +18,7 @@ async function fetchWithTimeout(
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') {
       throw new Error(
-        `Timeout while connecting to backend (${API_BASE}). Verify it is running and reachable.`
+        `Timeout while waiting for backend response (${API_BASE || 'proxy /api'}).`
       );
     }
     throw error;

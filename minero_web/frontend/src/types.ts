@@ -87,6 +87,17 @@ export interface MineroResponse {
   results: MineroResult[];
 }
 
+export interface SearchHistoryEntry {
+  id: string;
+  created_at: string;
+  source: SourceMode;
+  natural_query: string;
+  ncbi_query: string;
+  status: MineroMetadata['status'];
+  total_results: number;
+  response: MineroResponse;
+}
+
 export interface SearchPayload {
   natural_query: string;
   source: SourceMode;

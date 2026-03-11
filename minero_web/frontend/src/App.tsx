@@ -7,13 +7,23 @@ import { AnalysisView } from './components/AnalysisView';
 import { HelpView } from './components/HelpView';
 import { StatusBanner } from './components/StatusBanner';
 import { analyzePapers, checkHealth, generateQuery, runSearchWithQuery } from './lib/api';
-import type { AppStatus, AppView, MineroResponse, ProAnalysisResponse, QueryGeneration, SearchPayload } from './types';
+import type {
+  AppStatus,
+  AppView,
+  MineroResponse,
+  ProAnalysisResponse,
+  QueryGeneration,
+  SearchHistoryEntry,
+  SearchPayload,
+} from './types';
 
 const API_BASE = import.meta.env.VITE_MINERO_API_URL ?? 'http://127.0.0.1:8010';
 
 // ─── Nombre del proyecto ────────────────────────────────────────────────────
 // Cambiar este valor cuando se defina el nombre final (Pyner / MAIner / Minero)
 const APP_NAME = 'Minero';
+const HISTORY_STORAGE_KEY = 'minero.search_history.v1';
+const MAX_HISTORY_ENTRIES = 20;
 
 const NAV_ITEMS: Array<{ id: AppView; label: string; icon: typeof Search }> = [
   { id: 'buscar', label: 'Search', icon: Search },
@@ -104,6 +114,7 @@ export default function App() {
   const [view, setView] = useState<AppView>('buscar');
   const [status, setStatus] = useState<AppStatus>('idle');
   const [response, setResponse] = useState<MineroResponse | null>(null);
+  const [searchHistory, setSearchHistory] = useState<SearchHistoryEntry[]>([]);
   const [error, setError] = useState<string>('');
   const [llmAvailable, setLlmAvailable] = useState(false);
   const [pendingRun, setPendingRun] = useState<PendingRun | null>(null);
@@ -120,6 +131,23 @@ export default function App() {
       .then((health) => setLlmAvailable(Boolean(health.llm_runtime_available)))
       .catch(() => setLlmAvailable(false));
   }, []);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(HISTORY_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        setSearchHistory(parsed.slice(0, MAX_HISTORY_ENTRIES));
+      }
+    } catch {
+      setSearchHistory([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(searchHistory));
+  }, [searchHistory]);
 
   async function handleGenerate(payload: SearchPayload): Promise<void> {
     setStep('generating');
@@ -167,6 +195,17 @@ export default function App() {
         query_generation: pendingRun.query_generation,
       });
       setResponse(result);
+      const historyEntry: SearchHistoryEntry = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        created_at: new Date().toISOString(),
+        source: pendingRun.source,
+        natural_query: pendingRun.query_generation.user_input ?? '',
+        ncbi_query: pendingRun.query_generation.ncbi_query,
+        status: result.metadata.status,
+        total_results: result.metadata.total_results,
+        response: result,
+      };
+      setSearchHistory((prev) => [historyEntry, ...prev].slice(0, MAX_HISTORY_ENTRIES));
       setPendingRun(null);
       setStatus(result.metadata.status);
       setView('resultados');
@@ -210,6 +249,17 @@ export default function App() {
     ? LOADING_STEPS[activeLoadingStage][loadingStepIndex]
     : null;
 
+  const authorByPmid = useMemo<Record<string, string>>(() => {
+    if (!response) return {};
+    const map: Record<string, string> = {};
+    response.results.forEach((item) => {
+      if ('pmid' in item && Array.isArray(item.authors) && item.authors.length > 0) {
+        map[item.pmid] = item.authors[0];
+      }
+    });
+    return map;
+  }, [response]);
+
   async function handleRunPro(
     publications: Record<string, unknown>[],
     query: string
@@ -226,6 +276,26 @@ export default function App() {
     } finally {
       setProLoading(false);
     }
+  }
+
+  function handleOpenHistory(entryId: string): void {
+    const match = searchHistory.find((entry) => entry.id === entryId);
+    if (!match) return;
+    setResponse(match.response);
+    setPendingRun(null);
+    setProResponse(null);
+    setShowPro(false);
+    setError('');
+    setStatus(match.status);
+    setView('resultados');
+  }
+
+  function handleDeleteHistory(entryId: string): void {
+    setSearchHistory((prev) => prev.filter((entry) => entry.id !== entryId));
+  }
+
+  function handleClearHistory(): void {
+    setSearchHistory([]);
   }
 
   return (
@@ -284,15 +354,20 @@ export default function App() {
                 isRunning={step === 'running'}
                 llmAvailable={llmAvailable}
                 pendingQuery={pendingRun?.query_generation ?? null}
+                searchHistory={searchHistory}
                 onGenerate={handleGenerate}
                 onConfirm={handleConfirm}
                 onDiscard={() => setPendingRun(null)}
+                onOpenHistory={handleOpenHistory}
+                onDeleteHistory={handleDeleteHistory}
+                onClearHistory={handleClearHistory}
               />
             ) : null}
             {view === 'resultados' ? (
               showPro && proResponse ? (
                 <ProAnalysisView
                   proResponse={proResponse}
+                  authorByPmid={authorByPmid}
                   onClose={() => setShowPro(false)}
                 />
               ) : (
