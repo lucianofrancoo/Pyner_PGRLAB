@@ -22,7 +22,7 @@ import csv
 import logging
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 from collections import defaultdict
 
 from Bio import Entrez
@@ -42,6 +42,56 @@ Entrez.email = NCBI_EMAIL
 if NCBI_API_KEY:
     Entrez.api_key = NCBI_API_KEY
     logger.info("✓ Using NCBI API key")
+
+
+def _clean_text(value: str) -> str:
+    return " ".join(str(value).split()).strip()
+
+
+def _looks_like_institution(value: str) -> bool:
+    lower = value.lower()
+    return any(
+        token in lower
+        for token in (
+            "university",
+            "universidad",
+            "institute",
+            "institut",
+            "academy",
+            "college",
+            "center",
+            "centre",
+            "laboratory",
+            "lab",
+            "department",
+            "hospital",
+            "school",
+            "research",
+            "ministry",
+        )
+    )
+
+
+def _pick_bioproject_organism(doc) -> str:
+    candidate_paths = [
+        ".//OrganismName",
+        ".//Organism/OrganismName",
+        ".//Target/Organism/OrganismName",
+        ".//Target/Organism/Name",
+        ".//Organism/Name",
+    ]
+
+    for path in candidate_paths:
+        value = _clean_text(doc.findtext(path, ""))
+        if value and not _looks_like_institution(value):
+            return value
+
+    # Keep legacy fallback, but avoid returning institution/lab names as organism.
+    fallback = _clean_text(doc.findtext(".//Name", ""))
+    if fallback and not _looks_like_institution(fallback):
+        return fallback
+
+    return ""
 
 
 class BooleanFetcherIntegrated:
@@ -126,8 +176,8 @@ class BooleanFetcherIntegrated:
                     if desc:
                         bp_data['description'] = desc
                     
-                    # Extract Organism Name
-                    organism = doc.findtext(".//Name", "")
+                    # Extract Organism Name (avoid generic/institution names)
+                    organism = _pick_bioproject_organism(doc)
                     if organism:
                         bp_data['organism'] = organism
                     
@@ -331,27 +381,39 @@ class BooleanFetcherIntegrated:
             exp_count = len(bs_data.get('experiments', []))
             logger.info(f"      • {bs_id}: {exp_count} experiment(s)")
         
-        # PubMed search disabled - only generate SRA hierarchy data
-        # To enable PubMed cascade search, uncomment the code below
+        publications, search_method = self.search_pubmed_publications(
+            bioproject_id,
+            biosamples_dict,
+            sra_runs,
+            cascade=True
+        )
         
-        # publications, search_method = self.search_pubmed_publications(
-        #     bioproject_id,
-        #     biosamples_dict,
-        #     sra_runs,
-        #     cascade=True
-        # )
-        
-        # No PubMed search - set all publication fields to NA
-        result['publications_found'] = 0
-        result['search_method'] = "NA"
-        result['dois'] = "NA"
-        result['pmids'] = "NA"
-        result['papers_summary'] = "NA"
+        if publications:
+            result['publications_found'] = len(publications)
+            result['search_method'] = search_method
+            result['dois'] = [p.get('doi', '') for p in publications if p.get('doi')]
+            result['pmids'] = [p.get('pmid', '') for p in publications if p.get('pmid')]
+            summaries = []
+            for p in publications[:3]:
+                title = p.get('title', 'Unknown')
+                summaries.append(f"[{p.get('pmid')}] {title}")
+            result['papers_summary'] = " | ".join(summaries)
+        else:
+            result['publications_found'] = 0
+            result['search_method'] = "NA"
+            result['dois'] = []
+            result['pmids'] = []
+            result['papers_summary'] = "No publications found"
         
         return result
     
     
-    def run_workflow(self, boolean_query: str, max_bioproject: int = 50) -> List[Dict]:
+    def run_workflow(
+        self,
+        boolean_query: str,
+        max_bioproject: int = 50,
+        progress_callback: Optional[Callable[[Dict[str, Any]], None]] = None,
+    ) -> List[Dict]:
         """
         Execute complete workflow:
         1. Boolean search
@@ -370,6 +432,15 @@ class BooleanFetcherIntegrated:
         if not bioprojects:
             logger.warning("No BioProjects found")
             return []
+        if progress_callback:
+            progress_callback(
+                {
+                    "stage": "searching",
+                    "processed": 0,
+                    "target": len(bioprojects),
+                    "message": f"Found {len(bioprojects)} BioProjects. Processing...",
+                }
+            )
         
         # Step 2: Process each BioProject
         logger.info(f"\n{'='*70}")
@@ -379,6 +450,15 @@ class BooleanFetcherIntegrated:
         self.results = []
         for i, bp_data in enumerate(bioprojects, 1):
             logger.info(f"\n[{i}/{len(bioprojects)}]")
+            if progress_callback:
+                progress_callback(
+                    {
+                        "stage": "fetching",
+                        "processed": i - 1,
+                        "target": len(bioprojects),
+                        "message": f"Processing BioProject {i}/{len(bioprojects)}...",
+                    }
+                )
             
             try:
                 enriched = self.process_bioproject(bp_data)
@@ -389,6 +469,15 @@ class BooleanFetcherIntegrated:
                 self.results.append(bp_data)
             
             time.sleep(RATE_LIMIT)
+            if progress_callback:
+                progress_callback(
+                    {
+                        "stage": "fetching",
+                        "processed": i,
+                        "target": len(bioprojects),
+                        "message": f"Processed BioProject {i}/{len(bioprojects)}.",
+                    }
+                )
         
         return self.results
     
@@ -552,10 +641,13 @@ def main():
     parser.add_argument("--output-json", type=Path, help="Output JSON file")
     
     args = parser.parse_args()
-    
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     # Create output files if not specified
+    if not args.output_tsv:
         args.output_tsv = Path(f"boolean_results_{timestamp}.tsv")
-    
+
     # Run workflow
     fetcher = BooleanFetcherIntegrated()
     results = fetcher.run_workflow(args.query, max_bioproject=args.max)

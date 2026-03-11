@@ -60,6 +60,16 @@ class PaperVisualizer:
                 return classified_path
         return None
     
+    def set_data(self, query: str, publications: List[Dict], classified_results: List[Dict]):
+        """Load data directly from in-memory objects."""
+        self.query = query
+        self.papers = publications
+        self.classified_data = {}
+        for row in classified_results:
+            pmid = row.get('PMID', '')
+            if pmid:
+                self.classified_data[pmid] = row
+
     def load_classified_data(self, tsv_path: str) -> int:
         """Load classified data from analyzer TSV output."""
         with open(tsv_path, 'r', encoding='utf-8') as f:
@@ -183,8 +193,8 @@ class PaperVisualizer:
         
         return edges
     
-    def generate_html(self, output_path: str) -> str:
-        """Generate self-contained interactive HTML visualization."""
+    def generate_html_content(self) -> str:
+        """Generate and return self-contained HTML visualization as a string."""
         nodes = self._build_nodes()
         edges = self._build_edges(nodes)
         
@@ -196,7 +206,11 @@ class PaperVisualizer:
         years = sorted(set(n['year'] for n in nodes if n['year']), reverse=True)
         journals = sorted(set(n['journal'] for n in nodes if n['journal']))
         
-        html_content = self._render_html(nodes, edges, has_scores, total, relevant, years, journals)
+        return self._render_html(nodes, edges, has_scores, total, relevant, years, journals)
+
+    def generate_html(self, output_path: str) -> str:
+        """Generate self-contained interactive HTML visualization to file."""
+        html_content = self.generate_html_content()
         
         os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else '.', exist_ok=True)
         

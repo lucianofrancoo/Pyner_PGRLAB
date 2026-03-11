@@ -1,0 +1,5 @@
+{
+  "name": "SRA Query Builder",
+  "description": "A specialized bioinformatics tool for constructing optimized NCBI SRA search queries using structured biological inputs and LLM-powered synonym mapping.",
+  "requestFramePermissions": []
+}

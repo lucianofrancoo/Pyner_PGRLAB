@@ -23,7 +23,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Set, Optional, Tuple
+from typing import Any, Callable, Dict, List, Set, Optional, Tuple
 from Bio import Entrez
 from config import NCBI_EMAIL, NCBI_API_KEY, RATE_LIMIT, LOGS_DIR
 
@@ -326,7 +326,13 @@ class LinkoutFetcher:
             self.logger.error(f"Search failed: {e}")
             return {"bioproject": bioproject_id, "publications": []}
     
-    def search_publications_by_boolean_query(self, query: str, max_results: int = 100, db: str = 'pubmed') -> List[Dict]:
+    def search_publications_by_boolean_query(
+        self,
+        query: str,
+        max_results: int = 100,
+        db: str = 'pubmed',
+        progress_callback: Optional[Callable[[Dict[str, Any]], None]] = None,
+    ) -> List[Dict]:
         """
         Direct boolean search in PubMed or PMC.
         
@@ -377,10 +383,28 @@ class LinkoutFetcher:
             
             self.logger.info(f"Found {total_count} total matches in {db_label}")
             self.logger.info(f"Retrieving {len(ids)} publications...")
+            if progress_callback:
+                progress_callback(
+                    {
+                        "stage": "searching",
+                        "processed": 0,
+                        "target": len(ids) if ids else max_results,
+                        "message": f"Found {total_count} matches in {db_label}.",
+                    }
+                )
             
             if db == 'pmc':
                 # PMC returns PMC IDs — convert to PMIDs via elink
-                pmids = self._convert_pmc_to_pmids(ids)
+                if progress_callback:
+                    progress_callback(
+                        {
+                            "stage": "converting",
+                            "processed": 0,
+                            "target": len(ids) if ids else max_results,
+                            "message": "Converting PMC IDs to PMID...",
+                        }
+                    )
+                pmids = self._convert_pmc_to_pmids(ids, progress_callback=progress_callback)
                 self.logger.info(f"Converted {len(pmids)} PMC articles to PubMed IDs")
             else:
                 pmids = ids
@@ -388,11 +412,29 @@ class LinkoutFetcher:
             # Fetch metadata for each PMID
             for i, pmid in enumerate(pmids, 1):
                 self.logger.info(f"  [{i}/{len(pmids)}] Fetching PMID:{pmid}")
+                if progress_callback:
+                    progress_callback(
+                        {
+                            "stage": "fetching",
+                            "processed": i - 1,
+                            "target": len(pmids) if pmids else max_results,
+                            "message": f"Fetching PMID metadata ({i}/{len(pmids)})...",
+                        }
+                    )
                 pub = extract_pubmed_metadata(pmid)
                 if pub:
                     publications.append(pub)
                     self.stats["unique_pmids"].add(pmid)
                     self.stats["pubmed_hits"] += 1
+                if progress_callback:
+                    progress_callback(
+                        {
+                            "stage": "fetching",
+                            "processed": i,
+                            "target": len(pmids) if pmids else max_results,
+                            "message": f"Fetched PMID metadata ({i}/{len(pmids)})...",
+                        }
+                    )
             
             self.stats["queries"] += 1
             
@@ -403,7 +445,11 @@ class LinkoutFetcher:
         
         return publications
     
-    def _convert_pmc_to_pmids(self, pmc_ids: List[str]) -> List[str]:
+    def _convert_pmc_to_pmids(
+        self,
+        pmc_ids: List[str],
+        progress_callback: Optional[Callable[[Dict[str, Any]], None]] = None,
+    ) -> List[str]:
         """
         Convert PMC IDs to PubMed IDs using Entrez elink.
         Only gets the article's own PMID (pmc_pubmed), not referenced articles.
@@ -425,6 +471,15 @@ class LinkoutFetcher:
         for batch_num, i in enumerate(range(0, len(pmc_ids), batch_size), 1):
             batch = pmc_ids[i:i + batch_size]
             self.logger.info(f"  Converting PMC batch {batch_num}/{total_batches} ({len(batch)} IDs)...")
+            if progress_callback:
+                progress_callback(
+                    {
+                        "stage": "converting",
+                        "processed": min(i, len(pmc_ids)),
+                        "target": len(pmc_ids),
+                        "message": f"Converting PMC IDs to PMID (batch {batch_num}/{total_batches})...",
+                    }
+                )
             
             # Retry logic for network reliability
             max_retries = 3
@@ -447,6 +502,15 @@ class LinkoutFetcher:
                                 pmid = link.get('Id', '')
                                 if pmid and pmid not in pmids:
                                     pmids.append(pmid)
+                    if progress_callback:
+                        progress_callback(
+                            {
+                                "stage": "converting",
+                                "processed": min(i + len(batch), len(pmc_ids)),
+                                "target": len(pmc_ids),
+                                "message": f"Converted PMC batch {batch_num}/{total_batches}.",
+                            }
+                        )
                     break  # Success, exit retry loop
                     
                 except Exception as e:

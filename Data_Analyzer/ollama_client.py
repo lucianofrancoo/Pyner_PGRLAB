@@ -8,7 +8,7 @@ import json
 import logging
 import requests
 from typing import Dict, Optional, List
-from config import OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_TIMEOUT
+from da_config import OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_TIMEOUT
 
 logger = logging.getLogger(__name__)
 
