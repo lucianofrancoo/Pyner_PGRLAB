@@ -13,7 +13,9 @@ OUTPUT_FILE = BASE_DIR / "output" / "experimental_conditions_lexicon.json"
 CONDITION_CORES = {
     "stress", "stresses", "exposure", "treatment", "deficiency", 
     "deprivation", "starvation", "toxicity", "challenge", "infection", 
-    "injury", "hypoxia", "anoxia", "irradiation", "salinity"
+    "injury", "hypoxia", "anoxia", "irradiation", "salinity",
+    "limitation", "depletion", "restriction", "damage", "perturbation", "inflammation",
+    "drought", "heat", "cold", "salt", "freezing", "chilling"
 }
 
 # Modificadores que suelen acompañar a un núcleo (o indicar condición en combinación)
@@ -21,11 +23,16 @@ CONDITION_MODIFIERS = {
     "heat", "cold", "freezing", "chilling", "temperature", "temperatures",
     "thermal", "radiation", "uv", "ultraviolet", "drug", "drugs", "chemical",
     "water", "osmotic", "salt", "drought", "oxidative", "nutrient", 
-    "metal", "light", "dark", "shade"
+    "metal", "light", "dark", "shade",
+    "oxygen", "glucose", "iron", "phosphate", "mechanical", "pressure", "shear",
+    "immune", "viral", "bacterial", "toxin", "compound"
 }
 
 # Palabras compatibles adicionales permitidas junto a un modificador para validar
-COMPATIBLE_WORDS = CONDITION_CORES.union({"induced", "mediated", "response", "treated", "tolerance", "resistant", "resistance"})
+COMPATIBLE_WORDS = CONDITION_CORES.union({
+    "induced", "mediated", "response", "treated", "tolerance", 
+    "resistant", "resistance", "damaged", "inflammatory"
+})
 
 
 # Simple regex for tokenization (words only, length >= 2)

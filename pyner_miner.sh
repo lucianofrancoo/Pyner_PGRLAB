@@ -319,14 +319,52 @@ printf "\n${GREEN}━━━━━━━━━━━━━━━━━━━━�
 printf "${GREEN}[5/6] Configure result limits${NC}\n"
 printf "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n\n"
 
+# Get total matches available on NCBI to help user decide
+printf "  ${CYAN}Checking available results on NCBI...${NC}\n"
+
+TOTAL_HITS=$(python3 -c "
+import sys, os
+sys.path.append(os.path.join('$ROOT_DIR', 'Fetcher_NCBI'))
+try:
+    from Bio import Entrez
+    try:
+        from config import NCBI_EMAIL, NCBI_API_KEY
+        Entrez.email = NCBI_EMAIL
+        if NCBI_API_KEY: Entrez.api_key = NCBI_API_KEY
+    except:
+        Entrez.email = 'pyner@example.com'
+    
+    query = sys.argv[1]
+    search_db = sys.argv[2]
+    db_choice = sys.argv[3]
+    
+    # Determine correct db name
+    if db_choice == 'bioproject':
+        db = 'bioproject'
+    elif search_db == 'pmc':
+        db = 'pmc'
+    else:
+        db = 'pubmed'
+        
+    handle = Entrez.esearch(db=db, term=query, retmax=0)
+    record = Entrez.read(handle)
+    handle.close()
+    print(f\"{int(record['Count']):,}\")
+except Exception as e:
+    print('Unknown (' + str(e) + ')')
+" "$QUERY" "$SEARCH_DB" "$DATABASE")
+
+printf "  ${GREEN}✓ Found ${TOTAL_HITS} total matches available on NCBI${NC}\n\n"
+
 if [ "$DATABASE" = "pubmed" ]; then
     printf "How many publications to retrieve?\n"
-    printf "${YELLOW}(Press Enter for unlimited)${NC}\n\n"
+    printf "${YELLOW}(Press Enter to fetch all up to 10,000)${NC}\n\n"
     read -r -p "Maximum number [default: unlimited]: " MAX_RESULTS
     MAX_RESULTS=${MAX_RESULTS:-0}
 else
     printf "How many BioProjects to process?\n"
-    printf "${YELLOW}(Press Enter for unlimited)${NC}\n\n"
+    printf "${YELLOW}(Warning: Processing 100+ projects with SRA cascade is slow. Expected >10 min)${NC}\n"
+    printf "${YELLOW}(Press Enter to fetch all up to 10,000)${NC}\n\n"
     read -r -p "Maximum number [default: unlimited]: " MAX_RESULTS
     MAX_RESULTS=${MAX_RESULTS:-0}
 fi
@@ -407,15 +445,16 @@ elif [ "$DATABASE" = "bioproject" ]; then
     
     # If Pro mode, run Data Analyzer
     if [ "$MODE" = "pro" ]; then
-        printf "\n${CYAN}[Data Analyzer]${NC} Running AI analysis with Ollama...\n\n"
+        printf "\n${CYAN}[BioProject Analyzer]${NC} Running AI dataset usability analysis with Ollama...\n\n"
         
         cd "$ROOT_DIR/Data_Analyzer"
-        ANALYSIS_TSV="$OUTPUT_DIR/classified_papers_${TIMESTAMP}.tsv"
+        ANALYSIS_TSV="$OUTPUT_DIR/bioproject_analysis_${TIMESTAMP}.tsv"
         
-        python3 paper_analyzer.py "$FETCH_JSON" "$ANALYSIS_TSV"
+        # Calling the newly created bioproject_analyzer.py instead of paper_analyzer
+        python3 bioproject_analyzer.py "$FETCH_JSON" "$ANALYSIS_TSV"
         
         printf "\n${GREEN}✓ Analysis completed${NC}\n"
-        printf "  📊 Classified TSV: %s\n" "$ANALYSIS_TSV"
+        printf "  📊 Usability TSV: %s\n" "$ANALYSIS_TSV"
     fi
 fi
 

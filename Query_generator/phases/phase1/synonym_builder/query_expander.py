@@ -71,7 +71,9 @@ class QueryExpander:
         self.condition_cores = {
             "stress", "stresses", "exposure", "treatment", "deficiency", 
             "deprivation", "starvation", "toxicity", "challenge", "infection", 
-            "injury", "hypoxia", "anoxia", "irradiation", "salinity"
+            "injury", "hypoxia", "anoxia", "irradiation", "salinity",
+            "limitation", "depletion", "restriction", "damage", "perturbation", "inflammation",
+            "drought", "heat", "cold", "salt", "freezing", "chilling"
         }
 
         self.condition_modifiers = {
@@ -79,13 +81,16 @@ class QueryExpander:
             "thermal", "radiation", "uv", "ultraviolet", "drug", "drugs", "chemical",
             "salinity", "salt", "water", "drought", "light", "dark", "darkness",
             "osmotic", "oxidative", "metal", "heavy", "biotic", "abiotic", "nutrient", 
-            "nutrient deficiency", "starvation", "ozone", "mechanical", "wounding"
+            "nutrient deficiency", "starvation", "ozone", "mechanical", "wounding",
+            "oxygen", "glucose", "iron", "phosphate", "pressure", "shear",
+            "immune", "viral", "bacterial", "toxin", "compound"
         }
 
         self.compatible_words = {
             "response", "responses", "tolerance", "tolerant", "resistance", "resistant",
             "sensitive", "sensitivity", "adaptation", "adapted", "acclimation", "acclimated",
-            "signaling", "pathway", "induced", "induction", "mediated", "regulated", "regulation"
+            "signaling", "pathway", "induced", "induction", "mediated", "regulated", "regulation",
+            "damage", "damaged", "perturbation", "inflammatory"
         }
 
         self.chemical_elements = {

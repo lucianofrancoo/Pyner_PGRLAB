@@ -443,6 +443,123 @@ JSON:"""
             'raw_data_available': 'not described'
         }
 
+    def analyze_bioproject(self, bioproject_data: Dict, user_query: str) -> Dict:
+        """
+        Analyze a BioProject dataset to evaluate its usability for a given query.
+        
+        Args:
+            bioproject_data: Normalized dictionary containing project, sample, and experiment info.
+            user_query: Original user query.
+            
+        Returns:
+            Dictionary with extracted high-level assessment.
+        """
+        prompt = self._build_bioproject_prompt(bioproject_data, user_query)
+        
+        try:
+            response = self._call_ollama(prompt)
+            parsed = self._parse_bioproject_response(response)
+            return parsed
+        except Exception as e:
+            logger.error(f"Error analyzing BioProject: {e}")
+            return self._empty_bioproject_result()
+
+    def _build_bioproject_prompt(self, bp_data: Dict, user_query: str) -> str:
+        """Build prompt for BioProject usability analysis"""
+        
+        bp_id = bp_data.get('bioproject', 'Unknown')
+        title = bp_data.get('title', 'Unknown')
+        desc = bp_data.get('description', 'Unknown')
+        organism = bp_data.get('organism', 'Unknown')
+        
+        # Summarize available SRA context
+        sra_count = bp_data.get('sra_experiments_count', 0)
+        
+        # We can extract a quick summary of platforms/strategies to feed the LLM
+        strategies = set()
+        tissues = set()
+        conditions = set()
+        
+        # In the context of the new normalizer, we might have these directly or need to dig.
+        # Let's pass a stringified compact summary if available.
+        sra_summary = json.dumps(bp_data.get('sra_hierarchy', {}), indent=2)[:3000] # Limiting to avoid massive prompts
+        
+        return f"""You are a bioinformatics data curator. Evaluate the USABILITY of the following BioProject raw datasets for a researcher's specific query.
+
+USER QUERY (for relevance): {user_query}
+
+BIOPROJECT: {bp_id}
+TITLE: {title}
+ORGANISM: {organism}
+DESCRIPTION: {desc}
+TOTAL EXPERIMENTS: {sra_count}
+
+SRA HIERARCHY PREVIEW (Sample/Experiment Metadata):
+{sra_summary}
+
+YOUR TASK:
+Given the user query and the normalized metadata for this BioProject/SRA dataset, evaluate how usable these raw datasets are for studying the requested topic. Consider organism match, data type compatibility, biological context, experimental design clarity, metadata completeness, and whether the dataset is likely reusable for downstream analysis. Do not assume the project is relevant just because keywords overlap.
+
+Categorize the usability and extract high-level summaries.
+
+RESPONSE FORMAT (JSON only, no explanation):
+{{
+  "relevance_score_0_10": <0-10>,
+  "experimental_design_summary": "Concise 2-3 sentence summary of the actual experiment and data gathered.",
+  "primary_use_case": "What is this dataset best used for?",
+  "major_limitations": "Are there missing controls, unclear metadata, or wrong organism issues?",
+  "recommended_for_query": "Yes", "No", or "Tangential",
+  "confidence_explanation": "Brief explanation of your score and recommendation."
+}}
+
+IMPORTANT RULES:
+- YOU MUST RETURN ONLY VALID JSON - NO EXPLANATIONS, NO TEXT BEFORE OR AFTER THE JSON.
+- Be critical. A generic genome sequencing project is NOT highly relevant for a query asking for 'drought stress transcriptomics'.
+- If the metadata is very poor or description is empty, reduce the score and mention it in limitations.
+
+CRITICAL: Your entire response must be ONLY the JSON object. Do not add any text before or after the JSON.
+
+JSON:"""
+
+    def _parse_bioproject_response(self, response: str) -> Dict:
+        """Parse Ollama JSON response for BioProject analysis"""
+        try:
+            start = response.find('{')
+            end = response.rfind('}') + 1
+            
+            if start == -1 or end == 0:
+                logger.warning("No JSON found in BioProject response")
+                return self._empty_bioproject_result()
+            
+            json_str = response[start:end]
+            parsed = json.loads(json_str)
+            
+            result = {
+                'relevance_score': int(parsed.get('relevance_score_0_10', 0)),
+                'experimental_design_summary': parsed.get('experimental_design_summary', 'not described'),
+                'primary_use_case': parsed.get('primary_use_case', 'not described'),
+                'major_limitations': parsed.get('major_limitations', 'not described'),
+                'recommended_for_query': parsed.get('recommended_for_query', 'not described'),
+                'confidence_explanation': parsed.get('confidence_explanation', 'not described')
+            }
+            
+            result['relevance_score'] = max(0, min(10, result['relevance_score']))
+            return result
+        except BaseException as e:
+            logger.error(f"Error parsing BioProject response: {e}")
+            return self._empty_bioproject_result()
+
+    def _empty_bioproject_result(self) -> Dict:
+        """Return empty result for BioProject analysis"""
+        return {
+            'relevance_score': 0,
+            'experimental_design_summary': 'ERROR during analysis',
+            'primary_use_case': 'ERROR',
+            'major_limitations': 'ERROR',
+            'recommended_for_query': 'No',
+            'confidence_explanation': 'Analysis failed due to LLM error or timeout.'
+        }
+
 
 def test_ollama_connection():
     """Test Ollama connection"""
