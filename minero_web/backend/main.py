@@ -296,15 +296,23 @@ def _compact_query_payload_for_frontend(query_payload: Dict[str, Any]) -> Dict[s
     return compacted
 
 
-def _build_phase1_boolean_query(user_input: str, _use_llm_requested: bool) -> Optional[Dict[str, Any]]:
+def _build_phase1_boolean_query(user_input: str, use_llm_requested: bool) -> Optional[Dict[str, Any]]:
     if not QUERY_GENERATOR_SCRIPT.exists():
         logger.warning("Query generator script not found: %s", QUERY_GENERATOR_SCRIPT)
         return None
 
+    import tempfile
+    import os
+    import json
+
+    with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as tmp:
+        json_path = tmp.name
+
     try:
-        cmd = ["python3", str(QUERY_GENERATOR_SCRIPT), user_input]
-        # Intentionally run with the same invocation as pyner_miner.sh:
-        # python3 test_query_expander.py "$USER_INPUT"
+        cmd = ["python3", str(QUERY_GENERATOR_SCRIPT), user_input, "--export-json", json_path]
+        if not use_llm_requested:
+            cmd.append("--no-llm")
+            
         logger.info("[phase1-script] Running: %s", " ".join(cmd))
         proc = subprocess.Popen(
             cmd,
@@ -325,21 +333,91 @@ def _build_phase1_boolean_query(user_input: str, _use_llm_requested: bool) -> Op
         return_code = proc.wait(timeout=QUERY_GENERATION_SCRIPT_TIMEOUT_SEC)
         if return_code != 0:
             logger.warning("phase1 script returned non-zero exit code: %s", return_code)
-            return None
+            # Continúa, puede haber fallado pero exportado JSON, o al revés
 
+        ncbi_query = ""
         lines = output_lines
         for idx, line in enumerate(lines):
             if line.strip() == "NCBI Query:":
                 for query_line in lines[idx + 1 :]:
                     query = query_line.strip()
                     if query:
-                        return {"ncbi_query": query}
+                        ncbi_query = query
+                        break
                 break
-        logger.warning("phase1 script did not emit a parsable 'NCBI Query:' block")
+                
+        if not ncbi_query:
+            logger.warning("phase1 script did not emit a parsable 'NCBI Query:' block")
+            return None
+
+        # Build frontend schema from json_path if it exists
+        extracted = {
+            "organism": None, "organism_variants": [], "strategies": [],
+            "tissues": [], "conditions": [], "genes": [], "free_terms": []
+        }
+        synonyms_dict = {
+            "organism": [], "strategies": [], "tissues": [], "conditions": [], "genes": [], "free_terms": []
+        }
+
+        if os.path.exists(json_path) and os.path.getsize(json_path) > 0:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                res_data = json.load(f)
+            
+            expanded = res_data.get("expanded", {})
+            for kw, kw_data in expanded.items():
+                syn_list = [s.get('term') for s in kw_data.get('synonyms', []) if s.get('term')]
+                method = kw_data.get("method")
+                
+                if method in ("exact_gene_match", "gene_bypassed"):
+                    extracted["genes"].append(kw)
+                    synonyms_dict["genes"].extend(syn_list)
+                    if kw_data.get("lexicon_expansions"):
+                        synonyms_dict["genes"].extend(kw_data.get("lexicon_expansions"))
+                elif method == "chemical_bypassed":
+                    extracted["free_terms"].append(kw)
+                elif method == "compound_split":
+                    org_data = kw_data.get("org_data", {})
+                    proc_data = kw_data.get("proc_data", {})
+                    
+                    org_term = org_data.get("preferred_term") or org_data.get("query")
+                    if org_term:
+                        extracted["organism"] = org_term
+                    extracted["organism_variants"].extend([s.get('term') for s in org_data.get('synonyms', []) if s.get('term')])
+                    
+                    pref_proc = proc_data.get("preferred_term") or proc_data.get("query")
+                    if pref_proc:
+                        extracted["free_terms"].append(pref_proc)
+                    suggs = proc_data.get('suggestions', [])
+                    if isinstance(suggs, list):
+                        extracted["free_terms"].extend([s.get('term') for s in suggs if isinstance(s, dict) and s.get('term')])
+                elif kw_data.get("mesh_bypassed_for_experimental_condition") or kw_data.get("lexicon_found"):
+                    extracted["conditions"].append(kw)
+                    synonyms_dict["conditions"].extend(syn_list)
+                    if kw_data.get("lexicon_expansions"):
+                        synonyms_dict["conditions"].extend(kw_data.get("lexicon_expansions"))
+                else:
+                    extracted["free_terms"].append(kw)
+                    synonyms_dict["free_terms"].extend(syn_list)
+
+        return {
+            "user_input": user_input,
+            "extracted": extracted,
+            "synonyms": synonyms_dict,
+            "ncbi_query": ncbi_query,
+            "ready_to_use": True,
+            "clarification_needed": False,
+            "clarification_message": "",
+            "query_mode": "phase1_expander",
+        }
+
     except subprocess.TimeoutExpired:
         logger.warning("Phase1 script timed out after %ss", QUERY_GENERATION_SCRIPT_TIMEOUT_SEC)
     except Exception as exc:
         logger.warning("Phase1 script execution failed; using legacy query. Error: %s", exc)
+    finally:
+        if 'json_path' in locals() and os.path.exists(json_path):
+            os.remove(json_path)
+            
     return None
 
 

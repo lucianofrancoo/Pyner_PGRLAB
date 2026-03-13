@@ -45,8 +45,9 @@ def header(text): sep(); print(c(text, GREEN)); sep()
 # ──────────────────────────────────────────────────────────────────────────────
 # PASO LLM: EXTRACCIÓN DE KEYWORDS con Ollama
 # ──────────────────────────────────────────────────────────────────────────────
-OLLAMA_HOST    = "http://localhost:11434"
-DEFAULT_MODEL  = "qwen2.5:14b"
+import os
+OLLAMA_HOST    = os.getenv('OLLAMA_HOST', 'http://localhost:11434')
+DEFAULT_MODEL  = os.getenv('OLLAMA_MODEL', 'qwen2.5:14b')
 
 def ollama_is_available() -> bool:
     try:
@@ -244,6 +245,8 @@ def main():
                         help="Desactivar extracción de keywords vía LLM")
     parser.add_argument("--model", type=str, default=DEFAULT_MODEL,
                         help=f"Modelo Ollama a usar (default: {DEFAULT_MODEL})")
+    parser.add_argument("--export-json", type=str, default=None,
+                        help="Ruta para exportar el diccionario resultante en JSON")
     args = parser.parse_args()
 
     # Banner
@@ -346,6 +349,13 @@ def main():
     print()
     sep("═")
     print()
+
+    if args.export_json:
+        try:
+            with open(args.export_json, 'w', encoding='utf-8') as f:
+                json.dump(result, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            print(c(f"Error exportando JSON: {e}", RED))
 
 if __name__ == "__main__":
     main()
